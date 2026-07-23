@@ -24,10 +24,10 @@ jobs:
           # Clone if not exists, otherwise update
           if [ ! -d ~/landing_page/bloompod ]; then
             git clone git@github.com:IntelliSync-data/bloompod.git ~/landing_page/bloompod
-            cd ~/landing_page/bloompod && git checkout bloompod
+            cd ~/landing_page/bloompod && git checkout production
           else
             cd ~/landing_page/bloompod
-            git fetch origin && git reset --hard origin/bloompod
+            git fetch origin && git reset --hard origin/production
           fi
 
           # Sync bloompod directory with rsync (including deletions)
