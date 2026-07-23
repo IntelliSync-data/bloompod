@@ -25,12 +25,12 @@ jobs:
       - name: Upload via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: ${{ secrets.FTP_HOST }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
+          server: ${{ secrets.LANDING_PAGE_BLOOMPOD_HOST }}
+          username: ${{ secrets.LANDING_PAGE_BLOOMPOD_USER }}
+          password: ${{ secrets.LANDING_PAGE_BLOOMPOD_PASSWORD }}
           protocol: ftp
           port: 21
-          server-dir: ${{ secrets.FTP_TARGET_DIR }}
+          server-dir: ${{ secrets.LANDING_PAGE_BLOOMPOD_TARGET_DIR }}
           local-dir: ./
           exclude: |
             **/.git*
