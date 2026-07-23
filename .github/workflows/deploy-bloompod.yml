@@ -1,0 +1,36 @@
+name: Deploy BloomPod Production
+
+on:
+  push:
+    branches:
+      - production
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    - name: Deploy bloompod to Server
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.BLOOMPOD_HOST }}
+        username: ${{ secrets.BLOOMPOD_USERNAME }}
+        key: ${{ secrets.BLOOMPOD_SSH_KEY }}
+        script_stop: true
+        script: |
+          # Clone if not exists, otherwise update
+          if [ ! -d ~/landing_page/bloompod ]; then
+            git clone git@github.com:IntelliSync-data/bloompod.git ~/landing_page/bloompod
+            cd ~/landing_page/bloompod && git checkout bloompod
+          else
+            cd ~/landing_page/bloompod
+            git fetch origin && git reset --hard origin/bloompod
+          fi
+
+          # Sync bloompod directory with rsync (including deletions)
+          sudo mkdir -p ~/www
+          sudo rsync -av --delete \
+            ~/landing_page/bloompod/ ~/www/
