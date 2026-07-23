@@ -31,7 +31,7 @@ jobs:
           protocol: ftp
           port: 21
           server-dir: ${{ secrets.LANDING_PAGE_BLOOMPOD_TARGET_DIR }}
-          local-dir: ./source-main
+          local-dir: ./source-main/
           exclude: |
             **/.git*
             **/.github/**
