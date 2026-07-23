@@ -28,8 +28,9 @@ jobs:
           server: ${{ secrets.LANDING_PAGE_BLOOMPOD_HOST }}
           username: ${{ secrets.LANDING_PAGE_BLOOMPOD_USER }}
           password: ${{ secrets.LANDING_PAGE_BLOOMPOD_PASSWORD }}
-          protocol: ftp
+          protocol: ftps
           port: 21
+          security: loose
           server-dir: ${{ secrets.LANDING_PAGE_BLOOMPOD_TARGET_DIR }}
           local-dir: ./source-main/
           timeout: 60000
