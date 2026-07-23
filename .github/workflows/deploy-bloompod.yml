@@ -33,4 +33,4 @@ jobs:
           # Sync bloompod directory with rsync (including deletions)
           sudo mkdir -p ~/www
           sudo rsync -av --delete \
-            ~/landing_page/bloompod/ ~/www/
+            ~/landing_page/bloompod/source-main/ ~/www/
