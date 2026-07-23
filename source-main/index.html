@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="vi" ready="true">
+
+<head>
+    <!-- <script>
+        window.addEventListener("message", (message) => {
+            if (message.data.type === "refresh") {
+                window.location.reload();
+            }
+        })
+    </script> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <title>Bloompod™ - Hệ thống Language Readiness cho trẻ 0-3 tuổi</title>
+    <meta name="description" content="Bloompod™ - Hệ thống Language Readiness cho trẻ 0-3 tuổi">
+    <link rel="stylesheet" href="./assets/css/globals.css">
+    <link rel="stylesheet" href="./assets/css/styleguide.css">
+    <link rel="stylesheet" href="./assets/css/style.css?v=4">
+    <link rel="stylesheet" href="./assets/css/style-responsive.css?v=4">
+    <link rel="stylesheet" href="./assets/css/email-modal.css">
+    <script src="https://app.bloompod.vn/chatbot/widget.js"></script>
+</head>
+
+<body style="user-select: unset;">
+    <script>
+        // Smooth scroll for anchor links
+        document.addEventListener('DOMContentLoaded', function () {
+            // Smooth scrolling
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    const href = this.getAttribute('href');
+                    if (href === '#' || !href) return;
+
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+                        // Close mobile menu if open
+                        const mobileMenu = document.getElementById('mobile-menu');
+                        if (mobileMenu && mobileMenu.classList.contains('active')) {
+                            mobileMenu.classList.remove('active');
+                            document.body.style.overflow = '';
+                        }
+                    }
+                });
+            });
+
+            // Mobile menu toggle
+            const hamburger = document.getElementById('hamburger-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuClose = document.getElementById('mobile-menu-close');
+
+            if (hamburger && mobileMenu) {
+                hamburger.addEventListener('click', function () {
+                    mobileMenu.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                });
+            }
+
+            if (mobileMenuClose && mobileMenu) {
+                mobileMenuClose.addEventListener('click', function () {
+                    mobileMenu.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            }
+
+            // Highlight active nav link
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.menu-tab, .mobile-nav-link');
+
+            function highlightNav() {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    if (window.pageYOffset >= sectionTop - 200) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + current) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+
+            window.addEventListener('scroll', highlightNav);
+            highlightNav();
+
+            // Form validation
+            const forms = document.querySelectorAll('form');
+            forms.forEach(form => {
+                form.addEventListener('submit', function (e) {
+                    e.preventDefault();
+
+                    const inputs = form.querySelectorAll('input[required], select[required]');
+                    let isValid = true;
+
+                    inputs.forEach(input => {
+                        if (!input.value.trim()) {
+                            isValid = false;
+                            input.style.borderColor = '#dc2424';
+                        } else {
+                            input.style.borderColor = '#f2f0ee';
+                        }
+                    });
+
+                    if (isValid) {
+                        // Show success message or navigate to next step
+                        alert('Form submitted successfully!');
+                        // In a real app, you would submit the form data here
+                    }
+                });
+            });
+
+            //Video BloomPod
+            const videoModal = document.getElementById('youtube-modal-overlay');
+            const closeVideoBtn = document.getElementById('close-video-btn');
+            const youtubePlayer = document.getElementById('youtube-player');
+            const originalVideoSrc = youtubePlayer ? youtubePlayer.src : '';
+            const playButtons = document.querySelectorAll('.play-pause');
+
+            playButtons.forEach(btn => {
+                btn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    if (videoModal && youtubePlayer) {
+                    
+                        youtubePlayer.src = originalVideoSrc + "?autoplay=1";
+                        videoModal.style.display = 'flex';
+                    }
+                });
+            });
+
+            function closeVideoModal() {
+                if (videoModal && youtubePlayer) {
+                    videoModal.style.display = 'none';
+                    // Reset link to force video stopped when popup closed 
+                    youtubePlayer.src = originalVideoSrc;
+                }
+            }
+
+            // Closed popup button
+            if (closeVideoBtn) {
+                closeVideoBtn.addEventListener('click', closeVideoModal);
+            }
+
+            // Click outside popup to close
+            if (videoModal) {
+                videoModal.addEventListener('click', function (e) {
+                    if (e.target === videoModal) {
+                        closeVideoModal();
+                    }
+                });
+            }
+
+            // Modal close buttons
+            const modalCloseButtons = document.querySelectorAll('.frame-97, .button-13');
+            modalCloseButtons.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const modal = this.closest('.cm-on');
+                    if (modal) {
+                        modal.style.display = 'none';
+                        const overlay = document.querySelector('.rectangle-5');
+                        if (overlay) overlay.style.display = 'none';
+                    }
+                });
+            });
+
+            // Language switcher
+            const langSwitcher = document.querySelectorAll('.ngn-ng');
+            langSwitcher.forEach(switcher => {
+                switcher.addEventListener('click', function () {
+                    alert('Language switching would be implemented here');
+                });
+            });
+
+            // Purchase buttons - scroll to form or show modal
+            const purchaseButtons = document.querySelectorAll('.button, .button-wrapper, .button-5, .button-6');
+            purchaseButtons.forEach(btn => {
+                const text = btn.textContent.trim();
+                if (text.includes('Đặt mua') || text.includes('Bloom')) {
+                    btn.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        // Scroll to order form or show purchase modal
+                        const orderSection = document.querySelector('.info-wrapper');
+                        if (orderSection) {
+                            orderSection.scrollIntoView({ behavior: 'smooth' });
+                        }
+                    });
+                }
+            });
+        });
+
+    </script>
+    <main class="main">
+        <section class="home">
+            <header class="menu-bar">
+                <div class="container flex-direction-row justify-content-space-between">
+                    <div onclick="window.location.href='./'" class="logo" role="img" aria-label="Bloompod logo"></div>
+                    <nav class="home-wrapper-nav-tertiary desktop-nav" aria-label="Main navigation">
+                        <a href="#home" class="menu-tab active"><span class="home-text-span-tertiary">Trang
+                                Chủ</span></a>
+                        <a href="#journey" class="menu-tab"><span class="home-text-span-tertiary">Hành Trình
+                                Bloom</span></a>
+                        <a href="#notice" class="menu-tab"><span class="home-text-span-tertiary">Hỗ Trợ</span></a>
+                    </nav>
+                    <div class="home-wrapper-div-extra">
+                        <button class="purchase-button-button-additional" type="button" aria-label="Đặt mua Bloompod"
+                            onclick="window.location.href='order.html'">
+                            <!--  <span class="purchase-button-span">Đặt mua <span>Bloompod™</span></span> -->
+                            <span class="purchase-button-span">Đặt mua <span>Bloompod</span></span>
+                        </button>
+                        <div class="language-hero-wrapper-div" role="button" tabindex="0"
+                            aria-label="Change language to English" onclick="window.location.href='index-en.html'">
+                            <img class="content-image-img" src="./assets/images/circle---countries-flag.svg"
+                                alt="Language flag">
+                            <div class="layout-section-div"><span class="label-text-span-lang">EN</span></div>
+                        </div>
+                        <button id="hamburger-btn" class="hamburger-menu" aria-label="Open menu">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3 12H21M3 6H21M3 18H21" stroke="#605e5c" stroke-width="2"
+                                    stroke-linecap="round"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="mobile-menu">
+                <div class="mobile-menu-header">
+                    <div onclick="window.location.href='./'" class="logo" role="img" aria-label="Bloompod logo"></div>
+                    <div style="display: flex; gap: 8px;">
+                        <div class="language-hero-wrapper-div" role="button" tabindex="0"
+                            aria-label="Change language to English" onclick="window.location.href='index-en.html'">
+                            <img class="content-image-img" src="./assets/images/circle---countries-flag.svg"
+                                alt="Language flag">
+                            <div class="layout-section-div"><span class="label-text-span-lang">EN</span></div>
+                        </div>
+                        <button id="mobile-menu-close" class="mobile-menu-close" aria-label="Close menu">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M18 6L6 18M6 6L18 18" stroke="#605e5c" stroke-width="2" stroke-linecap="round">
+                                </path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <nav class="mobile-nav" aria-label="Mobile navigation">
+                    <a href="#home" class="mobile-nav-link active"><span>Trang Chủ</span></a>
+                    <a href="#journey" class="mobile-nav-link"><span>Hành Trình Bloompod</span></a>
+                    <a href="#notice" class="mobile-nav-link"><span>Hỗ Trợ</span></a>
+                </nav>
+                <div class="mobile-menu-footer">
+                    <nav class="language-switcher-wrapper-nav-tertiary" aria-label="Footer navigation">
+                        </a>
+                        <a href="privacy.html" class="footer-tab">
+                            <span class="terms-of-use"><span class="label-text-span-link">Privacy Policy</span></span>
+                        </a>
+                        <a href="terms.html" class="footer-tab">
+                            <span class="terms-of-use"><span class="label-text-span-link">Terms of Use</span></span>
+                        </a>
+                        <a href="shipping.html" class="footer-tab">
+                            <span class="terms-of-use"><span class="label-text-span-link">Shipping</span></span>
+                        </a>
+                        <a href="returns.html" class="footer-tab">
+                            <span class="terms-of-use"><span class="label-text-span-link">Returns</span></span>
+                        </a>
+                        <a href="contact.html" class="footer-tab">
+                            <span class="terms-of-use"><span class="label-text-span-link"> Contact</span></span>
+                        </a>
+                    </nav>
+                    <!-- <button class="purchase-button-button-additional mobile-cta" type="button">
+                        <span class="purchase-button-span">Đặt mua Bloompod™</span>
+                    </button>
+                    <div class="language-hero-wrapper-div" role="button" tabindex="0"
+                        aria-label="Change language to English">
+                        <img class="content-image-img" src="./assets/images/circle---countries-flag.svg"
+                            alt="Language flag">
+                        <div class="layout-section-div"><span class="label-text-span-lang">EN</span></div>
+                    </div> -->
+                </div>
+            </div>
+            <section id="home" class="home-wrapper-section-banner" aria-labelledby="hero-heading">
+                <img class="z" src="./assets/images/z7578719146891-561a99af35c7454153c4d4aaad63ffd4-1.png" alt=""
+                    role="presentation">
+                <img class="z mb" src="./assets/images/image-banner-mb.png" alt="" role="presentation">
+                <div class="container language-switcher-wrapper flex-direction-column">
+                    <div class="language-switcher">
+                        <div class="language-switcher-wrapper-div-primary">
+                            <h1 id="hero-heading" class="p">Bạn không cần dạy con nói tiếng
+                                Anh sớm.</h1>
+                            <p class="value-proposition-text">Bạn chỉ cần cho con một nền tảng đúng.
+                            </p>
+                        </div>
+                        <p class="language-readiness-l">
+                            <span class="span">Language Readiness</span>
+                            <span class="language-switcher-text-span-primary">
+                                là giai đoạn não bộ hình thành sự quen thuộc với ngôn ngữ thông qua lắng nghe — trước
+                                khi lời nói xuất
+                                <!-- hiện. Bloompod™ được thiết kế cho 3 năm đầu đời của trẻ.</span> -->
+                                hiện. Bloompod được thiết kế cho 3 năm đầu đời của trẻ.</span>
+                        </p>
+                    </div>
+                    <div class="language-switcher-wrapper-div-secondary">
+                        <!-- <button class="button-wrapper" type="button" onclick="window.location.href='order.html'"><span class="purchase-button-span-extra">Đặt mua
+                                Bloom™</span></button> -->
+                        <button class="button-wrapper" type="button" onclick="window.location.href='order.html'"><span
+                                class="purchase-button-span-extra">Đặt mua
+                                Bloom</span></button>
+                        <button class="action-button" type="button" onclick="window.location.href='#journey'"><span
+                                class="label-text-span-banner">Khám phá hành
+                                trình</span></button>
+                    </div>
+                </div>
+            </section>
+            <section class="home-wrapper-section-primary" aria-labelledby="language-foundation-heading">
+                <img class="language-switcher-image" src="./assets/images/image-33.png" alt="" role="presentation">
+                <div class="container flex-direction-column">
+                    <div class="language-switcher-wrapper-div-tertiary">
+                        <h2 id="language-foundation-heading" class="description-text-h2">
+                            Ngôn ngữ không bắt đầu từ lời nói.<br>Nó bắt đầu từ việc lắng nghe
+                        </h2>
+                        <p class="description-text-p-secondary">
+                            Trước khi trẻ nói, não bộ đã ghi nhận nhịp điệu, âm sắc và cấu trúc của một hệ thống ngôn
+                            ngữ.
+                            Sự quen
+                            thuộc này diễn ra âm thầm nhưng quyết định cách trẻ tiếp cận việc học sau này.
+                        </p>
+                    </div>
+                    <div class="language-switcher-wrapper-div-extra">
+                        <article class="tone-feature-wrapper-article-primary">
+                            <img class="graphic-icon" src="./assets/images/graphic-icon.svg" alt="Rhythm icon">
+                            <div class="landing-hero-wrapper-article-extra">
+                                <h3 class="label-text-h3-secondary">Nhịp điệu</h3>
+                                <p class="description-text-p-secondary">Trẻ nhận diện dòng chảy của câu trước
+                                    khi hiểu nghĩa.</p>
+                            </div>
+                        </article>
+                        <article class="tone-feature-wrapper-article-primary">
+                            <img class="graphic-icon" src="./assets/images/graphic-icon-2.svg" alt="Tone icon">
+                            <div class="landing-hero-wrapper-article-extra">
+                                <h3 class="label-text-h3-secondary">Âm sắc</h3>
+                                <p class="description-text-p-secondary">Âm thanh được ghi nhận ở mức độ cảm
+                                    giác.</p>
+                            </div>
+                        </article>
+                        <article class="tone-feature-wrapper-article-primary">
+                            <img class="graphic-icon" src="./assets/images/graphic-icon-1.svg" alt="Structure icon">
+                            <div class="landing-hero-wrapper-article-extra">
+                                <h3 class="label-text-h3-secondary">Cấu trúc</h3>
+                                <p class="description-text-p-secondary">Mẫu hình lặp lại giúp não bộ dự đoán
+                                    và củng cố kết nối.</p>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </section>
+            <section class="home-wrapper-section-secondary" aria-labelledby="challenges-heading">
+                <img class="problem-section-image" src="./assets/images/image-29.svg" alt="" role="presentation">
+                <div class="container flex-direction-column">
+                    <h2 id="challenges-heading" class="v-sao-nhi-u-tr-v-n-g">
+                        Vì sao nhiều trẻ vẫn gặp khó khăn<br>khi học tiếng Anh?
+                    </h2>
+                    <div class="problem-section-wrapper">
+                        <article class="image-wrapper-article-secondary">
+                            <img class="layout-section-img-tertiary" src="./assets/images/frame-1000003109-7.svg"
+                                alt="Listening difficulty icon">
+                            <p class="label-text-p-tertiary">Nghe không bắt được âm</p>
+                        </article>
+                        <article class="image-wrapper-article-secondary">
+                            <img class="layout-section-img-tertiary" src="./assets/images/frame-1000003109-16.svg"
+                                alt="Pronunciation difficulty icon">
+                            <p class="label-text-p-tertiary">Phát âm khó sửa</p>
+                        </article>
+                        <article class="image-wrapper-article-secondary">
+                            <img class="layout-section-img-tertiary" src="./assets/images/frame-1000003109-5.svg"
+                                alt="Stress icon">
+                            <p class="label-text-p-tertiary">Căng thẳng khi vào lớp</p>
+                        </article>
+                        <article class="image-wrapper-article-secondary">
+                            <img class="layout-section-img-tertiary" src="./assets/images/frame-1000003109-24.svg"
+                                alt="Foundation icon">
+                            <p class="label-text-p-tertiary">Thiếu sự quen thuộc ban đầu</p>
+                        </article>
+                    </div>
+                    <div class="problem-section-wrapper-div">
+                        <p class="label-text-p-extra">Không phải vì thiếu khả năng.</p>
+                        <p class="description-text-p-secondary">Mà vì nền tảng chưa từng được xây dựng trong
+                            giai đoạn não bộ linh hoạt nhất.</p>
+                    </div>
+                </div>
+            </section>
+            <section class="home-wrapper-section-tertiary" aria-labelledby="difference-heading">
+                <img class="landing-hero-image" src="./assets/images/image-28.png" alt="" role="presentation">
+                <div class="container">
+                    <div class="landing-hero-wrapper">
+                        <h2 id="difference-heading" class="custom-element-h2">
+                            <!-- <span class="landing-hero-text-span-extra">Bloompod™</span> -->
+                            <span class="landing-hero-text-span-extra">Bloompod</span>
+                            <span class="landing-hero-text-span-extra">
+                                không phải lớp học.<br>Không phải app.<br>Không phải video ngẫu nhiên.</span>
+                        </h2>
+                        <div class="landing-hero-wrapper-div-1">
+                            <div class="landing-hero-wrapper-div-secondary">
+                                <div class="layout-section-div-primary">
+                                    <h3 class="landing-hero-text-h3">Tiếp xúc ngẫu nhiên</h3>
+                                </div>
+                                <div class="landing-hero-wrapper-div-additional">
+                                    <img class="structure-feature-wrapper-img"
+                                        src="./assets/images/frame-1000003109-11.svg" alt="Random sound icon">
+                                    <p class="structure-feature-text-p-primary">Âm thanh rời rạc</p>
+                                </div>
+                                <div class="landing-hero-wrapper-div-additional">
+                                    <img class="structure-feature-wrapper-img"
+                                        src="./assets/images/frame-1000003109-6.svg" alt="Change icon">
+                                    <p class="structure-feature-text-p-primary">Thay đổi liên tục</p>
+                                </div>
+                                <div class="landing-hero-wrapper-div-additional">
+                                    <img class="structure-feature-wrapper-img"
+                                        src="./assets/images/frame-1000003109-4.svg" alt="No sequence icon">
+                                    <p class="structure-feature-text-p-primary">Không trình tự</p>
+                                </div>
+                                <div class="landing-hero-wrapper-div-additional">
+                                    <img class="structure-feature-wrapper-img"
+                                        src="./assets/images/frame-1000003109-21.svg" alt="Fragmented icon">
+                                    <p class="structure-feature-text-p-primary">Nội dung phân mảnh</p>
+                                </div>
+                            </div>
+                            <div class="landing-hero-wrapper-div-secondary">
+                                <div class="landing-hero-wrapper-div-tertiary">
+                                    <!-- <h3 class="landing-hero-text-h3">Bloompod™</h3> -->
+                                    <h3 class="landing-hero-text-h3">Bloompod</h3>
+                                </div>
+                                <div class="landing-hero-wrapper-div-additional">
+                                    <img class="structure-feature-wrapper-img"
+                                        src="./assets/images/frame-1000003109-8.svg" alt="Cycle icon">
+                                    <p class="structure-feature-text-p-primary">Chu kỳ lặp lại</p>
+                                </div>
+                                <div class="landing-hero-wrapper-div-additional">
+                                    <img class="structure-feature-wrapper-img"
+                                        src="./assets/images/frame-1000003110-1.svg" alt="Rhythm icon">
+                                    <p class="structure-feature-text-p-primary">Nhịp điệu ổn định</p>
+                                </div>
+                                <div class="landing-hero-wrapper-div-additional">
+                                    <img class="structure-feature-wrapper-img"
+                                        src="./assets/images/frame-1000003109-25.svg" alt="Stage design icon">
+                                    <p class="structure-feature-text-p-primary">Thiết kế theo giai đoạn</p>
+                                </div>
+                                <div class="landing-hero-wrapper-div-additional">
+                                    <img class="structure-feature-wrapper-img"
+                                        src="./assets/images/frame-1000003110.svg" alt="Structure icon">
+                                    <p class="structure-feature-text-p-primary">Cấu trúc nhất quán</p>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="landing-hero-text">Sự khác biệt không nằm ở số lượng âm thanh,
+                            mà ở cách âm thanh được tổ chức.</p>
+                    </div>
+                </div>
+            </section>
+            <section class="home-wrapper-section-extra" aria-labelledby="system-heading">
+                <img class="rhythm-feature-image" src="./assets/images/image-24.png" alt="" role="presentation">
+                <div class="container flex-direction-column">
+                    <h2 id="system-heading" class="rhythm-feature-text-h2">Một hệ thống đồng bộ với 3
+                        năm đầu đời</h2>
+                    <div class="home-wrapper-section-body-extra">
+                        <div class="rhythm-feature-wrapper-div">
+                            <img class="layout-section-img-extra" src="./assets/images/frame-1000003150.svg"
+                                alt="Stage 1 icon">
+                            <div class="image-wrapper-div">
+                                <img class="content-image-img-primary" src="./assets/images/rectangle-12.svg" alt=""
+                                    role="presentation">
+                                <p class="label-text-p">Giai đoạn 1</p>
+                            </div>
+                            <article class="rhythm-feature-wrapper-article-tertiary mb">
+                                <h3 class="language-switcher-text-h3">Làm quen hệ thống âm thanh
+                                </h3>
+                                <p class="description-text-p-secondary">Nhịp điệu ổn định. Sự lặp lại nhẹ nhàng giúp trẻ
+                                    tiếp xúc với âm thanh của ngôn ngữ.</p>
+                            </article>
+                        </div>
+                        <div class="rhythm-feature-wrapper-div">
+                            <img class="layout-section-img-extra" src="./assets/images/frame-1000003151.svg"
+                                alt="Stage 2 icon">
+                            <div class="image-wrapper-div">
+                                <img class="content-image-img-primary" src="./assets/images/rectangle-13.svg" alt=""
+                                    role="presentation">
+                                <p class="label-text-p">Giai đoạn 2</p>
+                            </div>
+                            <article class="rhythm-feature-wrapper-article-tertiary mb">
+                                <h3 class="language-switcher-text-h3">Nhận diện các mẫu âm thanh</h3>
+                                <p class="description-text-p-secondary">Sự lặp lại có cấu trúc giúp não bộ dẫn nhận ra
+                                    các chuỗi âm quen thuộc.</p>
+                            </article>
+                        </div>
+                        <div class="rhythm-feature-wrapper-div">
+                            <img class="layout-section-img-extra" src="./assets/images/frame-1000003149.svg"
+                                alt="Stage 3 icon">
+                            <div class="image-wrapper-div">
+                                <img class="content-image-img-primary" src="./assets/images/rectangle-16.svg" alt=""
+                                    role="presentation">
+                                <p class="label-text-p">Giai đoạn 3</p>
+                            </div>
+                            <article class="rhythm-feature-wrapper-article-tertiary mb">
+                                <h3 class="language-switcher-text-h3">Quen với cấu trúc của ngôn ngữ</h3>
+                                <p class="description-text-p-secondary">Trẻ bắt đầu nhận ra các mẫu câu đơn giản và dòng
+                                    chảy tự nhiên của lời nói.
+                                </p>
+                            </article>
+                        </div>
+                    </div>
+                    <div class="language-switcher-wrapper-div-alternate">
+                        <article class="rhythm-feature-wrapper-article-tertiary">
+                            <h3 class="language-switcher-text-h3">Làm quen hệ thống âm thanh nền tảng.
+                            </h3>
+                            <p class="description-text-p-secondary">Nhịp điệu ổn định. Lặp lại nhẹ nhàng.</p>
+                        </article>
+                        <img class="line" src="./assets/images/line-6.svg" alt="" role="presentation">
+                        <article class="rhythm-feature-wrapper-article-tertiary">
+                            <h3 class="language-switcher-text-h3">Mở rộng nhận diện<br>cấu trúc.</h3>
+                            <p class="description-text-p-secondary">Tăng độ phức tạp có kiểm soát.</p>
+                        </article>
+                        <img class="line" src="./assets/images/line-6.svg" alt="" role="presentation">
+                        <article class="rhythm-feature-wrapper-article-tertiary">
+                            <h3 class="language-switcher-text-h3">Chuẩn bị bước vào môi trường học chính
+                                thức.</h3>
+                            <p class="description-text-p-secondary">Tăng sự quen thuộc với hệ thống ngôn ngữ.
+                            </p>
+                        </article>
+                    </div>
+                    <img class="rhythm-feature-image-img" src="./assets/images/group-427321112.png"
+                        alt="Timeline illustration">
+                    <p class="landing-hero-text-p-primary">BloomPod không thúc ép. BloomPod đồng hành cùng sự phát
+                        triển.</p>
+                </div>
+            </section>
+            <section id="journey" class="home-wrapper-section-journey" aria-labelledby="journey-heading">
+                <h2 id="journey-heading" class="landing-hero-text-h2-primary">Hành trình BloomPod</h2>
+                <h4 class="description-text-p-secondary">
+                    Để đồng hành cùng quá trình tiếp thu ngôn ngữ tự nhiên của trẻ,<br>
+                    Bloompod xây dựng một hành trình gồm <span style="color: var(--primaryprimary-800); font-weight: 700;">4 phần</span>.
+                </h4>
+                 <div class="journey-wrapper-grid">
+                    <article class="journey-wrapper-card">
+                        <span class="journey-badge">🌱 Phần 1</span>
+                        <h3 class="journey-card-title">Làm Quen Tiếng Anh</h3>
+                        <div class="journey-card-image-wrap">
+                            <img class="journey-card-image" src="./assets/images/baby1.png" alt="Bé nằm nghe âm thanh tiếng Anh">
+                            <img class="journey-card-tag" src="./assets/images/graphic-icon.svg" alt="">
+                        </div> 
+                        <p class="journey-card-desc">Làm quen với âm thanh, nhịp điệu và ngữ điệu của tiếng Anh.</p>
+                    </article>
+
+                    <article class="journey-wrapper-card">
+                        <span class="journey-badge">🍎 Phần 2</span>
+                        <h3 class="journey-card-title">Làm Quen Từ Vựng</h3>
+                        <div class="journey-card-image-wrap">
+                            <img class="journey-card-image" src="./assets/images/baby2.png" alt="Bé chơi với thẻ từ vựng">
+                            <img class="journey-card-tag" src="./assets/images/graphic-icon.svg" alt="">
+                        </div>
+                        <p class="journey-card-desc">Tiếp xúc với những từ vựng quen thuộc trong cuộc sống hàng ngày.</p>
+                    </article>
+
+                    <article class="journey-wrapper-card">
+                        <span class="journey-badge">💬 Phần 3</span>
+                        <h3 class="journey-card-title">Làm Quen Giao Tiếp</h3>
+                        <div class="journey-card-image-wrap">
+                            <img class="journey-card-image" src="./assets/images/baby3.png" alt="Bé tập nói câu đơn giản">
+                            <img class="journey-card-tag" src="./assets/images/graphic-icon.svg" alt="">
+                        </div>
+                        <p class="journey-card-desc">Làm quen với các câu nói đơn giản và cách diễn đạt thân thuộc.</p>
+                    </article>
+
+                    <article class="journey-wrapper-card">
+                        <span class="journey-badge">📖 Phần 4</span>
+                        <h3 class="journey-card-title">Làm Quen Câu Chuyện</h3>
+                        <div class="journey-card-image-wrap">
+                            <img class="journey-card-image" src="./assets/images/baby4.png" alt="Bé nghe kể chuyện tiếng Anh">
+                            <img class="journey-card-tag" src="./assets/images/graphic-icon.svg" alt="">
+                        </div>
+                        <p class="journey-card-desc">Tiếp nhận tiếng Anh qua những câu chuyện gần gũi, giàu cảm xúc.</p>
+                    </article>
+                </div>
+
+                <div class="journey-quote-wrapper">
+                    <div class="journey-quote-box">
+                        <img class="journey-quote-device journey-quote-device-left" src="./assets/images/bloompod2.png" alt="">
+                        <img class="journey-quote-note journey-quote-note-left" src="./assets/images/music-note-double.svg" alt="" role="presentation">
+                        <img class="journey-quote-mark journey-quote-mark-open" src="./assets/images/quote-open-green.svg" alt="" role="presentation">
+                        <blockquote class="journey-quote-text">
+                            Ngôn ngữ được tiếp thu tự nhiên nhất khi trẻ được nghe, lặp lại, khám phá
+                            và kết nối trong niềm vui.
+                        </blockquote>
+                        <img class="journey-quote-mark journey-quote-mark-close" src="./assets/images/quote-close-green.svg" alt="" role="presentation">
+                        <img class="journey-quote-device journey-quote-device-right" src="./assets/images/bloompod1.png" alt="">
+                        <img class="journey-quote-note journey-quote-note-right" src="./assets/images/music-note-single.svg" alt="" role="presentation">
+                    </div>
+                </div>
+            </section>
+            <section class="home-wrapper-section-book" aria-labelledby="book-heading">
+                <img class="language-switcher-image-img" src="./assets/images/image-24-2.png" alt=""
+                    role="presentation">
+                <div class="container">
+                    <divc class="home-wrapper-section-body-book">
+                        <div class="language-switcher-wrapper-div-additional">
+                            <div class="language-switcher-book-wrapper-div">
+                                <h2 id="book-heading" class="language-switcher-text-h2-primary">Muốn hiểu sâu hơn về
+                                    nền tảng Language Readiness?</h2>
+                                <p class="s-ch-language">
+                                    <span class="language-switcher-text-span-primary">Sách </span>
+                                    <span class="span">Language Readiness</span>
+                                    <span class="language-switcher-text-span-primary">
+                                        là tài liệu nền tảng giúp phụ huynh hiểu rõ giai đoạn tiền lời nói — khi não bộ
+                                        hình
+                                        thành sự quen
+                                        thuộc với một hệ thống ngôn ngữ trước khi lời nói xuất hiện.<br>Cuốn sách trình
+                                        bày
+                                        các
+                                        nguyên lý về
+                                        độ nhạy âm vị, tính linh hoạt thần kinh và quá trình học mẫu hình trong những
+                                        năm
+                                        đầu
+                                        đời, dưới góc
+                                        nhìn dễ tiếp cận nhưng giữ được chiều sâu phát triển.<br>Không nhằm thúc đẩy trẻ
+                                        nói
+                                        sớm.<br>Không
+                                        tạo áp lực thành tích.<br>Chỉ giúp phụ huynh hiểu đúng giai
+                                        đoạn chuẩn bị thầm lặng của não
+                                        bộ.</span>
+                                </p>
+                            </div>
+                            <img class="grg-mb" src="./assets/images/grg-1.png" alt="Language Readiness book">
+                            <button class="language-switcher-wrapper-button" type="button">
+                                <span class="language-switcher-text-span-secondary">Tải miễn phí sách Language
+                                    Readiness</span>
+                                <div class="language-switcher-wrapper-div-button">
+                                    <img class="union" src="./assets/images/union-1.svg" alt="">
+                                    <img class="content-image-img-tertiary" src="./assets/images/rectangle-19.svg"
+                                        alt="">
+                                </div>
+                            </button>
+                        </div>
+                        <img class="grg" src="./assets/images/grg-1.png" alt="Language Readiness book">
+                </div>
+                </div>
+            </section>
+            <section class="home-wrapper-section-phase" aria-labelledby="critical-period-heading">
+                <img class="content-image" src="./assets/images/image-33-2.png" alt="" role="presentation">
+                <div class="container flex-direction-column">
+                    <div class="image-wrapper-div-extra">
+                        <div class="content-block-div-primary">
+                            <h2 id="critical-period-heading" class="description-text-h2">Ba năm đầu
+                                đời chỉ diễn ra một lần.</h2>
+                            <p class="description-text-p-secondary">
+                                Trong giai đoạn này, não bộ linh hoạt nhất. Sự quen thuộc được hình thành<br>dễ dàng
+                                hơn.
+                            </p>
+                        </div>
+                        <div class="image-wrapper-div-alternate">
+                            <article class="image-wrapper-article-extra">
+                                <h3 class="label-text-h3-tertiary">Ba năm đời đầu</h3>
+                                <img class="img-objects" src="./assets/images/objects.png"
+                                    alt="Brain connections illustration">
+                                <p class="description-text-p-tertiary">Hình thành dễ dàng</p>
+                            </article>
+                            <img class="union-2" src="./assets/images/union.svg" alt="Arrow">
+                            <article class="image-wrapper-article-extra">
+                                <h3 class="label-text-h3-tertiary">Sau ba năm tuổi</h3>
+                                <img class="img-objects" src="./assets/images/objects-1.png"
+                                    alt="Brain connections illustration">
+                                <p class="description-text-p-tertiary">Khả năng hình thành tự nhiên giảm dần theo thời gian.</p>
+                            </article>
+                        </div>
+                        <p class="landing-hero-text-blockquote-primary">
+                            Khi nền tảng đã có, việc học sau này trở nên tự nhiên hơn.<br>Khi
+                            nền tảng vắng mặt, việc học vẫn có thể
+                            diễn ra — nhưng thường cần nhiều nỗ lực hơn.
+                        </p>
+                    </div>
+                </div>
+            </section>
+            <section id="package" class="home-wrapper-section-package" aria-labelledby="product-heading">
+                <img class="landing-hero-image-img-tertiary" src="./assets/images/image-30.png" alt=""
+                    role="presentation">
+                <div class="container flex-direction-column">
+                    <h2 id="product-heading" class="landing-hero-text-h2-tertiary">Bộ BloomPod</h2>
+                    <h4 class="landing-hero-text-h4-tertiary">Một hệ thống được thiết kế để đồng hành
+                        cùng quá trình xây nền ngôn ngữ tự nhiên trong ba năm đầu đời.</h4>
+                    <div class="home-wrapper-section-body-package">
+                        <article class="landing-hero-wrapper-article-secondary">
+                            <!--<h3 class="landing-hero-text-h3-secondary">Bộ BloomPod™ bao gồm:</h3>-->
+                            <h3 class="landing-hero-text-h3-secondary">Bộ BloomPod bao gồm:</h3>
+                            <ul class="landing-hero-wrapper-div-ul-1">
+                                <li class="landing-hero-wrapper-li-secondary">
+                                    <img class="layout-section-img" src="./assets/images/frame-1000003109-15.svg"
+                                        alt="Pod icon">
+                                    <div class="layout-section-content">
+                                        <!--<div class="pricing-text-span">Thiết bị BloomPod™</div>-->
+                                        <div class="pricing-text-span">Thiết bị BloomPod</div>
+                                        <div class="secondary-desciption">Thiết bị phát nội dung âm thanh được thiết kế
+                                            cho
+                                            giai đoạn đầu đời.</div>
+                                    </div>
+                                </li>
+                                <li class="landing-hero-wrapper-li-secondary">
+                                    <img class="layout-section-img" src="./assets/images/frame-1000003109-22.svg"
+                                        alt="Content icon">
+                                    <div class="layout-section-content">
+                                        <div class="pricing-text-span">Hệ thống nội dung 3 giai đoạn</div>
+                                        <div class="secondary-desciption">Nội dung được tổ chức theo tiến trình phát
+                                            triển
+                                            thính giác của trẻ trong ba năm đầu.</div>
+                                    </div>
+                                </li>
+                                <li class="landing-hero-wrapper-li-secondary">
+                                    <img class="layout-section-img" src="./assets/images/frame-1000003109-23.svg"
+                                        alt="Books icon">
+                                    <div class="layout-section-content">
+                                        <div class="pricing-text-span">Bộ thẻ hình ảnh hỗ trợ nghe</div>
+                                        <div class="secondary-desciption">Các bộ hình ảnh theo chủ đề giúp trẻ kết nối
+                                            âm
+                                            thanh với trải nghiệm thị giác một cách tự nhiên.</div>
+                                    </div>
+                                </li>
+                            </ul>
+                            <div class="landing-hero-wrapper-div-price">
+                                <div class="layout-section-div-secondary"><span
+                                        class="label-text-span-secondary">2.100.000</span></div>
+                                <div class="layout-section-div-tertiary"><span
+                                        class="label-text-span-tertiary">VNĐ</span>
+                                </div>
+                            </div>
+                            <button class="purchase-button-button-primary" type="button"
+                                onclick="window.location.href='order.html'"><span>
+                                </span> <span class="purchase-button-span-extra">Đặt mua Bloom </span></button>
+
+                            <ul class="landing-hero-wrapper-div-ul-2">
+                                <li class="image-wrapper-li-primary">
+                                    <img class="content-image-img-package-note"
+                                        src="./assets/images/frame-1000003109-19.svg" alt="Shipping icon">
+                                    <span class="landing-hero-text-span">Miễn phí giao hàng toàn
+                                        quốc</span>
+                                </li>
+                                <li class="image-wrapper-li-primary">
+                                    <img class="content-image-img-package-note"
+                                        src="./assets/images/frame-1000003109-9.svg" alt="Return icon">
+                                    <span class="landing-hero-text-span">Đổi trả trong 7 ngày</span>
+                                </li>
+                            </ul>
+                        </article>
+                        <img class="landing-hero-image-img-alternate" src="./assets/images/group-1000003138.png"
+                            alt="Product package">
+                    </div>
+                </div>
+            </section>
+            <section class="home-wrapper-section-feedback" aria-labelledby="testimonials-heading">
+                <img class="landing-hero-image-img-extra" src="./assets/images/image-33.png" alt="" role="presentation">
+                <div class="container flex-direction-column">
+                    <h2 id="testimonials-heading" class="ph-huynh-n-i-v">
+                        <!--<span class="landing-hero-text-span-additional">Phụ huynh nói về Bloompod™</span>-->
+                        <span class="landing-hero-text-span-additional">Phụ huynh nói về Bloompod</span>
+                    </h2>
+                    <div class="landing-hero-wrapper-div-3">
+                        <article class="landing-hero-wrapper-article-extra">
+                            <img class="landing-hero-wrapper-img-tertiary" src="./assets/images/frame-1000003140.svg"
+                                alt="Quote icon">
+                            <blockquote class="landing-hero-text-blockquote-primary">
+                                "Ban đầu tôi nghĩ con sẽ không chú ý.<br>Nhưng dần dần con quen với việc nghe tiếng Anh
+                                mỗi ngày."
+                            </blockquote>
+                            <p class="landing-hero-text-p-additional">— Mẹ bé 28 tháng</p>
+                        </article>
+                        <article class="landing-hero-wrapper-article-extra">
+                            <img class="landing-hero-wrapper-img-tertiary" src="./assets/images/frame-1000003140.svg"
+                                alt="Quote icon">
+                            <blockquote class="landing-hero-text-blockquote-primary">
+                                "Điều tôi thích là Bloom không yêu cầu tôi phải dạy con.<br>Chỉ
+                                bật lên, đặt xuống, và mọi thứ diễn ra
+                                rất tự nhiên."
+                            </blockquote>
+                            <p class="landing-hero-text-p-additional">— Mẹ bé 18 tháng</p>
+                        </article>
+                        <article class="landing-hero-wrapper-article-extra">
+                            <img class="landing-hero-wrapper-img-tertiary" src="./assets/images/frame-1000003140.svg"
+                                alt="Quote icon">
+                            <blockquote class="landing-hero-text-blockquote-primary">
+                                "Trước đây tôi cũng mở nhiều video tiếng Anh.<br>Nhưng Bloom cho cảm giác ổn định và có
+                                cấu trúc hơn."
+                            </blockquote>
+                            <p class="landing-hero-text-p-additional">— Mẹ bé 2 tuổi</p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+            <section id="notice" class="home-wrapper-section-notice" aria-labelledby="faq-heading">
+                <img class="language-switcher-image-img-primary" src="./assets/images/image-33.png" alt=""
+                    role="presentation">
+                <div class="container flex-direction-column">
+                    <h2 id="faq-heading" class="language-switcher-text-h2-secondary">Những điều phụ huynh thường băn
+                        khoăn</h2>
+                    <div class="language-switcher-notice-wrapper-div">
+                        <div class="language-switcher-notice-item-wrapper-div">
+                            <details class="FA-qs">
+                                <summary class="landing-hero-wrapper-summary">
+                                    <h3 class="label-text-h3">1. Có cần mở Bloom cả ngày
+                                        không?</h3>
+                                    <img class="content-image-img" src="./assets/images/icon-3.svg" alt="">
+                                </summary>
+                                <div class="kh-ng-language-wrapper">
+                                    <p class="kh-ng-language">
+                                        Không.<br>Language Readiness không phụ thuộc vào thời
+                                        lượng dài, mà vào sự lặp lại có cấu trúc.<br>Những
+                                        phiên nghe ngắn, ổn định và đều đặn thường hiệu quả hơn việc mở liên tục trong
+                                        nền.
+                                    </p>
+                                </div>
+                            </details>
+                            <details class="FA-qs">
+                                <summary class="landing-hero-wrapper-summary">
+                                    <h3 class="label-text-h3">2. Nếu bé chưa nói hoặc không
+                                        phản ứng, liệu có tác dụng?</h3>
+                                    <img class="content-image-img" src="./assets/images/icon-3.svg" alt="">
+                                </summary>
+                                <div class="kh-ng-language-wrapper">
+                                    <p class="kh-ng-language">
+                                        Giai đoạn này không nhằm tạo ra biểu hiện tức thì.<br>Sự
+                                        quen thuộc hình thành ở mức độ thần kinh,
+                                        trước khi lời nói xuất hiện.
+                                    </p>
+                                </div>
+                            </details>
+                            <details class="FA-qs">
+                                <summary class="landing-hero-wrapper-summary">
+                                    <h3 class="label-text-h3">3. Bloom khác gì so với video
+                                        hoặc nội dung tiếng Anh thông thường?</h3>
+                                    <img class="content-image-img" src="./assets/images/icon-3.svg" alt="">
+                                </summary>
+                                <div class="kh-ng-language-wrapper">
+                                    <p class="kh-ng-language">
+                                        Sự khác biệt nằm ở cấu trúc.<br>Bloom được thiết kế theo
+                                        chu kỳ lặp lại ổn định và trình tự phát
+                                        triển — không phải tiếp xúc ngẫu nhiên.
+                                    </p>
+                                </div>
+                            </details>
+                            <div class="xem-ch-nh-s-ch-h-tr-wrapper">
+                                <a href="support.html" class="xem-ch-nh-s-ch-h-tr">Xem chính
+                                    sách &amp; hỗ trợ đầy đủ →</a>
+                            </div>
+                        </div>
+                        <button class="purchase-button-button-secondary" type="button"
+                            onclick="window.location.href='order.html'"><span class="purchase-button-span-extra">Đặt mua
+                                Bloom</span></button>
+                    </div>
+                </div>
+            </section>
+            <footer class="footer">
+                <div class="container flex-direction-row">
+                    <div class="language-switcher-wrapper-footer-left">
+                        <div class="logo-2" role="img" aria-label="Bloompod logo"></div>
+                        <p class="language-switcher-text-p">
+                            Công ty TNHH GIÁO DỤC TOÀN CẦU AMPLIFY<br>
+                            MST: 0123456789<br>
+                            Địa chỉ: CC Lavida Plus, Đường Nguyễn Văn Linh, Phường Tân Hưng, HCM<br>
+                            Email: <a href="mailto:info@bloom.vn">info@bloom.vn</a><br>
+                            HotLine: <a href="tel:+84938838974">+84 938 838 974</a>
+                        </p>
+                    </div>
+                    <div class="language-switcher-wrapper-footer-right">
+                        <nav class="language-switcher-wrapper-nav-tertiary" aria-label="Footer navigation">
+                            <a href="support.html" class="footer-tab">
+                                <span class="terms-of-use"><span class="label-text-span-link">Chính sách thanh
+                                        toán</span></span>
+                            </a>
+                            <a href="support.html" class="footer-tab">
+                                <span class="terms-of-use"><span class="label-text-span-link">Chính sách bảo
+                                        mật</span></span>
+                            </a>
+                            <a href="support.html" class="footer-tab">
+                                <span class="terms-of-use"><span class="label-text-span-link">Điều khoản sử
+                                        dụng</span></span>
+                            </a>
+                            <a href="support.html" class="footer-tab">
+                                <span class="terms-of-use"><span class="label-text-span-link">Giao hàng</span></span>
+                            </a>
+                            <a href="support.html" class="footer-tab">
+                                <span class="terms-of-use"><span class="label-text-span-link">Đổi trả</span></span>
+                            </a>
+                            <a href="support.html" class="footer-tab">
+                                <span class="terms-of-use"><span class="label-text-span-link"> Liên hệ</span></span>
+                            </a>
+                        </nav>
+                        <div class="social-media-wrapper">
+                            <a href="#" target="_blank" class="social-icon" aria-label="Facebook">
+                                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" />
+                                </svg>
+                            </a>
+
+                            <a href="#" target="_blank" class="social-icon" aria-label="TikTok">
+                                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
+                                    style="transform: scale(0.85);">
+                                    <path
+                                        d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z" />
+                                </svg>
+                            </a>
+
+                            <a href="#" target="_blank" class="social-icon" aria-label="YouTube">
+                                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M21.582 6.186c-.23-.86-.908-1.538-1.768-1.768C18.254 4 12 4 12 4s-6.254 0-7.814.418c-.86.23-1.538.908-1.768 1.768C2 7.746 2 12 2 12s0 4.254.418 5.814c.23.86.908 1.538 1.768 1.768C7.746 20 12 20 12 20s6.254 0 7.814-.418c.86-.23 1.538-.908 1.768-1.768C22 16.254 22 12 22 12s0-4.254-.418-5.814zM9.999 15.594v-7.188l6.328 3.594-6.328 3.594z" />
+                                </svg>
+                            </a>
+                        </div>
+                        <div class="language-switcher-wrapper-production-line">
+                            <p class="landing-hero-text-p">
+                                © 2026 Bloompod™ Developed by Amplify Global Education</p>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </section>
+    </main>
+
+    <!-- Video Bloompod -->
+    <div id="youtube-modal-overlay" class="video-modal-overlay" style="display: none;">
+        <div class="video-modal-content">
+            <button id="close-video-btn" class="video-close-btn">&times;</button>
+
+            <iframe id="youtube-player" width="100%" height="100%" src="https://www.youtube.com/embed/kLMqOFPWPp8"
+                title="YouTube video player" frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen>
+            </iframe>
+        </div>
+    </div>
+
+    <!-- Email Capture Modal -->
+    <div id="emailModalOverlay" class="email-modal-overlay">
+        <div id="emailModal" class="email-modal">
+            <button id="emailModalClose" class="email-modal-close" type="button" aria-label="Đóng">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18 6L6 18M6 6L18 18" stroke="#605e5c" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+            </button>
+
+            <!-- Form View -->
+            <div id="emailFormView">
+                <div class="email-modal-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L3 7L12 12L21 7L12 2Z" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M3 17L12 22L21 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                        <path d="M3 12L12 17L21 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </div>
+                <h2 class="email-modal-title">Tải miễn phí sách Language Readiness</h2>
+                <p class="email-modal-description">Nhập email của bạn để nhận sách điện tử miễn phí về nền tảng Language
+                    Readiness</p>
+
+                <form id="emailModalForm" class="email-modal-form">
+                    <div class="email-modal-input-group">
+                        <label for="emailInput" class="email-modal-label">Địa chỉ email</label>
+                        <input type="email" id="emailInput" class="email-modal-input" placeholder="email@example.com"
+                            autocomplete="email" required />
+                        <div id="emailError" class="email-modal-error"></div>
+                    </div>
+
+                    <button type="submit" id="emailSubmitBtn" class="email-modal-submit">
+                        <span id="emailSpinner" class="email-modal-spinner"></span>
+                        <span>Tải sách miễn phí</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                            <path d="M12 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Success View -->
+            <div id="emailSuccessView" class="email-modal-success">
+                <div class="email-modal-success-icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M22 11.08V12C21.9988 14.1564 21.3005 16.2547 20.0093 17.9818C18.7182 19.709 16.9033 20.9725 14.8354 21.5839C12.7674 22.1953 10.5573 22.1219 8.53447 21.3746C6.51168 20.6273 4.78465 19.2461 3.61096 17.4371C2.43727 15.628 1.87979 13.4881 2.02168 11.3363C2.16356 9.18455 2.99721 7.13631 4.39828 5.49706C5.79935 3.85781 7.69279 2.71537 9.79619 2.24013C11.8996 1.7649 14.1003 1.98232 16.07 2.85999"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M22 4L12 14.01L9 11.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </div>
+                <h2 class="email-modal-success-title">Gửi thành công!</h2>
+                <p class="email-modal-success-text">Vui lòng kiểm tra email của bạn để tải sách Language Readiness</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="./assets/js/lang.js"></script>
+    <script src="./assets/js/email-modal.js?v=1"></script>
+</body>
+
+</html>

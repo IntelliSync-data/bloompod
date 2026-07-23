@@ -1,0 +1,87 @@
+@import url("https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css");
+@import url("https://fonts.googleapis.com/css?family=Raleway:var(--title-font-weight),var(--subtitle-font-weight),var(--body-1-font-weight),400,var(--body-2-font-weight)|Trirong:var(--h4-font-weight),var(--h5-font-weight),var(--h6-font-weight),600,var(--h7-font-weight),var(--h2-font-weight),400,var(--h3-font-weight)");
+
+/* @FONTWARNING[{"type": "restricted", "family": "Songti TC-Bold", "weight": "700", "style": "normal", "allowsCrossOrigin": false}] */
+* {
+    -webkit-font-smoothing: antialiased;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0px;
+    height: 100%;
+}
+
+/* a blue color as a generic focus style */
+button:focus-visible {
+    outline: 2px solid #4a90e2 !important;
+    outline: -webkit-focus-ring-color auto 5px !important;
+}
+
+a {
+    text-decoration: none;
+}
+
+@font-face {
+    font-family: "Songti TC-Bold";
+    src: local("Songti TC-Bold");
+}
+
+.main {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.main>section,
+.main>section,
+.main>section {
+    display: flex;
+    flex-direction: column;
+}
+
+.main>section>header>.container,
+.main>section>section>.container,
+.main>section>footer>.container {
+    max-width: 1366px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 16px;
+    display: flex;
+    position: relative;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.display-flex {
+    display: flex;
+}
+
+.flex-direction-column {
+    flex-direction: column;
+}
+
+.flex-direction-row {
+    flex-direction: row;
+}
+
+.justify-content-space-between {
+    justify-content: space-between;
+}
+
+.justify-content-center {
+    justify-content: center;
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
+.align-items-end {
+    align-items: flex-end;
+}

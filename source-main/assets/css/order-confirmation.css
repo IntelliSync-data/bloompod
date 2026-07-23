@@ -1,0 +1,262 @@
+/* ==============================================
+   ORDER CONFIRMATION PAGE STYLES
+   ============================================== */
+
+.confirmation-content {
+    max-width: 800px;
+    margin: 60px auto;
+    padding: 48px;
+    background: var(--white);
+    border-radius: 8px;
+    text-align: center;
+}
+
+/* Icon */
+.confirmation-icon {
+    margin: 0 auto 32px;
+    width: 80px;
+    height: 80px;
+}
+
+.confirmation-icon.success svg {
+    filter: drop-shadow(0 4px 12px rgba(111, 143, 94, 0.2));
+}
+
+.confirmation-icon.failure svg {
+    filter: drop-shadow(0 4px 12px rgba(220, 36, 36, 0.2));
+}
+
+/* Title & Description */
+.confirmation-title {
+    font-family: var(--h2-font-family);
+    font-weight: var(--h2-font-weight);
+    font-size: var(--h2-font-size);
+    line-height: var(--h2-line-height);
+    color: var(--secondary-dark);
+    margin: 0 0 16px 0;
+}
+
+.confirmation-description {
+    font-family: var(--body-2-font-family);
+    font-size: var(--body-2-font-size);
+    line-height: var(--body-2-line-height);
+    color: var(--text);
+    margin: 0 0 48px 0;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Details */
+.confirmation-details {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+    text-align: left;
+    margin-bottom: 48px;
+}
+
+.detail-box {
+    background: var(--second-bg);
+    padding: 32px;
+    border-radius: 8px;
+}
+
+.detail-title {
+    font-family: var(--h5-font-family);
+    font-weight: var(--h5-font-weight);
+    font-size: var(--h5-font-size);
+    color: var(--secondary-dark);
+    margin: 0 0 24px 0;
+}
+
+.detail-info {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+}
+
+.info-label {
+    font-family: var(--body-2-font-family);
+    font-weight: 400;
+    font-size: var(--body-2-font-size);
+    color: var(--text);
+    flex-shrink: 0;
+}
+
+.info-value {
+    font-family: var(--body-1-font-family);
+    font-weight: var(--body-1-font-weight);
+    font-size: var(--body-1-font-size);
+    color: var(--black);
+    text-align: right;
+}
+
+.info-row.total {
+    padding-top: 16px;
+    border-top: 2px solid var(--line-color);
+    margin-top: 8px;
+}
+
+.info-row.total .info-label {
+    font-weight: 700;
+    color: var(--black);
+}
+
+.info-row.total .info-value {
+    font-family: var(--h5-font-family);
+    font-weight: var(--h5-font-weight);
+    font-size: var(--h5-font-size);
+    color: var(--secondary-dark);
+}
+
+/* Next Steps */
+.next-steps {
+    background: var(--primaryprimary-200);
+    padding: 32px;
+    border-radius: 8px;
+}
+
+.steps-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.steps-list li {
+    font-family: var(--body-2-font-family);
+    font-size: var(--body-2-font-size);
+    line-height: var(--body-2-line-height);
+    color: var(--text);
+    padding-left: 32px;
+    position: relative;
+}
+
+.steps-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 24px;
+    height: 24px;
+    background: var(--secondary-dark);
+    color: var(--white);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* Actions */
+.confirmation-actions {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+}
+
+.confirmation-actions .btn-primary,
+.confirmation-actions .btn-secondary {
+    font-family: var(--body-1-font-family);
+    font-weight: var(--body-1-font-weight);
+    font-size: var(--body-1-font-size);
+    padding: 14px 48px;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.confirmation-actions .btn-primary {
+    background-color: var(--secondary-dark);
+    color: var(--white);
+    border: none;
+    box-shadow: var(--button-shadow-default);
+}
+
+.confirmation-actions .btn-primary:hover {
+    background-color: var(--button-hover);
+    box-shadow: var(--button-shadow-hover);
+}
+
+.confirmation-actions .btn-secondary {
+    background-color: var(--white);
+    color: var(--secondary-dark);
+    border: 2px solid var(--secondary-dark);
+}
+
+.confirmation-actions .btn-secondary:hover {
+    background-color: var(--primaryprimary-300);
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+    .confirmation-content {
+        margin: 40px auto;
+        padding: 32px 24px;
+    }
+
+    .confirmation-title {
+        font-size: 32px;
+        line-height: 42px;
+    }
+
+    .detail-box,
+    .next-steps {
+        padding: 24px 20px;
+    }
+
+    .info-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+
+    .info-value {
+        text-align: left;
+    }
+
+    .confirmation-actions {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .confirmation-actions .btn-primary,
+    .confirmation-actions .btn-secondary {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .confirmation-content {
+        padding: 24px 16px;
+    }
+
+    .confirmation-icon {
+        width: 60px;
+        height: 60px;
+        margin-bottom: 24px;
+    }
+
+    .confirmation-icon svg {
+        width: 60px;
+        height: 60px;
+    }
+
+    .detail-box,
+    .next-steps {
+        padding: 20px 16px;
+    }
+}

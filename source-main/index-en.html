@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="vi" ready="true">
+
+<head>
+    <!-- <script>
+        window.addEventListener("message", (message) => {
+            if (message.data.type === "refresh") {
+                window.location.reload();
+            }
+        })
+    </script> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <title>Bloompod™ - Language Readiness System</title>
+    <meta name="description" content="Bloompod™ - Hệ thống Language Readiness cho trẻ 0-3 tuổi">
+    <link rel="stylesheet" href="./assets/css/globals.css">
+    <link rel="stylesheet" href="./assets/css/styleguide.css">
+    <link rel="stylesheet" href="./assets/css/style.css?v=4">
+    <link rel="stylesheet" href="./assets/css/style-responsive.css?v=4">
+    <link rel="stylesheet" href="./assets/css/email-modal.css">
+    <script src="https://app.bloompod.vn/chatbot/widget.js"></script>
+</head>
+
+<body style="user-select: unset;">
+    <script>
+        // Smooth scroll for anchor links
+        document.addEventListener('DOMContentLoaded', function () {
+            // Smooth scrolling
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    const href = this.getAttribute('href');
+                    if (href === '#' || !href) return;
+
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+                        // Close mobile menu if open
+                        const mobileMenu = document.getElementById('mobile-menu');
+                        if (mobileMenu && mobileMenu.classList.contains('active')) {
+                            mobileMenu.classList.remove('active');
+                            document.body.style.overflow = '';
+                        }
+                    }
+                });
+            });
+
+            // Mobile menu toggle
+            const hamburger = document.getElementById('hamburger-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuClose = document.getElementById('mobile-menu-close');
+
+            if (hamburger && mobileMenu) {
+                hamburger.addEventListener('click', function () {
+                    mobileMenu.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                });
+            }
+
+            if (mobileMenuClose && mobileMenu) {
+                mobileMenuClose.addEventListener('click', function () {
+                    mobileMenu.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            }
+
+            // Highlight active nav link
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.menu-tab, .mobile-nav-link');
+
+            function highlightNav() {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    if (window.pageYOffset >= sectionTop - 200) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + current) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+
+            window.addEventListener('scroll', highlightNav);
+            highlightNav();
+
+            // Form validation
+            const forms = document.querySelectorAll('form');
+            forms.forEach(form => {
+                form.addEventListener('submit', function (e) {
+                    e.preventDefault();
+
+                    const inputs = form.querySelectorAll('input[required], select[required]');
+                    let isValid = true;
+
+                    inputs.forEach(input => {
+                        if (!input.value.trim()) {
+                            isValid = false;
+                            input.style.borderColor = '#dc2424';
+                        } else {
+                            input.style.borderColor = '#f2f0ee';
+                        }
+                    });
+
+                    if (isValid) {
+                        // Show success message or navigate to next step
+                        alert('Form submitted successfully!');
+                        // In a real app, you would submit the form data here
+                    }
+                });
+            });
+
+             //Video BloomPod
+            const videoModal = document.getElementById('youtube-modal-overlay');
+            const closeVideoBtn = document.getElementById('close-video-btn');
+            const youtubePlayer = document.getElementById('youtube-player');
+            const originalVideoSrc = youtubePlayer ? youtubePlayer.src : '';
+            const playButtons = document.querySelectorAll('.play-pause');
+
+            playButtons.forEach(btn => {
+                btn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    if (videoModal && youtubePlayer) {
+                    
+                        youtubePlayer.src = originalVideoSrc + "?autoplay=1";
+                        videoModal.style.display = 'flex';
+                    }
+                });
+            });
+
+            function closeVideoModal() {
+                if (videoModal && youtubePlayer) {
+                    videoModal.style.display = 'none';
+                    // Reset link to force video stopped when popup closed 
+                    youtubePlayer.src = originalVideoSrc;
+                }
+            }
+
+            // Closed popup button
+            if (closeVideoBtn) {
+                closeVideoBtn.addEventListener('click', closeVideoModal);
+            }
+
+            // Click outside popup to close
+            if (videoModal) {
+                videoModal.addEventListener('click', function (e) {
+                    if (e.target === videoModal) {
+                        closeVideoModal();
+                    }
+                });
+            }
+
+            // Modal close buttons
+            const modalCloseButtons = document.querySelectorAll('.frame-97, .button-13');
+            modalCloseButtons.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const modal = this.closest('.cm-on');
+                    if (modal) {
+                        modal.style.display = 'none';
+                        const overlay = document.querySelector('.rectangle-5');
+                        if (overlay) overlay.style.display = 'none';
+                    }
+                });
+            });
+
+            // Language switcher
+            const langSwitcher = document.querySelectorAll('.ngn-ng');
+            langSwitcher.forEach(switcher => {
+                switcher.addEventListener('click', function () {
+                    alert('Language switching would be implemented here');
+                });
+            });
+
+            // Purchase buttons - scroll to form or show modal
+            const purchaseButtons = document.querySelectorAll('.button, .button-5, .button-6');
+            purchaseButtons.forEach(btn => {
+                const text = btn.textContent.trim();
+                if (text.includes('Đặt mua') || text.includes('Bloom')) {
+                    btn.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        // Scroll to order form or show purchase modal
+                        const orderSection = document.querySelector('.info-wrapper');
+                        if (orderSection) {
+                            orderSection.scrollIntoView({ behavior: 'smooth' });
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+    <main class="main">
+        <section class="home">
+            <header class="menu-bar">
+                <div class="container flex-direction-row justify-content-space-between">
+                    <div class="logo" role="img" aria-label="Bloompod logo"></div>
+                    <nav class="home-wrapper-nav-tertiary desktop-nav" aria-label="Main navigation">
+                        <a href="#home" class="menu-tab active"><span class="home-text-span-tertiary">Home</span></a>
+                        <a href="#journey" class="menu-tab"><span class="home-text-span-tertiary">The Bloom
+                                Journey</span></a>
+                        <a href="#notice" class="menu-tab"><span class="home-text-span-tertiary">Support</span></a>
+                    </nav>
+                    <div class="home-wrapper-div-extra">
+                        <a href="order-en.html">
+                            <button class="purchase-button-button-additional" type="button" aria-label="Order Bloompod">
+                                <!--<span class="purchase-button-span">Order Bloompod™</span>-->
+                                <span class="purchase-button-span">Order Bloompod</span>
+                            </button>
+                        </a>
+                            <div class="language-hero-wrapper-div" role="button" tabindex="0"
+                                aria-label="Change language to Vietnamese" onclick="window.location.href='index.html'">
+                                <div class="layout-section-div"><span class="label-text-span-lang">VN</span></div>
+                                <img class="content-image-img" src="./assets/images/united-kingdom.png" alt="Language flag">
+                            </div>
+                        <button id="hamburger-btn" class="hamburger-menu" aria-label="Open menu">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3 12H21M3 6H21M3 18H21" stroke="#605e5c" stroke-width="2"
+                                    stroke-linecap="round"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="mobile-menu">
+                <div class="mobile-menu-header">
+                    <div class="logo" role="img" aria-label="Bloompod logo"></div>
+                    <div style="display: flex; gap: 8px;">
+                        <div class="language-hero-wrapper-div" role="button" tabindex="0"
+                            aria-label="Change language to Vietnamese" onclick="window.location.href='./'">
+                            <img class="content-image-img" src="./assets/images/circle---countries-flag.svg"
+                                alt="Language flag">
+                            <div class="layout-section-div"><span class="label-text-span-lang">VN</span></div>
+                        </div>
+                        <button id="mobile-menu-close" class="mobile-menu-close" aria-label="Close menu">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M18 6L6 18M6 6L18 18" stroke="#605e5c" stroke-width="2" stroke-linecap="round">
+                                </path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <nav class="mobile-nav" aria-label="Mobile navigation">
+                    <a href="#home" class="mobile-nav-link active"><span>Home</span></a>
+                    <a href="#journey" class="mobile-nav-link"><span>The Bloom Journey</span></a>
+                    <a href="#notice" class="mobile-nav-link"><span>Support</span></a>
+                </nav>
+                <div class="mobile-menu-footer">
+                    <nav class="language-switcher-wrapper-nav-tertiary" aria-label="Footer navigation">
+                        <a href="privacy.html" class="footer-tab">
+                            <span class="terms-of-use"><span class="label-text-span-link">Privacy
+                                    Policy</span></span>
+                        </a>
+                        <a href="terms.html" class="footer-tab">
+                            <span class="terms-of-use"><span class="label-text-span-link">Terms of Use</span></span>
+                        </a>
+                        <a href="shipping.html" class="footer-tab">
+                            <span class="terms-of-use"><span class="label-text-span-link">Shipping</span></span>
+                        </a>
+                        <a href="returns.html" class="footer-tab">
+                            <span class="terms-of-use"><span class="label-text-span-link">Returns</span></span>
+                        </a>
+                        <a href="contact.html" class="footer-tab">
+                            <span class="terms-of-use"><span class="label-text-span-link"> Contact</span></span>
+                        </a>
+                    </nav>
+                    <!-- <button class="purchase-button-button-additional mobile-cta" type="button">
+                        <span class="purchase-button-span">Order <span>Bloompod™</span></span>
+                    </button>
+                    <div class="language-hero-wrapper-div" role="button" tabindex="0"
+                        aria-label="Change language to Vietnamese">
+                        <img class="content-image-img" src="./assets/images/circle---countries-flag.svg"
+                            alt="Language flag">
+                        <div class="layout-section-div"><span class="label-text-span-lang">VN</span></div>
+                    </div> -->
+                </div>
+            </div>
+            <section id="home" class="home-wrapper-section-banner" aria-labelledby="hero-heading">
+                <img class="z" src="./assets/images/z7578719146891-561a99af35c7454153c4d4aaad63ffd4-1.png" alt=""
+                    role="presentation">
+                <div class="container language-switcher-wrapper flex-direction-column">
+                    <div class="language-switcher">
+                        <div class="language-switcher-wrapper-div-primary">
+                            <h1 id="hero-heading" class="p">You don’t need to teach your child English early.</h1>
+                            <p class="value-proposition-text">You just need to give your child the right foundation.
+                            </p>
+                        </div>
+                        <p class="language-readiness-l">
+                            <span class="span">Language Readiness</span>
+                            <span class="language-switcher-text-span-primary">
+                                is the stage where the brain builds familiarity with a language through listening —
+                                before
+                                <!--speech emerges. Bloompod™ is designed for the first three years of life.-->
+                                speech emerges. Bloompod is designed for the first three years of life.
+                            </span>
+                        </p>
+                    </div>
+                    <div class="language-switcher-wrapper-div-secondary">
+                        <button class="button-wrapper" type="button" onclick="window.location.href='order-en.html'">
+                            <!-- <span class="purchase-button-span-extra">Order Bloompod™</span></button> -->
+                            <span class="purchase-button-span-extra">Order Bloompod</span>
+                        </button>
+                        <button class="action-button" type="button" onclick="window.location.href='#journey'">
+                            <span class="label-text-span-banner">Explore the Bloompod Journey</span></button>
+                    </div>
+                </div>
+            </section>
+            <section class="home-wrapper-section-primary" aria-labelledby="language-foundation-heading">
+                <img class="language-switcher-image" src="./assets/images/image-33.png" alt="" role="presentation">
+                <div class="container flex-direction-column">
+                    <div class="language-switcher-wrapper-div-tertiary">
+                        <h2 id="language-foundation-heading" class="description-text-h2">
+                            Language does not begin with speaking.<br>It begins with listening.
+                        </h2>
+                        <p class="description-text-p-secondary">
+                            Before a child speaks, the brain has already registered the rhythm, tone, and structure of a
+                            language system.
+                            This familiarity develops quietly, but it shapes how a child approaches learning later on.
+                        </p>
+                    </div>
+                    <div class="language-switcher-wrapper-div-extra">
+                        <article class="tone-feature-wrapper-article-primary">
+                            <img class="graphic-icon" src="./assets/images/graphic-icon.svg" alt="Rhythm icon">
+                            <div class="landing-hero-wrapper-article-extra">
+                                <h3 class="label-text-h3-secondary">Rhythm</h3>
+                                <p class="description-text-p-secondary">Children recognize the flow of sentences before
+                                    they understand meaning.</p>
+                            </div>
+                        </article>
+                        <article class="tone-feature-wrapper-article-primary">
+                            <img class="graphic-icon" src="./assets/images/graphic-icon-2.svg" alt="Tone icon">
+                            <div class="landing-hero-wrapper-article-extra">
+                                <h3 class="label-text-h3-secondary">Tone</h3>
+                                <p class="description-text-p-secondary">Sounds are registered at a sensory level.</p>
+                                </p>
+                            </div>
+                        </article>
+                        <article class="tone-feature-wrapper-article-primary">
+                            <img class="graphic-icon" src="./assets/images/graphic-icon-1.svg" alt="Structure icon">
+                            <div class="landing-hero-wrapper-article-extra">
+                                <h3 class="label-text-h3-secondary">Structure</h3>
+                                <p class="description-text-p-secondary">Repeated patterns help the brain predict and
+                                    strengthen connections.</p>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </section>
+            <section class="home-wrapper-section-secondary" aria-labelledby="challenges-heading">
+                <img class="problem-section-image" src="./assets/images/image-29.svg" alt="" role="presentation">
+                <div class="container flex-direction-column">
+                    <h2 id="challenges-heading" class="v-sao-nhi-u-tr-v-n-g">
+                        Why do many children still struggle<br>when learning English?
+                    </h2>
+                    <div class="problem-section-wrapper">
+                        <article class="image-wrapper-article-secondary">
+                            <img class="layout-section-img-tertiary" src="./assets/images/frame-1000003109-7.svg"
+                                alt="Listening difficulty icon">
+                            <p class="label-text-p-tertiary">Difficulty hearing the sounds clearly</p>
+                        </article>
+                        <article class="image-wrapper-article-secondary">
+                            <img class="layout-section-img-tertiary" src="./assets/images/frame-1000003109-16.svg"
+                                alt="Pronunciation difficulty icon">
+                            <p class="label-text-p-tertiary">Pronunciation that is hard to correct</p>
+                        </article>
+                        <article class="image-wrapper-article-secondary">
+                            <img class="layout-section-img-tertiary" src="./assets/images/frame-1000003109-5.svg"
+                                alt="Stress icon">
+                            <p class="label-text-p-tertiary">Stress when entering formal classes</p>
+                        </article>
+                        <article class="image-wrapper-article-secondary">
+                            <img class="layout-section-img-tertiary" src="./assets/images/frame-1000003109-24.svg"
+                                alt="Foundation icon">
+                            <p class="label-text-p-tertiary">Lack of early familiarity with the language</p>
+                        </article>
+                    </div>
+                    <div class="problem-section-wrapper-div">
+                        <p class="label-text-p-extra">Not because they lack ability.</p>
+                        <p class="description-text-p-secondary">But because the foundation was never built during the
+                            brain’s most flexible stage.</p>
+                    </div>
+                </div>
+            </section>
+            <section class="home-wrapper-section-tertiary" aria-labelledby="difference-heading">
+                <img class="landing-hero-image" src="./assets/images/image-28.png" alt="" role="presentation">
+                <div class="container">
+                    <div class="landing-hero-wrapper">
+                        <h2 id="difference-heading" class="custom-element-h2">
+                            <span class="landing-hero-text-span-extra">Bloompod</span>
+                            <span class="landing-hero-text-span-tertiary"> TM</span>
+                            <span class="landing-hero-text-span-extra">
+                                is not a class.<br>Not an app.<br>Not random videos.</span>
+                        </h2>
+                        <div class="landing-hero-wrapper-div-1">
+                            <div class="landing-hero-wrapper-div-secondary">
+                                <div class="layout-section-div-primary">
+                                    <h3 class="landing-hero-text-h3">Random Exposure</h3>
+                                </div>
+                                <div class="landing-hero-wrapper-div-additional">
+                                    <img class="structure-feature-wrapper-img"
+                                        src="./assets/images/frame-1000003109-11.svg" alt="Random sound icon">
+                                    <p class="structure-feature-text-p-primary">Fragmented sounds</p>
+                                </div>
+                                <div class="landing-hero-wrapper-div-additional">
+                                    <img class="structure-feature-wrapper-img"
+                                        src="./assets/images/frame-1000003109-6.svg" alt="Change icon">
+                                    <p class="structure-feature-text-p-primary">Constantly changing</p>
+                                </div>
+                                <div class="landing-hero-wrapper-div-additional">
+                                    <img class="structure-feature-wrapper-img"
+                                        src="./assets/images/frame-1000003109-4.svg" alt="No sequence icon">
+                                    <p class="structure-feature-text-p-primary">No sequence</p>
+                                </div>
+                                <div class="landing-hero-wrapper-div-additional">
+                                    <img class="structure-feature-wrapper-img"
+                                        src="./assets/images/frame-1000003109-21.svg" alt="Fragmented icon">
+                                    <p class="structure-feature-text-p-primary">Scattered content</p>
+                                </div>
+                            </div>
+                            <div class="landing-hero-wrapper-div-secondary">
+                                <div class="landing-hero-wrapper-div-tertiary">
+                                    <!-- <h3 class="landing-hero-text-h3">Bloompod™</h3> -->
+                                    <h3 class="landing-hero-text-h3">Bloompod</h3>
+                                </div>
+                                <div class="landing-hero-wrapper-div-additional">
+                                    <img class="structure-feature-wrapper-img"
+                                        src="./assets/images/frame-1000003109-8.svg" alt="Cycle icon">
+                                    <p class="structure-feature-text-p-primary">Repeating listening cycles</p>
+                                </div>
+                                <div class="landing-hero-wrapper-div-additional">
+                                    <img class="structure-feature-wrapper-img"
+                                        src="./assets/images/frame-1000003110-1.svg" alt="Rhythm icon">
+                                    <p class="structure-feature-text-p-primary">Stable rhythm</p>
+                                </div>
+                                <div class="landing-hero-wrapper-div-additional">
+                                    <img class="structure-feature-wrapper-img"
+                                        src="./assets/images/frame-1000003109-25.svg" alt="Stage design icon">
+                                    <p class="structure-feature-text-p-primary">Designed by developmental stages</p>
+                                </div>
+                                <div class="landing-hero-wrapper-div-additional">
+                                    <img class="structure-feature-wrapper-img"
+                                        src="./assets/images/frame-1000003110.svg" alt="Structure icon">
+                                    <p class="structure-feature-text-p-primary">Consistent structure</p>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="landing-hero-text">The difference is not the amount of sound exposure, but how sound
+                            is organized.</p>
+                    </div>
+                </div>
+            </section>
+            <section class="home-wrapper-section-extra" aria-labelledby="system-heading">
+                <img class="rhythm-feature-image" src="./assets/images/image-24.png" alt="" role="presentation">
+                <div class="container flex-direction-column">
+                    <h2 id="system-heading" class="rhythm-feature-text-h2">A system aligned with the first three years
+                        of life</h2>
+                    <div class="full-width display-flex flex-direction-row justify-content-center">
+                        <div class="rhythm-feature-wrapper-div">
+                            <img class="layout-section-img" src="./assets/images/frame-1000003150.svg"
+                                alt="Stage 1 icon">
+                            <div class="image-wrapper-div">
+                                <img class="content-image-img-primary" src="./assets/images/rectangle-12.svg" alt=""
+                                    role="presentation">
+                                <p class="label-text-p">Stage 1</p>
+                            </div>
+                        </div>
+                        <div class="rhythm-feature-wrapper-div">
+                            <img class="layout-section-img" src="./assets/images/frame-1000003151.svg"
+                                alt="Stage 2 icon">
+                            <div class="image-wrapper-div">
+                                <img class="content-image-img-primary" src="./assets/images/rectangle-13.svg" alt=""
+                                    role="presentation">
+                                <p class="label-text-p">Stage 2</p>
+                            </div>
+                        </div>
+                        <div class="rhythm-feature-wrapper-div">
+                            <img class="layout-section-img" src="./assets/images/frame-1000003149.svg"
+                                alt="Stage 3 icon">
+                            <div class="image-wrapper-div">
+                                <img class="content-image-img-primary" src="./assets/images/rectangle-16.svg" alt=""
+                                    role="presentation">
+                                <p class="label-text-p">Stage 3</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="language-switcher-wrapper-div-alternate">
+                        <article class="rhythm-feature-wrapper-article-tertiary">
+                            <h3 class="language-switcher-text-h3">Familiarizing with the sound system
+                            </h3>
+                            <p class="description-text-p-secondary">Stable rhythm.
+                                Gentle repetition helps children become familiar with the sounds of a language.
+                            </p>
+                        </article>
+                        <img class="line" src="./assets/images/line-6.svg" alt="" role="presentation">
+                        <article class="rhythm-feature-wrapper-article-tertiary">
+                            <h3 class="language-switcher-text-h3">Recognizing sound patterns</h3>
+                            <p class="description-text-p-secondary">Structured repetition allows the brain to gradually
+                                recognize familiar sound sequences.</p>
+                        </article>
+                        <img class="line" src="./assets/images/line-6.svg" alt="" role="presentation">
+                        <article class="rhythm-feature-wrapper-article-tertiary">
+                            <h3 class="language-switcher-text-h3">Becoming familiar with language structure</h3>
+                            <p class="description-text-p-secondary">Children begin noticing simple sentence patterns and
+                                the natural flow of speech.
+                            </p>
+                        </article>
+                    </div>
+                    <img class="rhythm-feature-image-img" src="./assets/images/group-427321112.png"
+                        alt="Timeline illustration">
+                    <p class="landing-hero-text-p-primary">Bloompod does not accelerate development. Bloompod grows
+                        alongside it.</p>
+                </div>
+            </section>
+            <section id="journey" class="home-wrapper-section-journey" aria-labelledby="journey-heading">
+                <h2 id="journey-heading" class="landing-hero-text-h2-primary">The Bloompod Journey</h2>
+                <h4 class="description-text-p-secondary">
+                    To support the way children naturally acquire language,<br>
+                    Bloompod is designed as a journey through <span style="color: var(--primaryprimary-800); font-weight: 700;">four progressive stages</span>.    
+                </h4>
+                 <div class="journey-wrapper-grid">
+                    <article class="journey-wrapper-card">
+                        <span class="journey-badge">🌱 Part One</span>
+                        <h3 class="journey-card-title">Discovering English Sounds</h3>
+                        <div class="journey-card-image-wrap">
+                            <img class="journey-card-image" src="./assets/images/baby1.png" alt="Bé nằm nghe âm thanh tiếng Anh">
+                            <img class="journey-card-tag" src="./assets/images/graphic-icon.svg" alt="">
+                        </div> 
+                        <p class="journey-card-desc">Become familiar with the sounds, rhythm, and melody of the English language.</p>
+                    </article>
+
+                    <article class="journey-wrapper-card">
+                        <span class="journey-badge">🍎 Part Two</span>
+                        <h3 class="journey-card-title">Discovering Everyday Words</h3>
+                        <div class="journey-card-image-wrap">
+                            <img class="journey-card-image" src="./assets/images/baby2.png" alt="Bé chơi với thẻ từ vựng">
+                            <img class="journey-card-tag" src="./assets/images/graphic-icon.svg" alt="">
+                        </div>
+                        <p class="journey-card-desc">Explore familiar words that children encounter in everyday life.</p>
+                    </article>
+
+                    <article class="journey-wrapper-card">
+                        <span class="journey-badge">💬 Part Three</span>
+                        <h3 class="journey-card-title">Discovering Everyday Communication</h3>
+                        <div class="journey-card-image-wrap">
+                            <img class="journey-card-image" src="./assets/images/baby3.png" alt="Bé tập nói câu đơn giản">
+                            <img class="journey-card-tag" src="./assets/images/graphic-icon.svg" alt="">
+                        </div>
+                        <p class="journey-card-desc">Become familiar with simple expressions and everyday conversations.</p>
+                    </article>
+
+                    <article class="journey-wrapper-card">
+                        <span class="journey-badge">📖 Part Four</span>
+                        <h3 class="journey-card-title">Discovering Stories</h3>
+                        <div class="journey-card-image-wrap">
+                            <img class="journey-card-image" src="./assets/images/baby4.png" alt="Bé nghe kể chuyện tiếng Anh">
+                            <img class="journey-card-tag" src="./assets/images/graphic-icon.svg" alt="">
+                        </div>
+                        <p class="journey-card-desc">Experience English through warm, engaging stories that spark imagination and emotional connection.</p>
+                    </article>
+                </div>
+
+                <div class="journey-quote-wrapper">
+                    <div class="journey-quote-box">
+                        <img class="journey-quote-device journey-quote-device-left" src="./assets/images/bloompod2.png" alt="">
+                        <img class="journey-quote-note journey-quote-note-left" src="./assets/images/music-note-double.svg" alt="" role="presentation">
+                        <img class="journey-quote-mark journey-quote-mark-open" src="./assets/images/quote-open-green.svg" alt="" role="presentation">
+                        <blockquote class="journey-quote-text">
+                            Language is acquired most naturally when children are given the opportunity to listen, revisit, explore, and connect—through joyful experiences, every day.
+                        </blockquote>
+                        <img class="journey-quote-mark journey-quote-mark-close" src="./assets/images/quote-close-green.svg" alt="" role="presentation">
+                        <img class="journey-quote-device journey-quote-device-right" src="./assets/images/bloompod1.png" alt="">
+                        <img class="journey-quote-note journey-quote-note-right" src="./assets/images/music-note-single.svg" alt="" role="presentation">
+                    </div>
+                </div>
+            </section>
+            <section class="home-wrapper-section-alternate" aria-labelledby="design-heading">
+                <img class="landing-hero-image-img" src="./assets/images/image-bg-leaf.png" alt="" role="presentation">
+                <div class="container flex-direction-column">
+                    <h2 id="design-heading" class="landing-hero-text-h2-tertiary">Designed for the pre-speech stage</h2>
+                    <article class="landing-hero-wrapper-article">
+                        <img class="dxut" src="./assets/images/dxut-1.png" alt="Bloompod device">
+                        <div class="landing-hero-wrapper-div">
+                            <!-- <h3 class="landing-hero-text-h3-primary">Bloompod™</h3> -->
+                            <h3 class="landing-hero-text-h3-primary">Bloompod</h3>
+                            <ul class="language-switcher-wrapper-div">
+                                <li class="book-section-text-p">No screen</li>
+                                <li class="book-section-text-p">No visual overload</li>
+                                <li class="book-section-text-p">Clear, stable audio</li>
+                                <li class="book-section-text-p">Convenient rechargeable battery</li>
+                            </ul>
+                            <p class="description-text-p-secondary">Children do not need constant stimulation.<br />
+                                They need stability.</p>
+                        </div>
+                    </article>
+                </div>
+            </section>
+            <section class="home-wrapper-section-additional" aria-labelledby="family-heading">
+                <div class="container flex-direction-column">
+                    <div class="landing-hero-wrapper-div-title">
+                        <h2 id="family-heading" class="custom-element-h2">
+                            <!-- <span class="landing-hero-text-span-extra">Bloompod™</span> -->
+                            <span class="landing-hero-text-span-extra">Bloompod</span>
+                            <span class="landing-hero-text-span-extra"> in the home environment</span>
+                        </h2>
+                        <p class="landing-hero-text-p-tertiary">Bloompod in the home environment — part of everyday
+                            life.</p>
+                    </div>
+                    <img class="landing-hero-wrapper-img" src="./assets/images/frame-1000003134.svg"
+                        alt="Family usage illustration">
+                </div>
+            </section>
+            <section class="home-wrapper-section-video" aria-labelledby="moments-heading">
+                <img class="landing-hero-image-img-primary" src="./assets/images/image-24-1.png" alt=""
+                    role="presentation">
+                <div class="container flex-direction-column">
+                    <h2 id="moments-heading" class="landing-hero-text-h2-primary">Real moments with Bloompod</h2>
+                    <div class="landing-hero-wrapper-div-2">
+                        <img class="z-3" src="./assets/images/z7578623536654-27bdaf144fca23fd6ae872d71a47ff67-1.png"
+                            alt="Real usage video thumbnail">
+                        <button class="play-pause" type="button" aria-label="Play video">
+                            <img src="./assets/images/play---pause.svg" alt="">
+                        </button>
+                    </div>
+                </div>
+            </section>
+            <section class="home-wrapper-section-research" aria-labelledby="science-heading">
+                <img class="landing-hero-image-img-secondary" src="./assets/images/image-33-1.png" alt=""
+                    role="presentation">
+                <div class="container flex-direction-column">
+                    <div class="landing-hero-wrapper-div-title-1">
+                        <h2 id="science-heading" class="description-text-h2">Built on developmental science</h2>
+                        <p class="description-text-p-secondary">Bloom is based on well-established principles of early
+                            language development.</p>
+                    </div>
+                    <div class="landing-hero-wrapper-div-title-2">
+                        <article class="tone-feature-wrapper-article-primary">
+                            <img class="layout-section-img-research" src="./assets/images/frame-1000003109-26.svg"
+                                alt="Phonological sensitivity icon">
+                            <div class="landing-hero-wrapper-article-extra">
+                                <h3 class="label-text-h3-secondary">Phonemic Sensitivity</h3>
+                                <p class="description-text-p-secondary">Sensitivity to the sounds and structures of
+                                    speech.</p>
+                            </div>
+                        </article>
+                        <article class="tone-feature-wrapper-article-primary">
+                            <img class="layout-section-img-research" src="./assets/images/frame-1000003109-20.svg"
+                                alt="Neural plasticity icon">
+                            <div class="landing-hero-wrapper-article-extra">
+                                <h3 class="label-text-h3-secondary">Neural Plasticity</h3>
+                                <p class="description-text-p-secondary">The brain’s flexible ability to form and
+                                    reorganize connections.
+                                </p>
+                            </div>
+                        </article>
+                        <article class="tone-feature-wrapper-article-primary">
+                            <img class="layout-section-img-research" src="./assets/images/frame-1000003109-12.svg"
+                                alt="Statistical learning icon">
+                            <div class="landing-hero-wrapper-article-extra">
+                                <h3 class="label-text-h3-secondary">Pattern Recognition</h3>
+                                <p class="description-text-p-secondary">CThe brain’s ability to notice repetition and
+                                    sound structures.</p>
+                            </div>
+                        </article>
+                    </div>
+                    <p class="kh-ng-ph-i-m-t-ph-ng">
+                        This is not a temporary method.<br>It is a structured application of what science already
+                        understands.
+                    </p>
+                </div>
+            </section>
+            <section class="home-wrapper-section-book" aria-labelledby="book-heading">
+                <img class="language-switcher-image-img" src="./assets/images/image-24-2.png" alt=""
+                    role="presentation">
+                <div class="container">
+                    <divc class="home-wrapper-section-body-book">
+                        <div class="language-switcher-wrapper-div-additional">
+                            <div class="language-switcher-book-wrapper-div">
+                                <h2 id="book-heading" class="language-switcher-text-h2-primary">Want to explore the
+                                    Language Readiness foundation in depth?</h2>
+                                <p class="s-ch-language">
+                                    <span class="language-switcher-text-span-primary">The </span>
+                                    <span class="span">Language Readiness</span>
+                                    <span class="language-switcher-text-span-primary">
+                                        helps parents understand the pre-speech stage — when the brain develops
+                                        familiarity with a language system before speech appears.<br>The book explains
+                                        principles such as phonemic sensitivity, neural plasticity, and early pattern
+                                        learning in an accessible yet developmentally grounded way.<br>It does not aim
+                                        to make children speak early.<br>It does not create pressure for
+                                        performance.<br>It simply helps parents understand the brain’s quiet preparation
+                                        for language.</span>
+                                </p>
+                            </div>
+                            <img class="grg-mb" src="./assets/images/grg-1.png" alt="Language Readiness book">
+                            <button class="language-switcher-wrapper-button" type="button">
+                                <span class="language-switcher-text-span-secondary">Download the Language Readiness
+                                    book – Free</span>
+                                <div class="language-switcher-wrapper-div-button">
+                                    <img class="union" src="./assets/images/union-1.svg" alt="">
+                                    <img class="content-image-img-tertiary" src="./assets/images/rectangle-19.svg"
+                                        alt="">
+                                </div>
+                            </button>
+                        </div>
+                        <img class="grg" src="./assets/images/grg-1.png" alt="Language Readiness book">
+                </div>
+                </div>
+            </section>
+            <section class="home-wrapper-section-phase" aria-labelledby="critical-period-heading">
+                <img class="content-image" src="./assets/images/image-33-2.png" alt="" role="presentation">
+                <div class="container flex-direction-column">
+                    <div class="image-wrapper-div-extra">
+                        <div class="content-block-div-primary">
+                            <h2 id="critical-period-heading" class="description-text-h2">The first three years happen
+                                only once.</h2>
+                            <p class="description-text-p-secondary">
+                                During this period, the brain is most flexible. Familiarity is formed more easily.
+                            </p>
+                        </div>
+                        <div class="image-wrapper-div-alternate">
+                            <article class="image-wrapper-article-extra">
+                                <h3 class="label-text-h3-tertiary">The first three years</h3>
+                                <img class="img-objects" src="./assets/images/objects.png"
+                                    alt="Brain connections illustration">
+                                <p class="description-text-p-tertiary">Connections form easily</p>
+                            </article>
+                            <img class="union-2" src="./assets/images/union.svg" alt="Arrow">
+                            <article class="image-wrapper-article-extra">
+                                <h3 class="label-text-h3-tertiary">After age three</h3>
+                                <img class="img-objects" src="./assets/images/objects-1.png"
+                                    alt="Brain connections illustration">
+                                <p class="description-text-p-tertiary">The ability to develop naturally gradually decreases over time.
+                            </article>
+                        </div>
+                        <p class="landing-hero-text-blockquote-primary">
+                            When a foundation exists, learning later becomes more natural.<br>When the foundation is
+                            missing, learning can still happen — but it often requires more effort.
+                        </p>
+                    </div>
+                </div>
+            </section>
+            <section id="package" class="home-wrapper-section-package" aria-labelledby="product-heading">
+                <img class="landing-hero-image-img-tertiary" src="./assets/images/image-30.png" alt=""
+                    role="presentation">
+                <div class="container flex-direction-column">
+                    <h2 id="product-heading" class="landing-hero-text-h2-tertiary">The Bloompod Kit</h2>
+                    <h4 class="landing-hero-text-h4-tertiary">A thoughtfully designed system 
+                        that supports the natural foundation of language during the first three years of life.</h4>
+                    <div class="home-wrapper-section-body-package">
+                        <article class="landing-hero-wrapper-article-secondary">
+                            <!-- <h3 class="landing-hero-text-h3-secondary">The BloomPod™ kit includes:</h3> -->
+                            <h3 class="landing-hero-text-h3-secondary">The BloomPod kit includes:</h3>
+                            <ul class="landing-hero-wrapper-div-ul-1">
+                                <li class="landing-hero-wrapper-li-secondary">
+                                    <img class="layout-section-img" src="./assets/images/frame-1000003109-15.svg"
+                                        alt="Pod icon">
+                                    <div class="layout-section-content">
+                                        <!-- <div class="pricing-text-span">BloomPod™ Device</div> -->
+                                        <div class="pricing-text-span">BloomPod Device</div>
+                                        <div class="secondary-desciption">An audio device designed for the earliest
+                                            stage of development.</div>
+                                    </div>
+                                </li>
+                                <li class="landing-hero-wrapper-li-secondary">
+                                    <img class="layout-section-img" src="./assets/images/frame-1000003109-22.svg"
+                                        alt="Content icon">
+                                    <div class="layout-section-content">
+                                        <div class="pricing-text-span">Three-Stage Content System</div>
+                                        <div class="secondary-desciption">Content organized according to the child’s
+                                            auditory development during the first three years.</div>
+                                    </div>
+                                </li>
+                                <li class="landing-hero-wrapper-li-secondary">
+                                    <img class="layout-section-img" src="./assets/images/frame-1000003109-23.svg"
+                                        alt="Books icon">
+                                    <div class="layout-section-content">
+                                        <div class="pricing-text-span">Image Support Cards</div>
+                                        <div class="secondary-desciption">Themed visual cards that help children connect
+                                            sound with visual experience naturally.</div>
+                                    </div>
+                                </li>
+                            </ul>
+                            <div class="landing-hero-wrapper-div-price">
+                                <div class="layout-section-div-secondary"><span
+                                        class="label-text-span-secondary">2.100.000</span></div>
+                                <div class="layout-section-div-tertiary"><span
+                                        class="label-text-span-tertiary">VNĐ</span>
+                                </div>
+                            </div>
+                            <button class="purchase-button-button-primary" type="button"
+                                onclick="window.location.href='order-en.html'">
+                                <!-- <span class="purchase-button-span-extra">Order Bloompod™</span> -->
+                                <span class="purchase-button-span-extra">Order Bloompod</span></button>
+                            <ul class="landing-hero-wrapper-div-ul-2">
+                                <li class="image-wrapper-li-primary">
+                                    <img class="content-image-img" src="./assets/images/frame-1000003109-19.svg"
+                                        alt="Shipping icon">
+                                    <span class="landing-hero-text-span">Free nationwide shipping</span>
+                                </li>
+                                <li class="image-wrapper-li-primary">
+                                    <img class="content-image-img" src="./assets/images/frame-1000003109-9.svg"
+                                        alt="Return icon">
+                                    <span class="landing-hero-text-span">7-day return policy</span>
+                                </li>
+                            </ul>
+                        </article>
+                        <img class="landing-hero-image-img-alternate" src="./assets/images/group-1000003138.png"
+                            alt="Product package">
+                    </div>
+                </div>
+            </section>
+            <section class="home-wrapper-section-feedback" aria-labelledby="testimonials-heading">
+                <img class="landing-hero-image-img-extra" src="./assets/images/image-33.png" alt="" role="presentation">
+                <div class="container flex-direction-column">
+                    <h2 id="testimonials-heading" class="ph-huynh-n-i-v">
+                        <span class="landing-hero-text-span-additional">WHAT PARENTS SAY ABOUT BLOOMPOD</span>
+                    </h2>
+                    <div class="landing-hero-wrapper-div-3">
+                        <article class="landing-hero-wrapper-article-extra">
+                            <img class="landing-hero-wrapper-img-tertiary" src="./assets/images/frame-1000003140.svg"
+                                alt="Quote icon">
+                            <blockquote class="landing-hero-text-blockquote-primary">
+                                "At first I thought my child wouldn’t pay attention.<br>But over time, he became
+                                comfortable hearing English."
+                            </blockquote>
+                            <p class="landing-hero-text-p-additional">— Mother of a 28-month-old</p>
+                        </article>
+                        <article class="landing-hero-wrapper-article-extra">
+                            <img class="landing-hero-wrapper-img-tertiary" src="./assets/images/frame-1000003140.svg"
+                                alt="Quote icon">
+                            <blockquote class="landing-hero-text-blockquote-primary">
+                                "What I like is that Bloom doesn’t require me to teach my child.<br>CI just turn it on,
+                                set it down, and everything happens naturally."
+                            </blockquote>
+                            <p class="landing-hero-text-p-additional">— Mother of an 18-month-old</p>
+                        </article>
+                        <article class="landing-hero-wrapper-article-extra">
+                            <img class="landing-hero-wrapper-img-tertiary" src="./assets/images/frame-1000003140.svg"
+                                alt="Quote icon">
+                            <blockquote class="landing-hero-text-blockquote-primary">
+                                "I used to play many English videos.<br>But Bloom feels much more stable and
+                                structured."
+                            </blockquote>
+                            <p class="landing-hero-text-p-additional">— Mother of a 2-year-old</p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+            <section id="notice" class="home-wrapper-section-notice" aria-labelledby="faq-heading">
+                <img class="language-switcher-image-img-primary" src="./assets/images/image-33.png" alt=""
+                    role="presentation">
+                <div class="container flex-direction-column">
+                    <h2 id="faq-heading" class="language-switcher-text-h2-secondary">Questions parents often ask</h2>
+                    <div class="language-switcher-notice-wrapper-div">
+                        <div class="language-switcher-notice-item-wrapper-div">
+                            <details class="FA-qs">
+                                <summary class="landing-hero-wrapper-summary">
+                                    <h3 class="label-text-h3">1. Do I need to play Bloompod all day?</h3>
+                                    <img class="content-image-img" src="./assets/images/icon-3.svg" alt="">
+                                </summary>
+                                <div class="kh-ng-language-wrapper">
+                                    <p class="kh-ng-language">
+                                        No.<br>Language Readiness does not depend on long listening time, but on
+                                        structured repetition.<br>Short, consistent listening sessions are usually more
+                                        effective than leaving audio playing continuously in the background.
+                                    </p>
+                                </div>
+                            </details>
+                            <details class="FA-qs">
+                                <summary class="landing-hero-wrapper-summary">
+                                    <h3 class="label-text-h3">2. If my child doesn’t speak yet or show reactions, does
+                                        it still work?</h3>
+                                    <img class="content-image-img" src="./assets/images/icon-3.svg" alt="">
+                                </summary>
+                                <div class="kh-ng-language-wrapper">
+                                    <p class="kh-ng-language">
+                                        This stage is not meant to produce immediate visible results.<br>Familiarity
+                                        develops at the neural level before speech appears.
+                                    </p>
+                                </div>
+                            </details>
+                            <details class="FA-qs">
+                                <summary class="landing-hero-wrapper-summary">
+                                    <h3 class="label-text-h3">3. How is Bloom different from regular English videos or
+                                        content?</h3>
+                                    <img class="content-image-img" src="./assets/images/icon-3.svg" alt="">
+                                </summary>
+                                <div class="kh-ng-language-wrapper">
+                                    <p class="kh-ng-language">
+                                        The difference lies in structure.<br>Bloom is designed with stable repetition
+                                        cycles and developmental sequencing — not random exposure.
+                                    </p>
+                                </div>
+                            </details>
+                            <div class="xem-ch-nh-s-ch-h-tr-wrapper">
+                                <a href="support-en.html" class="xem-ch-nh-s-ch-h-tr">See full policies &amp; support
+                                    →</a>
+                            </div>
+                        </div>
+                        <a href="order-en.html">
+                            <button class="purchase-button-button-secondary" type="button"><span
+                                    class="purchase-button-span-extra">Order Bloom</span></button>
+                        </a>
+                    </div>
+                </div>
+            </section>
+            <footer class="footer">
+                <div class="container flex-direction-row">
+                    <div class="language-switcher-wrapper-footer-left">
+                        <div class="logo-2" role="img" aria-label="Bloompod logo"></div>
+                        <p class="language-switcher-text-p">
+                            Global Education Amplify Co., Ltd.<br>
+                            Tax ID: 0123456789<br>
+                            Address: Lavida Plus Condominium, Nguyen Van Linh Road, Tan Hung Ward, HCM<br>
+                            Email: <a href="mailto:info@bloom.vn">info@bloom.vn</a><br>
+                            HotLine: <a href="tel:+84938838974">+84 938 838 974</a>
+                        </p>
+                    </div>
+                    <div class="language-switcher-wrapper-footer-right">
+                        <nav class="language-switcher-wrapper-nav-tertiary" aria-label="Footer navigation">
+                            <a href="support-en.html" class="footer-tab">
+                                <span class="terms-of-use"><span class="label-text-span-link">Payment
+                                        Policy</span></span>
+                            </a>
+                            <a href="support-en.html" class="footer-tab">
+                                <span class="terms-of-use"><span class="label-text-span-link">Privacy
+                                        Policy</span></span>
+                            </a>
+                            <a href="support-en.html" class="footer-tab">
+                                <span class="terms-of-use"><span class="label-text-span-link">Terms of Use</span></span>
+                            </a>
+                            <a href="support-en.html" class="footer-tab">
+                                <span class="terms-of-use"><span class="label-text-span-link">Shipping</span></span>
+                            </a>
+                            <a href="support-en.html" class="footer-tab">
+                                <span class="terms-of-use"><span class="label-text-span-link">Returns</span></span>
+                            </a>
+                            <a href="support-en.html" class="footer-tab">
+                                <span class="terms-of-use"><span class="label-text-span-link"> Contact</span></span>
+                            </a>
+                        </nav>
+                        <div class="social-media-wrapper">
+                            <a href="#" target="_blank" class="social-icon" aria-label="Facebook">
+                                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" />
+                                </svg>
+                            </a>
+
+                            <a href="#" target="_blank" class="social-icon" aria-label="TikTok">
+                                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
+                                    style="transform: scale(0.85);">
+                                    <path
+                                        d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z" />
+                                </svg>
+                            </a>
+
+                            <a href="#" target="_blank" class="social-icon" aria-label="YouTube">
+                                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M21.582 6.186c-.23-.86-.908-1.538-1.768-1.768C18.254 4 12 4 12 4s-6.254 0-7.814.418c-.86.23-1.538.908-1.768 1.768C2 7.746 2 12 2 12s0 4.254.418 5.814c.23.86.908 1.538 1.768 1.768C7.746 20 12 20 12 20s6.254 0 7.814-.418c.86-.23 1.538-.908 1.768-1.768C22 16.254 22 12 22 12s0-4.254-.418-5.814zM9.999 15.594v-7.188l6.328 3.594-6.328 3.594z" />
+                                </svg>
+                            </a>
+                        </div>
+                        <div class="language-switcher-wrapper-production-line">
+                            <p class="landing-hero-text-p">© 2026 Bloompod™ Developed by Amplify Global
+                                Education</p>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </section>
+    </main>
+
+     <!-- Video Bloompod -->
+    <div id="youtube-modal-overlay" class="video-modal-overlay" style="display: none;">
+        <div class="video-modal-content">
+            <button id="close-video-btn" class="video-close-btn">&times;</button>
+
+            <iframe id="youtube-player" width="100%" height="100%" src="https://www.youtube.com/embed/kLMqOFPWPp8"
+                title="YouTube video player" frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen>
+            </iframe>
+        </div>
+    </div>
+        <!-- Email Capture Modal -->
+    <div id="emailModalOverlay" class="email-modal-overlay">
+        <div id="emailModal" class="email-modal">
+            <button id="emailModalClose" class="email-modal-close" type="button" aria-label="Close">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18 6L6 18M6 6L18 18" stroke="#605e5c" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+            </button>
+
+            <!-- Form View -->
+            <div id="emailFormView">
+                <div class="email-modal-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L3 7L12 12L21 7L12 2Z" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M3 17L12 22L21 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                        <path d="M3 12L12 17L21 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </div>
+                <h2 class="email-modal-title">Download the Language Readiness book – Free</h2>
+                <p class="email-modal-description">Enter your email to receive the free e-book on the Language Readiness
+                    foundation</p>
+
+                <form id="emailModalForm" class="email-modal-form">
+                    <div class="email-modal-input-group">
+                        <label for="emailInput" class="email-modal-label">Email address</label>
+                        <input type="email" id="emailInput" class="email-modal-input" placeholder="email@example.com"
+                            autocomplete="email" required />
+                        <div id="emailError" class="email-modal-error"></div>
+                    </div>
+
+                    <button type="submit" id="emailSubmitBtn" class="email-modal-submit">
+                        <span id="emailSpinner" class="email-modal-spinner"></span>
+                        <span>Download for free</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                            <path d="M12 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Success View -->
+            <div id="emailSuccessView" class="email-modal-success">
+                <div class="email-modal-success-icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M22 11.08V12C21.9988 14.1564 21.3005 16.2547 20.0093 17.9818C18.7182 19.709 16.9033 20.9725 14.8354 21.5839C12.7674 22.1953 10.5573 22.1219 8.53447 21.3746C6.51168 20.6273 4.78465 19.2461 3.61096 17.4371C2.43727 15.628 1.87979 13.4881 2.02168 11.3363C2.16356 9.18455 2.99721 7.13631 4.39828 5.49706C5.79935 3.85781 7.69279 2.71537 9.79619 2.24013C11.8996 1.7649 14.1003 1.98232 16.07 2.85999"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M22 4L12 14.01L9 11.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </div>
+                <h2 class="email-modal-success-title">Sent successfully!</h2>
+                <p class="email-modal-success-text">Please check your email to download the Language Readiness book</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="./assets/js/lang.js"></script>
+    <script src="./assets/js/email-modal.js?v=1"></script>
+</body>
+
+</html>

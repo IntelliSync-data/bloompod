@@ -1,0 +1,313 @@
+/* ==============================================
+   EMAIL CAPTURE MODAL STYLES
+   ============================================== */
+
+/* Modal Overlay */
+.email-modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.2s ease;
+}
+
+.email-modal-overlay.active {
+    display: flex;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Modal Container */
+.email-modal {
+    background: var(--white);
+    border-radius: 12px;
+    max-width: 500px;
+    width: 90%;
+    padding: 48px 40px;
+    position: relative;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Close Button */
+.email-modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 32px;
+    height: 32px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background 0.2s ease;
+}
+
+.email-modal-close:hover {
+    background: var(--primaryprimary-200);
+}
+
+.email-modal-close svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Modal Content */
+.email-modal-icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--primaryprimary-200);
+    border-radius: 50%;
+}
+
+.email-modal-icon svg {
+    width: 32px;
+    height: 32px;
+    color: var(--secondary-dark);
+}
+
+.email-modal-title {
+    font-family: var(--h4-font-family);
+    font-weight: var(--h4-font-weight);
+    font-size: var(--h4-font-size);
+    line-height: var(--h4-line-height);
+    color: var(--secondary-dark);
+    text-align: center;
+    margin: 0 0 12px 0;
+}
+
+.email-modal-description {
+    font-family: var(--body-2-font-family);
+    font-size: var(--body-2-font-size);
+    line-height: var(--body-2-line-height);
+    color: var(--text);
+    text-align: center;
+    margin: 0 0 32px 0;
+}
+
+/* Form */
+.email-modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.email-modal-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.email-modal-label {
+    font-family: var(--h7-font-family);
+    font-weight: var(--h7-font-weight);
+    font-size: var(--h7-font-size);
+    line-height: var(--h7-line-height);
+    color: var(--black);
+}
+
+.email-modal-input {
+    font-family: var(--body-2-font-family);
+    font-size: var(--body-2-font-size);
+    padding: 14px 16px;
+    border: 2px solid var(--line-color);
+    border-radius: 8px;
+    background: var(--white);
+    color: var(--text);
+    transition: border-color 0.2s ease;
+}
+
+.email-modal-input:focus {
+    outline: none;
+    border-color: var(--secondary-dark);
+}
+
+.email-modal-input::placeholder {
+    color: var(--placeholder);
+}
+
+.email-modal-input.error {
+    border-color: var(--red);
+}
+
+.email-modal-error {
+    font-family: var(--body-2-font-family);
+    font-size: 14px;
+    color: var(--red);
+    min-height: 20px;
+    display: none;
+}
+
+.email-modal-error.show {
+    display: block;
+}
+
+/* Submit Button */
+.email-modal-submit {
+    font-family: var(--body-1-font-family);
+    font-weight: var(--body-1-font-weight);
+    font-size: var(--body-1-font-size);
+    padding: 14px 32px;
+    background-color: var(--secondary-dark);
+    color: var(--white);
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: var(--button-shadow-default);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.email-modal-submit:hover:not(:disabled) {
+    background-color: var(--button-hover);
+    box-shadow: var(--button-shadow-hover);
+}
+
+.email-modal-submit:active:not(:disabled) {
+    transform: translateY(1px);
+}
+
+.email-modal-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.email-modal-submit svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Loading Spinner */
+.email-modal-spinner {
+    display: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: var(--white);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+.email-modal-spinner.show {
+    display: block;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Success State */
+.email-modal-success {
+    display: none;
+    text-align: center;
+}
+
+.email-modal-success.show {
+    display: block;
+}
+
+.email-modal-success-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--primaryprimary-200);
+    border-radius: 50%;
+}
+
+.email-modal-success-icon svg {
+    width: 48px;
+    height: 48px;
+    color: var(--secondary-dark);
+}
+
+.email-modal-success-title {
+    font-family: var(--h4-font-family);
+    font-weight: var(--h4-font-weight);
+    font-size: var(--h4-font-size);
+    line-height: var(--h4-line-height);
+    color: var(--secondary-dark);
+    margin: 0 0 12px 0;
+}
+
+.email-modal-success-text {
+    font-family: var(--body-2-font-family);
+    font-size: var(--body-2-font-size);
+    line-height: var(--body-2-line-height);
+    color: var(--text);
+    margin: 0;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+    .email-modal {
+        padding: 40px 32px;
+    }
+
+    .email-modal-title {
+        font-size: 24px;
+        line-height: 32px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .email-modal {
+        padding: 32px 24px;
+        width: 95%;
+    }
+
+    .email-modal-title {
+        font-size: 20px;
+        line-height: 28px;
+    }
+
+    .email-modal-icon {
+        width: 50px;
+        height: 50px;
+    }
+
+    .email-modal-icon svg {
+        width: 28px;
+        height: 28px;
+    }
+}

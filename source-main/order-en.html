@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en" ready="true">
+
+<head>
+    <!-- <script>
+        window.addEventListener("message", (message) => {
+            if (message.data.type === "refresh") {
+                window.location.reload();
+            }
+        })
+    </script> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <title>Bloompod™ - Language Readiness System</title>
+    <meta name="description" content="Bloompod™ - Language Readiness System for children 0-3 years old">
+    <link rel="stylesheet" href="./assets/css/globals.css">
+    <link rel="stylesheet" href="./assets/css/styleguide.css">
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <link rel="stylesheet" href="./assets/css/style-responsive.css">
+    <link rel="stylesheet" href="./assets/css/order.css">
+    <script src="https://app.bloompod.vn/chatbot/widget.js"></script>
+</head>
+
+<body style="user-select: unset;">
+    <script src="./assets/js/lang.js"></script>
+    <script src="./assets/js/order.js"></script>
+    <script>
+        // Smooth scroll for anchor links
+        document.addEventListener('DOMContentLoaded', function () {
+            // Smooth scrolling
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    const href = this.getAttribute('href');
+                    if (href === '#' || !href) return;
+
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+                        // Close mobile menu if open
+                        const mobileMenu = document.getElementById('mobile-menu');
+                        if (mobileMenu && mobileMenu.classList.contains('active')) {
+                            mobileMenu.classList.remove('active');
+                            document.body.style.overflow = '';
+                        }
+                    }
+                });
+            });
+
+            // Mobile menu toggle
+            const hamburger = document.getElementById('hamburger-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuClose = document.getElementById('mobile-menu-close');
+
+            if (hamburger && mobileMenu) {
+                hamburger.addEventListener('click', function () {
+                    mobileMenu.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                });
+            }
+
+            if (mobileMenuClose && mobileMenu) {
+                mobileMenuClose.addEventListener('click', function () {
+                    mobileMenu.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            }
+
+            // Highlight active nav link
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.menu-tab, .mobile-nav-link');
+
+            function highlightNav() {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    if (window.pageYOffset >= sectionTop - 200) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + current) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+
+            window.addEventListener('scroll', highlightNav);
+            highlightNav();
+
+            // Form validation is handled in order.js
+
+            // Video play button
+            const playButtons = document.querySelectorAll('.play-pause');
+            playButtons.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    alert('Video player would open here');
+                    // In a real app, you would open a video modal or player
+                });
+            });
+
+            // Modal close buttons
+            const modalCloseButtons = document.querySelectorAll('.frame-97, .button-13');
+            modalCloseButtons.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const modal = this.closest('.cm-on');
+                    if (modal) {
+                        modal.style.display = 'none';
+                        const overlay = document.querySelector('.rectangle-5');
+                        if (overlay) overlay.style.display = 'none';
+                    }
+                });
+            });
+
+            // Language switcher
+            const langSwitcher = document.querySelectorAll('.ngn-ng');
+            langSwitcher.forEach(switcher => {
+                switcher.addEventListener('click', function () {
+                    alert('Language switching would be implemented here');
+                });
+            });
+
+            // Purchase buttons - scroll to form or show modal
+            const purchaseButtons = document.querySelectorAll('.button, .button-wrapper, .button-5, .button-6');
+            purchaseButtons.forEach(btn => {
+                const text = btn.textContent.trim();
+                if (text.includes('Order') || text.includes('Bloom')) {
+                    btn.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        // Scroll to order form or show purchase modal
+                        const orderSection = document.querySelector('.info-wrapper');
+                        if (orderSection) {
+                            orderSection.scrollIntoView({ behavior: 'smooth' });
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+    <main class="main">
+        <section class="home">
+            <header class="menu-bar">
+                <div class="container flex-direction-row justify-content-space-between">
+                    <div onclick="window.location.href='./'" class="logo" role="img" aria-label="Bloompod logo"></div>
+                    <nav class="home-wrapper-nav-tertiary desktop-nav" aria-label="Main navigation">
+                        <a href="./index-en.html" class="menu-tab active"><span class="home-text-span-tertiary">Home</span></a>
+                        <a href="./index-en.html#journey" class="menu-tab"><span class="home-text-span-tertiary">The Bloom
+                                Journey</span></a>
+                        <a href="./index-en.html#notice" class="menu-tab"><span class="home-text-span-tertiary">Support</span></a>
+                    </nav>
+                    <div class="home-wrapper-div-extra">
+                        <button class="purchase-button-button-additional" type="button" aria-label="Order Bloompod"
+                            onclick="window.location.href='order-en.html'">
+                            <span class="purchase-button-span">Order <span>Bloompod™</span></span>
+                        </button>
+                        <div class="language-hero-wrapper-div" role="button" tabindex="0"
+                            aria-label="Change language to Vietnamese" onclick="window.location.href='order.html'">
+                            <div class="layout-section-div"><span class="label-text-span-lang">VN</span></div>
+                            <img class="content-image-img" src="./assets/images/united-kingdom.png" alt="Language flag">
+                        </div>
+                        <button id="hamburger-btn" class="hamburger-menu" aria-label="Open menu">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3 12H21M3 6H21M3 18H21" stroke="#605e5c" stroke-width="2"
+                                    stroke-linecap="round"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="mobile-menu">
+                <div class="mobile-menu-header">
+                    <div onclick="window.location.href='./'" class="logo" role="img" aria-label="Bloompod logo"></div>
+                    <div style="display: flex; gap: 8px;">
+                        <div class="language-hero-wrapper-div" role="button" tabindex="0"
+                            aria-label="Change language to Vietnamese" onclick="window.location.href='./order.html'">
+                            <img class="content-image-img" src="./assets/images/circle---countries-flag.svg"
+                                alt="Language flag">
+                            <div class="layout-section-div"><span class="label-text-span-lang">VI</span></div>
+                        </div>
+                        <button id="mobile-menu-close" class="mobile-menu-close" aria-label="Close menu">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M18 6L6 18M6 6L18 18" stroke="#605e5c" stroke-width="2" stroke-linecap="round">
+                                </path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <nav class="mobile-nav" aria-label="Mobile navigation">
+                    <a href="./#home" class="mobile-nav-link active"><span>Home</span></a>
+                    <a href="./#journey" class="mobile-nav-link"><span>The Bloom Journey</span></a>
+                    <a href="./#notice" class="mobile-nav-link"><span>Support</span></a>
+                </nav>
+                <div class="mobile-menu-footer">
+                    <nav class="language-switcher-wrapper-nav-tertiary" aria-label="Footer navigation">
+                        <a href="privacy.html" class="footer-tab">
+                            <span class="terms-of-use"><span class="label-text-span-link">Privacy
+                                    Policy</span></span>
+                        </a>
+                        <a href="terms.html" class="footer-tab">
+                            <span class="terms-of-use"><span class="label-text-span-link">Terms of Use</span></span>
+                        </a>
+                        <a href="shipping.html" class="footer-tab">
+                            <span class="terms-of-use"><span class="label-text-span-link">Shipping</span></span>
+                        </a>
+                        <a href="returns.html" class="footer-tab">
+                            <span class="terms-of-use"><span class="label-text-span-link">Returns</span></span>
+                        </a>
+                        <a href="contact.html" class="footer-tab">
+                            <span class="terms-of-use"><span class="label-text-span-link"> Contact</span></span>
+                        </a>
+                    </nav>
+                    <!-- <button class="purchase-button-button-additional mobile-cta" type="button">
+                        <span class="purchase-button-span">Order Bloompod™</span>
+                    </button>
+                    <div class="language-hero-wrapper-div" role="button" tabindex="0"
+                        aria-label="Change language to English">
+                        <img class="content-image-img" src="./assets/images/circle---countries-flag.svg"
+                            alt="Language flag">
+                        <div class="layout-section-div"><span class="label-text-span-lang">EN</span></div>
+                    </div> -->
+                </div>
+            </div>
+
+            <section class="home-wrapper-section-order-full">
+                <div class="container flex-direction-column order-container">
+                    <!-- STEP 1: RECIPIENT INFORMATION -->
+                    <div id="step1" class="order-step active">
+                        <div class="step-content">
+                            <h1 class="step-title">Recipient Information</h1>
+                            <p class="step-description">Please provide your information so we can prepare the Bloompod™
+                                system for your family.</p>
+
+                            <form id="orderForm" class="order-form">
+                                <!-- Full Name -->
+                                <div class="form-group full-width">
+                                    <label for="fullName">Full Name <span class="required">*</span></label>
+                                    <input type="text" id="fullName" name="fullName" placeholder="Enter your full name"
+                                        required>
+                                    <span class="error-message"></span>
+                                </div>
+
+                                <!-- Phone & Email -->
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="phone">Phone Number <span class="required">*</span></label>
+                                        <input type="tel" id="phone" name="phone" placeholder="Enter your phone number"
+                                            required>
+                                        <span class="error-message"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="email">Email <span class="required">*</span></label>
+                                        <input type="email" id="email" name="email"
+                                            placeholder="Enter your email address" required>
+                                        <span class="error-message"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Province/District/Ward -->
+                                <div class="form-row form-row-3">
+                                    <div class="form-group">
+                                        <label for="province">Province/City <span class="required">*</span></label>
+                                        <select id="province" name="province" required>
+                                            <option value="">Select Province/City</option>
+                                        </select>
+                                        <span class="error-message"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="district">District <span class="required">*</span></label>
+                                        <select id="district" name="district" required disabled>
+                                            <option value="">Select District</option>
+                                        </select>
+                                        <span class="error-message"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="ward">Ward <span class="required">*</span></label>
+                                        <select id="ward" name="ward" required disabled>
+                                            <option value="">Select Ward</option>
+                                        </select>
+                                        <span class="error-message"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Street Address -->
+                                <div class="form-group full-width">
+                                    <label for="address">Street Address <span class="required">*</span></label>
+                                    <input type="text" id="address" name="address"
+                                        placeholder="Enter your street address" required>
+                                    <span class="error-message"></span>
+                                </div>
+
+                                <!-- Baby age in months -->
+                                <div class="form-group full-width">
+                                    <label for="babyAge">How old is your baby? (months) <span
+                                            class="required">*</span></label>
+                                    <input type="number" id="babyAge" name="babyAge" placeholder="Enter age in months"
+                                        min="0" max="36" required>
+                                    <span class="error-message"></span>
+                                </div>
+
+                                <!-- Submit Button -->
+                                <div class="form-actions">
+                                    <button type="submit" class="btn-primary">Accept & Continue</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- STEP 2: COMPLETE PAYMENT -->
+                    <div id="step2" class="order-step">
+                        <div class="step-content">
+                            <h1 class="step-title">Complete Payment</h1>
+                            <p class="step-description">Transfer directly to our company account:</p>
+
+                            <!-- Payment Status Indicator -->
+                            <div id="paymentStatus" class="payment-status">
+                                <span class="status-icon">⏳</span>
+                                <span class="status-text">Waiting for payment...</span>
+                            </div>
+
+                            <div class="payment-container">
+                                <!-- Left column: Order Information -->
+                                <div class="order-info">
+                                    <h3 class="section-title">Order Information</h3>
+                                    <div class="order-details">
+                                        <div class="detail-row">
+                                            <span class="detail-label">Bloom Language Readiness™ System</span>
+                                        </div>
+                                        <div class="detail-row">
+                                            <span class="detail-label">Order Value:</span>
+                                            <span class="detail-value">2,100,000 VND</span>
+                                        </div>
+                                        <div class="detail-row">
+                                            <span class="detail-label">Transaction Fee:</span>
+                                            <span class="detail-value">0 VND</span>
+                                        </div>
+                                        <div class="detail-row">
+                                            <span class="detail-label">Order Code:</span>
+                                            <span class="detail-value" id="orderCode">-</span>
+                                        </div>
+                                        <div class="detail-row">
+                                            <span class="detail-label">Provider:</span>
+                                            <span class="detail-value detail-value-wrap">Amplify Global Education Co.,
+                                                Ltd</span>
+                                        </div>
+                                        <div class="detail-row total-row">
+                                            <span class="detail-label">Amount to Pay:</span>
+                                            <span class="detail-value total-value">2,100,000 VND</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Right column: QR Code -->
+                                <div class="qr-code-section">
+                                    <h3 class="section-title">Scan with Banking App/E-wallet</h3>
+                                    <div class="qr-code-wrapper">
+                                        <div class="qr-code">
+                                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=VNPAY|2,100,000|Bloom%20Payment"
+                                                alt="QR Code" width="200" height="200">
+                                        </div>
+                                        <div class="qr-countdown">
+                                            <span class="countdown-icon">⏱</span>
+                                            <span class="countdown-text">Time remaining: <strong
+                                                    id="countdownTimer">05:00</strong></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Benefits Icons -->
+                            <div class="benefits-wrapper">
+                                <div class="benefit-item">
+                                    <span class="benefit-icon">
+                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                            <circle cx="10" cy="10" r="10" fill="currentColor" />
+                                            <path d="M6 10L9 13L14 7" stroke="white" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </span>
+                                    <span class="benefit-text">Secure payment via VNPAY</span>
+                                </div>
+                                <div class="benefit-item">
+                                    <span class="benefit-icon">
+                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                            <circle cx="10" cy="10" r="10" fill="currentColor" />
+                                            <path d="M6 10L9 13L14 7" stroke="white" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </span>
+                                    <span class="benefit-text">Free nationwide shipping</span>
+                                </div>
+                                <div class="benefit-item">
+                                    <span class="benefit-icon">
+                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                            <circle cx="10" cy="10" r="10" fill="currentColor" />
+                                            <path d="M6 10L9 13L14 7" stroke="white" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </span>
+                                    <span class="benefit-text">Bloom Pod™ warranty per policy</span>
+                                </div>
+                                <div class="benefit-item">
+                                    <span class="benefit-icon">
+                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                            <circle cx="10" cy="10" r="10" fill="currentColor" />
+                                            <path d="M6 10L9 13L14 7" stroke="white" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </span>
+                                    <span class="benefit-text">Bloom will send a confirmation email after payment</span>
+                                </div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="form-actions">
+                                <button type="button" id="btnBack" class="btn-secondary">Go Back</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <footer class="footer">
+                <div class="container flex-direction-row">
+                    <div class="language-switcher-wrapper-footer-left">
+                        <div class="logo-2" role="img" aria-label="Bloompod logo"></div>
+                        <p class="language-switcher-text-p">
+                            Global Education Amplify Co., Ltd.<br>
+                            Tax ID: 0123456789<br>
+                            Address: Lavida Plus Condominium, Nguyen Van Linh Road, Tan Hung Ward, HCM<br>
+                            Email: <a href="mailto:info@bloom.vn">info@bloom.vn</a><br>
+                            HotLine: <a href="tel:+84938838974">+84 938 838 974</a>
+                        </p>
+                    </div>
+                    <div class="language-switcher-wrapper-footer-right">
+                        <nav class="language-switcher-wrapper-nav-tertiary" aria-label="Footer navigation">
+                            <a href="support-en.html" class="footer-tab">
+                                <span class="terms-of-use"><span class="label-text-span-link">Payment
+                                        Policy</span></span>
+                            </a>
+                            <a href="support-en.html" class="footer-tab">
+                                <span class="terms-of-use"><span class="label-text-span-link">Privacy
+                                        Policy</span></span>
+                            </a>
+                            <a href="support-en.html" class="footer-tab">
+                                <span class="terms-of-use"><span class="label-text-span-link">Terms of Use</span></span>
+                            </a>
+                            <a href="support-en.html" class="footer-tab">
+                                <span class="terms-of-use"><span class="label-text-span-link">Shipping</span></span>
+                            </a>
+                            <a href="support-en.html" class="footer-tab">
+                                <span class="terms-of-use"><span class="label-text-span-link">Returns</span></span>
+                            </a>
+                            <a href="support-en.html" class="footer-tab">
+                                <span class="terms-of-use"><span class="label-text-span-link"> Contact</span></span>
+                            </a>
+                        </nav>
+                        <div class="social-media-wrapper">
+                            <a href="#" target="_blank" class="social-icon" aria-label="Facebook">
+                                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" />
+                                </svg>
+                            </a>
+
+                            <a href="#" target="_blank" class="social-icon" aria-label="TikTok">
+                                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
+                                    style="transform: scale(0.85);">
+                                    <path
+                                        d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z" />
+                                </svg>
+                            </a>
+
+                            <a href="#" target="_blank" class="social-icon" aria-label="YouTube">
+                                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M21.582 6.186c-.23-.86-.908-1.538-1.768-1.768C18.254 4 12 4 12 4s-6.254 0-7.814.418c-.86.23-1.538.908-1.768 1.768C2 7.746 2 12 2 12s0 4.254.418 5.814c.23.86.908 1.538 1.768 1.768C7.746 20 12 20 12 20s6.254 0 7.814-.418c.86-.23 1.538-.908 1.768-1.768C22 16.254 22 12 22 12s0-4.254-.418-5.814zM9.999 15.594v-7.188l6.328 3.594-6.328 3.594z" />
+                                </svg>
+                            </a>
+                        </div>
+                        <div class="language-switcher-wrapper-production-line">
+                            <p class="landing-hero-text-p">© 2026 Bloompod™ Developed by Amplify Global
+                                Education</p>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </section>
+    </main>
+</body>
+
+</html>
