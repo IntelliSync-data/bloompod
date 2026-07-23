@@ -9,6 +9,12 @@
     // ==============================================
     // CONFIGURATION
     // ==============================================
+    const isProduction = window.location.hostname === 'bloompod.vn' || window.location.hostname === 'www.bloompod.vn';
+
+    const ENV_CONFIG = isProduction
+        ? { package_id: 4, payment_method_id: 3 }   // production
+        : { package_id: 3, payment_method_id: 1 };   // demo
+
     const API_BASE_URL = 'https://provinces.open-api.vn/api';
     const PAYMENT_API_URL = 'https://app.bloompod.vn/api/profile';
     const ORDER_DATA_KEY = 'bloomOrderData';
@@ -113,10 +119,10 @@
                 body: JSON.stringify({
                     jsonrpc: "2.0",
                     params: {
-                        package_id: 3,
+                        package_id: ENV_CONFIG.package_id,
                         email: formData.email,
                         notes: notes,
-                        payment_method_id: 1
+                        payment_method_id: ENV_CONFIG.payment_method_id
                     }
                 })
             });
