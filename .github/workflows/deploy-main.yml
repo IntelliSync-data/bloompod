@@ -31,7 +31,7 @@ jobs:
           protocol: ftps
           port: 21
           security: loose
-          server-dir: ${{ variables.LANDING_PAGE_BLOOMPOD_TARGET_DIR }}
+          server-dir: ${{ vars.LANDING_PAGE_BLOOMPOD_TARGET_DIR }}
           local-dir: ./source-main/
           timeout: 60000
           exclude: |
