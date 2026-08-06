@@ -16,6 +16,7 @@
         : { package_id: 3, payment_method_id: 1 };   // demo
 
     const API_BASE_URL = 'https://provinces.open-api.vn/api';
+    const INQUIRY_API_URL = 'https://app.bloompod.vn/api/inquiry';
     const PAYMENT_API_URL = 'https://app.bloompod.vn/api/profile';
     const ORDER_DATA_KEY = 'bloomOrderData';
     const POLLING_INTERVAL = 5000; // 5 seconds
@@ -102,6 +103,41 @@
     // ==============================================
     // API FUNCTIONS - Payment Backend
     // ==============================================
+
+    /**
+     * Submit inquiry via backend API
+     */
+    async function submitInquiry(formData) {
+        try {
+            const fullAddress = `${formData.address}, ${formData.ward}, ${formData.district}, ${formData.province}`;
+            const message = `Bé ${formData.babyAge} tháng tuổi, ${fullAddress}`;
+
+            const response = await fetch(INQUIRY_API_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: formData.fullName,
+                    email: formData.email,
+                    phone: formData.phone,
+                    message: message,
+                    source_code: 'website'
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            console.log('Inquiry response:', data);
+            return data;
+        } catch (error) {
+            console.error('Error submitting inquiry:', error);
+            throw error;
+        }
+    }
 
     /**
      * Create order via backend API
@@ -352,6 +388,9 @@
         submitBtn.textContent = t('order.creating');
 
         try {
+            // Submit inquiry first (save user info)
+            await submitInquiry(formData);
+
             // Call API to create order
             const response = await createOrder(formData);
 
