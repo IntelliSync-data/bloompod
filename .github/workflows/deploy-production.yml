@@ -1,4 +1,4 @@
-name: Deploy BloomPod Production
+name: Deploy Production
 
 on:
   push:
@@ -13,7 +13,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
       
-    - name: Deploy bloompod to Server
+    - name: Deploy to Server
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.BLOOMPOD_HOST }}
