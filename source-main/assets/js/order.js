@@ -110,7 +110,8 @@
     async function submitInquiry(formData) {
         try {
             const fullAddress = `${formData.address}, ${formData.ward}, ${formData.district}, ${formData.province}`;
-            const message = `Bé ${formData.babyAge} tháng tuổi, ${fullAddress}`;
+            const addressNoteStr = formData.addressNote ? `, Địa chỉ mới: ${formData.addressNote}` : '';
+            const message = `Bé ${formData.babyAge} tháng tuổi, ${fullAddress}${addressNoteStr}`;
 
             const response = await fetch(INQUIRY_API_URL, {
                 method: 'POST',
@@ -145,7 +146,8 @@
     async function createOrder(formData) {
         try {
             const fullAddress = `${formData.address}, ${formData.ward}, ${formData.district}, ${formData.province}`;
-            const notes = `${formData.fullName}, ${formData.phone}, ${fullAddress}, Bé ${formData.babyAge} tháng tuổi`;
+            const addressNoteStr = formData.addressNote ? `, Địa chỉ mới: ${formData.addressNote}` : '';
+            const notes = `${formData.fullName}, ${formData.phone}, ${fullAddress}${addressNoteStr}, Bé ${formData.babyAge} tháng tuổi`;
 
             const response = await fetch(`${PAYMENT_API_URL}/create`, {
                 method: 'POST',
@@ -745,6 +747,7 @@
                 ward: document.getElementById('ward').selectedOptions[0].text,
                 wardCode: document.getElementById('ward').value,
                 address: document.getElementById('address').value.trim(),
+                addressNote: (document.getElementById('addressNote')?.value || '').trim(),
                 babyAge: document.getElementById('babyAge').value.trim()
             };
 
