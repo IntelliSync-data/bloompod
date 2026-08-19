@@ -23,6 +23,7 @@
 </head>
 
 <body style="user-select: unset;">
+    <script src="./assets/js/toast.js"></script>
     <script src="./assets/js/lang.js"></script>
     <script src="./assets/js/order-confirmation.js"></script>
     <script>
@@ -113,7 +114,7 @@
 
                     if (isValid) {
                         // Show success message or navigate to next step
-                        alert('Form submitted successfully!');
+                        showToast('Gửi thành công!');
                         // In a real app, you would submit the form data here
                     }
                 });

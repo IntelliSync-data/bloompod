@@ -435,7 +435,7 @@
             } else {
                 // API returned error
                 const errorMsg = response.result?.error || t('order.createFailed');
-                alert(errorMsg);
+                showToast(errorMsg, 'error');
                 submitBtn.disabled = false;
                 submitBtn.textContent = originalText;
             }
@@ -443,7 +443,7 @@
         } catch (error) {
             // Network or other errors
             console.error('Error in goToStep2:', error);
-            alert(t('order.networkError'));
+            showToast(t('order.networkError'), 'error');
             submitBtn.disabled = false;
             submitBtn.textContent = originalText;
         }
