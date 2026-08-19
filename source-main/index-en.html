@@ -117,7 +117,7 @@
                 });
             });
 
-             //Video BloomPod
+            //Video BloomPod
             const videoModal = document.getElementById('youtube-modal-overlay');
             const closeVideoBtn = document.getElementById('close-video-btn');
             const youtubePlayer = document.getElementById('youtube-player');
@@ -128,7 +128,7 @@
                 btn.addEventListener('click', function (e) {
                     e.preventDefault();
                     if (videoModal && youtubePlayer) {
-                    
+
                         youtubePlayer.src = originalVideoSrc + "?autoplay=1";
                         videoModal.style.display = 'flex';
                     }
@@ -213,11 +213,11 @@
                                 <span class="purchase-button-span">Order Bloompod</span>
                             </button>
                         </a>
-                            <div class="language-hero-wrapper-div" role="button" tabindex="0"
-                                aria-label="Change language to Vietnamese" onclick="window.location.href='index.html'">
-                                <div class="layout-section-div"><span class="label-text-span-lang">VN</span></div>
-                                <img class="content-image-img" src="./assets/images/united-kingdom.png" alt="Language flag">
-                            </div>
+                        <div class="language-hero-wrapper-div" role="button" tabindex="0"
+                            aria-label="Change language to Vietnamese" onclick="window.location.href='index.html'">
+                            <div class="layout-section-div"><span class="label-text-span-lang">VN</span></div>
+                            <img class="content-image-img" src="./assets/images/united-kingdom.png" alt="Language flag">
+                        </div>
                         <button id="hamburger-btn" class="hamburger-menu" aria-label="Open menu">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
@@ -524,61 +524,77 @@
                 <h2 id="journey-heading" class="landing-hero-text-h2-primary">The Bloompod Journey</h2>
                 <h4 class="description-text-p-secondary">
                     To support the way children naturally acquire language,<br>
-                    Bloompod is designed as a journey through <span style="color: var(--primaryprimary-800); font-weight: 700;">four progressive stages</span>.    
+                    Bloompod is designed as a journey through <span
+                        style="color: var(--primaryprimary-800); font-weight: 700;">four progressive stages</span>.
                 </h4>
-                 <div class="journey-wrapper-grid">
+                <div class="journey-wrapper-grid">
                     <article class="journey-wrapper-card">
                         <span class="journey-badge">🌱 Part One</span>
                         <h3 class="journey-card-title">Discovering English Sounds</h3>
                         <div class="journey-card-image-wrap">
-                            <img class="journey-card-image" src="./assets/images/baby1.png" alt="Bé nằm nghe âm thanh tiếng Anh">
+                            <img class="journey-card-image" src="./assets/images/baby1.png"
+                                alt="Bé nằm nghe âm thanh tiếng Anh">
                             <img class="journey-card-tag" src="./assets/images/graphic-icon.svg" alt="">
-                        </div> 
-                        <p class="journey-card-desc">Become familiar with the sounds, rhythm, and melody of the English language.</p>
+                        </div>
+                        <p class="journey-card-desc">Become familiar with the sounds, rhythm, and melody of the English
+                            language.</p>
                     </article>
 
                     <article class="journey-wrapper-card">
                         <span class="journey-badge">🍎 Part Two</span>
                         <h3 class="journey-card-title">Discovering Everyday Words</h3>
                         <div class="journey-card-image-wrap">
-                            <img class="journey-card-image" src="./assets/images/baby2.png" alt="Bé chơi với thẻ từ vựng">
+                            <img class="journey-card-image" src="./assets/images/baby2.png"
+                                alt="Bé chơi với thẻ từ vựng">
                             <img class="journey-card-tag" src="./assets/images/graphic-icon.svg" alt="">
                         </div>
-                        <p class="journey-card-desc">Explore familiar words that children encounter in everyday life.</p>
+                        <p class="journey-card-desc">Explore familiar words that children encounter in everyday life.
+                        </p>
                     </article>
 
                     <article class="journey-wrapper-card">
                         <span class="journey-badge">💬 Part Three</span>
                         <h3 class="journey-card-title">Discovering Everyday Communication</h3>
                         <div class="journey-card-image-wrap">
-                            <img class="journey-card-image" src="./assets/images/baby3.png" alt="Bé tập nói câu đơn giản">
+                            <img class="journey-card-image" src="./assets/images/baby3.png"
+                                alt="Bé tập nói câu đơn giản">
                             <img class="journey-card-tag" src="./assets/images/graphic-icon.svg" alt="">
                         </div>
-                        <p class="journey-card-desc">Become familiar with simple expressions and everyday conversations.</p>
+                        <p class="journey-card-desc">Become familiar with simple expressions and everyday conversations.
+                        </p>
                     </article>
 
                     <article class="journey-wrapper-card">
                         <span class="journey-badge">📖 Part Four</span>
                         <h3 class="journey-card-title">Discovering Stories</h3>
                         <div class="journey-card-image-wrap">
-                            <img class="journey-card-image" src="./assets/images/baby4.png" alt="Bé nghe kể chuyện tiếng Anh">
+                            <img class="journey-card-image" src="./assets/images/baby4.png"
+                                alt="Bé nghe kể chuyện tiếng Anh">
                             <img class="journey-card-tag" src="./assets/images/graphic-icon.svg" alt="">
                         </div>
-                        <p class="journey-card-desc">Experience English through warm, engaging stories that spark imagination and emotional connection.</p>
+                        <p class="journey-card-desc">Experience English through warm, engaging stories that spark
+                            imagination and emotional connection.</p>
                     </article>
                 </div>
 
                 <div class="journey-quote-wrapper">
                     <div class="journey-quote-box">
-                        <img class="journey-quote-device journey-quote-device-left" src="./assets/images/bloompod2.png" alt="">
-                        <img class="journey-quote-note journey-quote-note-left" src="./assets/images/music-note-double.svg" alt="" role="presentation">
-                        <img class="journey-quote-mark journey-quote-mark-open" src="./assets/images/quote-open-green.svg" alt="" role="presentation">
+                        <img class="journey-quote-device journey-quote-device-left" src="./assets/images/bloompod2.png"
+                            alt="">
+                        <img class="journey-quote-note journey-quote-note-left"
+                            src="./assets/images/music-note-double.svg" alt="" role="presentation">
+                        <img class="journey-quote-mark journey-quote-mark-open"
+                            src="./assets/images/quote-open-green.svg" alt="" role="presentation">
                         <blockquote class="journey-quote-text">
-                            Language is acquired most naturally when children are given the opportunity to listen, revisit, explore, and connect—through joyful experiences, every day.
+                            Language is acquired most naturally when children are given the opportunity to listen,
+                            revisit, explore, and connect—through joyful experiences, every day.
                         </blockquote>
-                        <img class="journey-quote-mark journey-quote-mark-close" src="./assets/images/quote-close-green.svg" alt="" role="presentation">
-                        <img class="journey-quote-device journey-quote-device-right" src="./assets/images/bloompod1.png" alt="">
-                        <img class="journey-quote-note journey-quote-note-right" src="./assets/images/music-note-single.svg" alt="" role="presentation">
+                        <img class="journey-quote-mark journey-quote-mark-close"
+                            src="./assets/images/quote-close-green.svg" alt="" role="presentation">
+                        <img class="journey-quote-device journey-quote-device-right" src="./assets/images/bloompod1.png"
+                            alt="">
+                        <img class="journey-quote-note journey-quote-note-right"
+                            src="./assets/images/music-note-single.svg" alt="" role="presentation">
                     </div>
                 </div>
             </section>
@@ -677,11 +693,11 @@
                     </p>
                 </div>
             </section>
-            <section class="home-wrapper-section-book" aria-labelledby="book-heading">
+            <section id="book-sharing" class="home-wrapper-section-book" aria-labelledby="book-heading">
                 <img class="language-switcher-image-img" src="./assets/images/image-24-2.png" alt=""
                     role="presentation">
                 <div class="container">
-                    <divc class="home-wrapper-section-body-book">
+                    <div class="home-wrapper-section-body-book">
                         <div class="language-switcher-wrapper-div-additional">
                             <div class="language-switcher-book-wrapper-div">
                                 <h2 id="book-heading" class="language-switcher-text-h2-primary">Want to explore the
@@ -711,7 +727,7 @@
                             </button>
                         </div>
                         <img class="grg" src="./assets/images/grg-1.png" alt="Language Readiness book">
-                </div>
+                    </div>
                 </div>
             </section>
             <section class="home-wrapper-section-phase" aria-labelledby="critical-period-heading">
@@ -737,7 +753,8 @@
                                 <h3 class="label-text-h3-tertiary">After age three</h3>
                                 <img class="img-objects" src="./assets/images/objects-1.png"
                                     alt="Brain connections illustration">
-                                <p class="description-text-p-tertiary">The ability to develop naturally gradually decreases over time.
+                                <p class="description-text-p-tertiary">The ability to develop naturally gradually
+                                    decreases over time.
                             </article>
                         </div>
                         <p class="landing-hero-text-blockquote-primary">
@@ -752,7 +769,7 @@
                     role="presentation">
                 <div class="container flex-direction-column">
                     <h2 id="product-heading" class="landing-hero-text-h2-tertiary">The Bloompod Kit</h2>
-                    <h4 class="landing-hero-text-h4-tertiary">A thoughtfully designed system 
+                    <h4 class="landing-hero-text-h4-tertiary">A thoughtfully designed system
                         that supports the natural foundation of language during the first three years of life.</h4>
                     <div class="home-wrapper-section-body-package">
                         <article class="landing-hero-wrapper-article-secondary">
@@ -980,7 +997,7 @@
         </section>
     </main>
 
-     <!-- Video Bloompod -->
+    <!-- Video Bloompod -->
     <div id="youtube-modal-overlay" class="video-modal-overlay" style="display: none;">
         <div class="video-modal-content">
             <button id="close-video-btn" class="video-close-btn">&times;</button>
@@ -992,7 +1009,7 @@
             </iframe>
         </div>
     </div>
-        <!-- Email Capture Modal -->
+    <!-- Email Capture Modal -->
     <div id="emailModalOverlay" class="email-modal-overlay">
         <div id="emailModal" class="email-modal">
             <button id="emailModalClose" class="email-modal-close" type="button" aria-label="Close">
