@@ -8,6 +8,7 @@
 
     // API Configuration
     const API_URL = 'https://app.bloompod.vn/api/template/send';
+    const INQUIRY_API_URL = 'https://app.bloompod.vn/api/inquiry';
 
     // DOM Elements
     let modal, overlay, form, input, errorMsg, submitBtn, spinner, successView, formView;
@@ -163,6 +164,18 @@
 
             const data = await response.json();
             console.log('Email submitted successfully:', data);
+
+            // Submit inquiry
+            const isEn = window.i18nLang === 'en';
+            fetch(INQUIRY_API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: email,
+                    message: isEn ? 'Download ebook English' : 'Download ebook tiếng Việt',
+                    source_code: 'website'
+                })
+            }).catch(err => console.error('Inquiry error:', err));
 
             // Show success view
             showSuccess();
