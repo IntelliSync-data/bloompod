@@ -171,6 +171,7 @@
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
+                    name: email.split('@')[0],
                     email: email,
                     message: isEn ? 'Download ebook English' : 'Download ebook tiếng Việt',
                     source_code: 'website'
