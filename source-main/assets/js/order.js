@@ -35,6 +35,9 @@
         timestamp: ''
     };
 
+    // Package pricing loaded from API (see fetchPackageInfo)
+    let packageInfo = null;
+
     let pollingInterval = null;
     let pollingTimeoutId = null;
     let countdownInterval = null;
@@ -206,6 +209,37 @@
             return data;
         } catch (error) {
             console.error('Error checking payment:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * Fetch package info (name, prices, services) from backend API
+     */
+    async function fetchPackageInfo() {
+        try {
+            const response = await fetch(`${PAYMENT_API_URL}/package-info`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    jsonrpc: "2.0",
+                    params: {
+                        package_id: ENV_CONFIG.package_id
+                    }
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            console.log('Package info response:', data);
+            return data;
+        } catch (error) {
+            console.error('Error fetching package info:', error);
             throw error;
         }
     }
@@ -408,13 +442,13 @@
                 // Update UI with API data
                 document.getElementById('orderCode').textContent = response.result.transaction_id;
 
-                // Update amount display
-                const amountElements = document.querySelectorAll('.detail-value.total-value, .detail-value');
-                amountElements.forEach(el => {
-                    if (el.textContent.includes('VNĐ') || el.classList.contains('total-value')) {
-                        el.textContent = formatCurrency(response.result.amount);
-                    }
-                });
+                // Update amount display (keep the struck-through original price
+                // when the package is on a promotional price)
+                const paidAmount = Number(response.result.amount);
+                const originalAmount = packageInfo && packageInfo.use_promotional_price
+                    ? getOriginalCost(packageInfo)
+                    : null;
+                updatePriceDisplay(paidAmount, originalAmount);
 
                 // Update QR Code
                 const qrImg = document.querySelector('.qr-code img');
@@ -453,11 +487,85 @@
      * Format amount to Vietnamese currency
      */
     function formatCurrency(amount) {
+        const suffix = window.i18nLang === 'en' ? ' VND' : ' VNĐ';
         return new Intl.NumberFormat('vi-VN', {
             style: 'decimal',
             minimumFractionDigits: 0,
             maximumFractionDigits: 0
-        }).format(amount) + ' VNĐ';
+        }).format(amount) + suffix;
+    }
+
+    /**
+     * Render a price into an element.
+     * - Without originalAmount (or when it matches): a single plain price.
+     * - With a higher originalAmount: the original struck through in a smaller
+     *   size on its own line, then the final price in the element's normal style.
+     */
+    function renderPrice(el, finalAmount, originalAmount) {
+        if (!el) return;
+
+        el.textContent = '';
+
+        const hasDiscount = originalAmount != null &&
+            Number(originalAmount) > Number(finalAmount);
+
+        if (hasDiscount) {
+            const original = document.createElement('span');
+            original.className = 'price-original';
+            original.textContent = formatCurrency(originalAmount);
+            el.appendChild(original);
+        }
+
+        const final = document.createElement('span');
+        final.className = 'price-final';
+        final.textContent = formatCurrency(finalAmount);
+        el.appendChild(final);
+    }
+
+    /**
+     * Update both price slots (order value + amount to pay)
+     */
+    function updatePriceDisplay(finalAmount, originalAmount) {
+        renderPrice(document.getElementById('orderValue'), finalAmount, originalAmount);
+        renderPrice(document.getElementById('totalAmount'), finalAmount, originalAmount);
+    }
+
+    /**
+     * Pre-discount price of a package: the highest of total_cost / package_cost
+     */
+    function getOriginalCost(pkg) {
+        const candidates = [pkg.total_cost, pkg.package_cost]
+            .map(Number)
+            .filter(n => !isNaN(n));
+        return candidates.length ? Math.max(...candidates) : null;
+    }
+
+    /**
+     * Load package pricing from API and render it
+     */
+    async function initPackagePricing() {
+        try {
+            const data = await fetchPackageInfo();
+            const pkg = data?.result?.success ? data.result.package : null;
+            if (!pkg) return;
+
+            packageInfo = pkg;
+
+            const totalCost = Number(pkg.total_cost);
+            const promoCost = Number(pkg.promotional_cost);
+
+            if (pkg.use_promotional_price && !isNaN(promoCost)) {
+                // total_cost is the pre-discount price on some packages and the
+                // already-discounted one on others, so strike through whichever
+                // figure is genuinely higher than the promotional price.
+                updatePriceDisplay(promoCost, getOriginalCost(pkg));
+            } else {
+                updatePriceDisplay(totalCost, null);
+            }
+        } catch (error) {
+            // Keep the prices already rendered in the HTML as fallback
+            console.error('Error initializing package pricing:', error);
+        }
     }
 
     /**
@@ -781,6 +889,7 @@
         }
 
         // Initialize components
+        initPackagePricing();
         initAddressDropdowns();
         initFormValidation();
         initStep2Buttons();

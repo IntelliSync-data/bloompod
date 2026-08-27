@@ -313,6 +313,20 @@
     color: var(--secondary-dark);
 }
 
+/* Promotional price display */
+.price-original {
+    display: block;
+    font-size: 0.75em;
+    font-weight: 400;
+    color: var(--text);
+    text-decoration: line-through;
+    opacity: 0.7;
+}
+
+.price-final {
+    display: block;
+}
+
 /* QR Code Section */
 .qr-code-section {
     display: flex;
