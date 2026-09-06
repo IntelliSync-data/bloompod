@@ -847,6 +847,8 @@ details[open] .content-image-img {
     letter-spacing: var(--subtitle-letter-spacing);
     line-height: var(--subtitle-line-height);
     font-style: var(--subtitle-font-style);
+    width: max-content;
+    max-width: none;
 }
 
 .language-switcher-wrapper-div-extra {
