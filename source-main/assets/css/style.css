@@ -282,21 +282,20 @@ html {
 .landing-hero-wrapper-div-price {
     display: inline-flex;
     align-items: flex-end;
+    justify-content: flex-end;
     gap: 8px;
     position: relative;
-    padding: 0px 64px;
     width: 100%;
     border-radius: 16px;
 }
 
 /* Giá gốc gạch ngang, nằm ngay trên giá khuyến mãi */
 .landing-hero-price-original {
-    padding: 0 0 0 64px;
     width: 100%;
     text-align: right;
     font-family: "Songti TC-Bold", Helvetica;
     font-weight: 700;
-    font-size: 34px;
+    font-size: 22px;
     line-height: 40px;
     color: #605e5c;
     white-space: nowrap;
@@ -1888,23 +1887,36 @@ details[open] .content-image-img {
 
 .layout-section-div-secondary {
     display: inline-flex;
-    align-items: center;
+    align-items: baseline;
     justify-content: center;
     gap: 10px;
     position: relative;
     flex: 0 0 auto;
 }
 
-.label-text-span-secondary {
+.label-text-span-secondary.label-1 {
     position: relative;
     width: fit-content;
     font-family: "Songti TC-Bold", Helvetica;
     font-weight: 700;
     color: var(--primaryprimary-800);
-    font-size: 64px;
+    font-size: 30px;
     text-align: center;
     letter-spacing: 0;
-    line-height: 74px;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.label-text-span-secondary.label-2 {
+    position: relative;
+    width: fit-content;
+    font-family: "Songti TC-Bold", Helvetica;
+    font-weight: 700;
+    color: var(--primaryprimary-800);
+    font-size: 44px;
+    text-align: center;
+    letter-spacing: 0;
+    line-height: 48px;
     white-space: nowrap;
 }
 
@@ -1924,10 +1936,10 @@ details[open] .content-image-img {
     font-family: "Songti TC-Bold", Helvetica;
     font-weight: 700;
     color: #605e5c;
-    font-size: 34px;
+    font-size: 22px;
     text-align: center;
     letter-spacing: 0;
-    line-height: 44px;
+    line-height: 30px;
     white-space: nowrap;
 }
 
