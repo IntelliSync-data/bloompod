@@ -289,6 +289,25 @@ html {
     border-radius: 16px;
 }
 
+/* Giá gốc gạch ngang, nằm ngay trên giá khuyến mãi */
+.landing-hero-price-original {
+    padding: 0 0 0 64px;
+    width: 100%;
+    text-align: right;
+    font-family: "Songti TC-Bold", Helvetica;
+    font-weight: 700;
+    font-size: 34px;
+    line-height: 40px;
+    color: #605e5c;
+    white-space: nowrap;
+    /* Khối cha có gap 24px, kéo lại cho giá gốc dính sát giá khuyến mãi */
+    margin-bottom: -16px;
+}
+
+.landing-hero-price-original s {
+    text-decoration-thickness: 2px;
+}
+
 .landing-hero-wrapper-div-1 {
     display: inline-flex;
     flex-direction: row;
