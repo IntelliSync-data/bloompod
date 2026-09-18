@@ -525,10 +525,20 @@ details[open] .content-image-img {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: end;
+    align-items: center;
+    gap: 40px;
     width: 100%;
     max-width: 1220px;
     margin: auto;
+}
+
+/* 2 cot bang nhau: moi ben dung dung 50% vung chung */
+.home-wrapper-section-body-package>.landing-hero-wrapper-article-secondary,
+.home-wrapper-section-body-package>.landing-hero-image-img-alternate {
+    box-sizing: border-box;
+    flex: 1 1 50%;
+    width: 50%;
+    min-width: 0;
 }
 
 .home-wrapper-section-feedback {
@@ -1812,15 +1822,10 @@ details[open] .content-image-img {
     height: 346px;
 }
 
-.landing-hero-image-img-alternate {
-    width: 626px;
-    height: 401px;
-}
-
 .landing-hero-wrapper-article-secondary {
     display: flex;
     flex-direction: column;
-    width: 553px;
+    width: 50%;
     align-items: flex-start;
     gap: 24px;
     padding: 32px;
@@ -1828,6 +1833,16 @@ details[open] .content-image-img {
     border-radius: 16px;
     overflow: hidden;
     box-shadow: var(--button-shadow-default);
+}
+
+/* Anh poster: giu dung ti le goc, khong bao gio bi keo gian */
+.landing-hero-image-img-alternate {
+    display: block;
+    align-self: center;
+    height: auto;
+    max-height: 720px;
+    object-fit: contain;
+    object-position: center;
 }
 
 .landing-hero-text-h3-secondary {
@@ -2232,6 +2247,9 @@ details[open] .landing-hero-wrapper-summary {
 .language-switcher-text-p,
 .landing-hero-text-p {
     margin-bottom: 0 !important;
+    max-width: 50%;
+    flex: 0 1 50%;      
+  word-wrap: break-word;   
 }
 
 .logo-2 {
@@ -3174,19 +3192,24 @@ details[open] .landing-hero-wrapper-summary {
         max-width: 391px;
     }
 
-    .landing-hero-wrapper-article-secondary {
+    .home-wrapper-section-body-package>.landing-hero-wrapper-article-secondary {
+        flex: 0 0 auto;
         width: 100%;
         left: 0;
         padding: 24px 20px;
         position: relative;
     }
 
-    .landing-hero-image-img-alternate {
+    .home-wrapper-section-body-package>.landing-hero-image-img-alternate {
+        flex: 0 0 auto;
+        display: block;
         width: 100%;
+        max-width: 626px;
         height: auto;
-        left: 0;
-        padding: 0 20px;
-        position: relative;
+        /* để trình duyệt tự giữ tỉ lệ gốc */
+        max-height: none;
+        margin: 0 auto;
+        object-fit: contain;
     }
 
     .language-switcher-wrapper-nav-tertiary {
@@ -3518,14 +3541,14 @@ details:focus-visible {
 }
 
 .journey-quote-device-left {
-    width: 15%;
+    width: 12%;
     left: 0;
     --tx: -55%;
     transform: translate(-55%, -50%);
 }
 
-.journey-quote-device-right {
-    width: 20%;
+.journey-quote-device-right {   
+    width: 15%;
     right: 0;
     --tx: 55%;
     transform: translate(55%, -50%);
