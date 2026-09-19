@@ -152,8 +152,9 @@
             // Địa chỉ mới đi vào key `address` riêng, ngăn nhau bằng dấu phẩy.
             // Ghi chú địa chỉ cũ vẫn nằm trong `notes` như trước.
             const fullAddress = `${formData.address}, ${formData.ward}, ${formData.province}`;
-            const addressNoteStr = formData.addressNote ? `, Địa chỉ cũ: ${formData.addressNote}` : '';
-            const notes = `${formData.fullName}, ${formData.phone}${addressNoteStr}, Bé ${formData.babyAge} tháng tuổi`;
+            // Tên, SĐT và địa chỉ đã có key riêng nên không lặp lại trong notes
+            const addressNoteStr = formData.addressNote ? `Địa chỉ cũ: ${formData.addressNote}, ` : '';
+            const notes = `${addressNoteStr}Bé ${formData.babyAge} tháng tuổi`;
 
             const response = await fetch(`${PAYMENT_API_URL}/create`, {
                 method: 'POST',
@@ -164,6 +165,8 @@
                     jsonrpc: "2.0",
                     params: {
                         package_id: ENV_CONFIG.package_id,
+                        name: formData.fullName,
+                        phone: formData.phone,
                         email: formData.email,
                         address: fullAddress,
                         notes: notes,
