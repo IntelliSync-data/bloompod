@@ -116,6 +116,58 @@
     cursor: not-allowed;
 }
 
+/* ===== Dropdown gõ tìm được (tỉnh/thành, xã/phường) ===== */
+.combo {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.combo__input {
+    width: 100%;
+}
+
+.form-group input:disabled {
+    background: var(--second-bg);
+    color: var(--placeholder);
+    cursor: not-allowed;
+}
+
+.combo__list {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    z-index: 30;
+    margin: 0;
+    padding: 4px;
+    list-style: none;
+    max-height: 260px;
+    overflow-y: auto;
+    background: var(--white);
+    border: 1px solid var(--line-color);
+    border-radius: 4px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.combo__list[hidden] {
+    display: none;
+}
+
+.combo__option {
+    padding: 10px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: var(--body-2-font-family);
+    font-size: var(--body-2-font-size);
+    color: var(--text);
+}
+
+.combo__option:hover,
+.combo__option.is-active {
+    background: var(--second-bg);
+}
+
 .form-group input.error,
 .form-group select.error {
     border-color: var(--red);

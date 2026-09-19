@@ -267,27 +267,32 @@
                                     </div>
                                 </div>
 
-                                <!-- Tỉnh/Quận/Xã -->
-                                <div class="form-row form-row-3">
+                                <!-- Tỉnh/Xã (bỏ cấp quận/huyện theo địa giới mới 2025) -->
+                                <div class="form-row form-row-2">
                                     <div class="form-group">
                                         <label for="province">Tỉnh/ Thành Phố <span class="required">*</span></label>
-                                        <select id="province" name="province" required>
-                                            <option value="">Chọn Tỉnh/ Thành Phố</option>
-                                        </select>
-                                        <span class="error-message"></span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="district">Quận/ Huyện <span class="required">*</span></label>
-                                        <select id="district" name="district" required disabled>
-                                            <option value="">Chọn Quận/ Huyện</option>
-                                        </select>
+                                        <div class="combo">
+                                            <input type="text" id="province" name="province"
+                                                class="combo__input" placeholder="Chọn Tỉnh/ Thành Phố"
+                                                autocomplete="off" role="combobox"
+                                                aria-expanded="false" aria-autocomplete="list"
+                                                aria-controls="province-list" required>
+                                            <input type="hidden" id="provinceCode" name="provinceCode">
+                                            <ul class="combo__list" id="province-list" role="listbox" hidden></ul>
+                                        </div>
                                         <span class="error-message"></span>
                                     </div>
                                     <div class="form-group">
                                         <label for="ward">Xã/ Phường <span class="required">*</span></label>
-                                        <select id="ward" name="ward" required disabled>
-                                            <option value="">Chọn Xã/ Phường</option>
-                                        </select>
+                                        <div class="combo">
+                                            <input type="text" id="ward" name="ward"
+                                                class="combo__input" placeholder="Chọn Xã/ Phường"
+                                                autocomplete="off" role="combobox"
+                                                aria-expanded="false" aria-autocomplete="list"
+                                                aria-controls="ward-list" required>
+                                            <input type="hidden" id="wardCode" name="wardCode">
+                                            <ul class="combo__list" id="ward-list" role="listbox" hidden></ul>
+                                        </div>
                                         <span class="error-message"></span>
                                     </div>
                                 </div>
@@ -295,16 +300,16 @@
                                 <!-- Địa chỉ cụ thể -->
                                 <div class="form-group full-width">
                                     <label for="address">Địa chỉ cụ thể <span class="required">*</span></label>
-                                    <input type="text" id="address" name="address" placeholder="Nhập địa chỉ cụ thể"
-                                        required>
+                                    <input type="text" id="address" name="address"
+                                        placeholder="vd: chung cư ABC, 123 đường Lê Lợi" required>
                                     <span class="error-message"></span>
                                 </div>
 
-                                <!-- Ghi chú địa chỉ mới -->
+                                <!-- Ghi chú địa chỉ cũ -->
                                 <div class="form-group full-width">
-                                    <label for="addressNote">Ghi chú địa chỉ mới (nếu có)</label>
+                                    <label for="addressNote">Ghi chú địa chỉ cũ (nếu cần)</label>
                                     <input type="text" id="addressNote" name="addressNote"
-                                        placeholder="Nhập địa chỉ mới theo đơn vị hành chính mới (nếu có)">
+                                        placeholder="vd: chung cư ABC, 123 đường Lê Lợi, Quận 1, Thành Phố Hồ Chí Minh">
                                     <span class="error-message"></span>
                                 </div>
 

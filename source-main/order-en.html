@@ -268,27 +268,32 @@
                                     </div>
                                 </div>
 
-                                <!-- Province/District/Ward -->
-                                <div class="form-row form-row-3">
+                                <!-- Province/Ward (bỏ cấp quận/huyện theo địa giới mới 2025) -->
+                                <div class="form-row form-row-2">
                                     <div class="form-group">
                                         <label for="province">Province/City <span class="required">*</span></label>
-                                        <select id="province" name="province" required>
-                                            <option value="">Select Province/City</option>
-                                        </select>
-                                        <span class="error-message"></span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="district">District <span class="required">*</span></label>
-                                        <select id="district" name="district" required disabled>
-                                            <option value="">Select District</option>
-                                        </select>
+                                        <div class="combo">
+                                            <input type="text" id="province" name="province"
+                                                class="combo__input" placeholder="Select Province/City"
+                                                autocomplete="off" role="combobox"
+                                                aria-expanded="false" aria-autocomplete="list"
+                                                aria-controls="province-list" required>
+                                            <input type="hidden" id="provinceCode" name="provinceCode">
+                                            <ul class="combo__list" id="province-list" role="listbox" hidden></ul>
+                                        </div>
                                         <span class="error-message"></span>
                                     </div>
                                     <div class="form-group">
                                         <label for="ward">Ward <span class="required">*</span></label>
-                                        <select id="ward" name="ward" required disabled>
-                                            <option value="">Select Ward</option>
-                                        </select>
+                                        <div class="combo">
+                                            <input type="text" id="ward" name="ward"
+                                                class="combo__input" placeholder="Select Ward"
+                                                autocomplete="off" role="combobox"
+                                                aria-expanded="false" aria-autocomplete="list"
+                                                aria-controls="ward-list" required>
+                                            <input type="hidden" id="wardCode" name="wardCode">
+                                            <ul class="combo__list" id="ward-list" role="listbox" hidden></ul>
+                                        </div>
                                         <span class="error-message"></span>
                                     </div>
                                 </div>
@@ -297,15 +302,15 @@
                                 <div class="form-group full-width">
                                     <label for="address">Street Address <span class="required">*</span></label>
                                     <input type="text" id="address" name="address"
-                                        placeholder="Enter your street address" required>
+                                        placeholder="e.g. ABC Apartment, 123 Le Loi Street" required>
                                     <span class="error-message"></span>
                                 </div>
 
-                                <!-- New address note -->
+                                <!-- Old address note -->
                                 <div class="form-group full-width">
-                                    <label for="addressNote">New address note (if any)</label>
+                                    <label for="addressNote">Old address note (if needed)</label>
                                     <input type="text" id="addressNote" name="addressNote"
-                                        placeholder="Enter new address per updated administrative units (if any)">
+                                        placeholder="e.g. ABC Apartment, 123 Le Loi Street, District 1, Ho Chi Minh City">
                                     <span class="error-message"></span>
                                 </div>
 
