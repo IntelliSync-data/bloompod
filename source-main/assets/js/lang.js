@@ -24,7 +24,6 @@
 
             // Address dropdown defaults
             'address.selectProvince':   'Chọn Tỉnh/ Thành Phố',
-            'address.selectDistrict':   'Chọn Quận/ Huyện',
             'address.selectWard':       'Chọn Xã/ Phường',
 
             // Order flow
@@ -53,7 +52,6 @@
 
             // Address dropdown defaults
             'address.selectProvince':   'Select Province/City',
-            'address.selectDistrict':   'Select District',
             'address.selectWard':       'Select Ward',
 
             // Order flow

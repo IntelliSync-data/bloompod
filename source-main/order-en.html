@@ -151,10 +151,10 @@
                     <nav class="home-wrapper-nav-tertiary desktop-nav" aria-label="Main navigation">
                         <a href="./index-en.html" class="menu-tab active"><span
                                 class="home-text-span-tertiary">Home</span></a>
-                        <a href="./index-en.html#journey" class="menu-tab"><span class="home-text-span-tertiary">The
-                                Bloompod
-                                Journey</span></a>
-                        <a href="./index-en.html#notice" class="menu-tab"><span
+                        <a href="./index-en.html#book-sharing" class="menu-tab"><span class="home-text-span-tertiary">Download
+                                Language Readiness
+                                Book</span></a>
+                        <a href="support-en.html" class="menu-tab"><span
                                 class="home-text-span-tertiary">Support</span></a>
                     </nav>
                     <div class="home-wrapper-div-extra">
@@ -200,8 +200,8 @@
                 </div>
                 <nav class="mobile-nav" aria-label="Mobile navigation">
                     <a href="./#home" class="mobile-nav-link active"><span>Home</span></a>
-                    <a href="./#journey" class="mobile-nav-link"><span>The Bloompod Journey</span></a>
-                    <a href="./#notice" class="mobile-nav-link"><span>Support</span></a>
+                    <a href="./index-en.html#book-sharing" class="mobile-nav-link"><span>Download Language Readiness Book</span></a>
+                    <a href="support-en.html" class="mobile-nav-link"><span>Support</span></a>
                 </nav>
                 <div class="mobile-menu-footer">
                     <nav class="language-switcher-wrapper-nav-tertiary" aria-label="Footer navigation">
@@ -268,27 +268,32 @@
                                     </div>
                                 </div>
 
-                                <!-- Province/District/Ward -->
-                                <div class="form-row form-row-3">
+                                <!-- Province/Ward (bỏ cấp quận/huyện theo địa giới mới 2025) -->
+                                <div class="form-row form-row-2">
                                     <div class="form-group">
                                         <label for="province">Province/City <span class="required">*</span></label>
-                                        <select id="province" name="province" required>
-                                            <option value="">Select Province/City</option>
-                                        </select>
-                                        <span class="error-message"></span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="district">District <span class="required">*</span></label>
-                                        <select id="district" name="district" required disabled>
-                                            <option value="">Select District</option>
-                                        </select>
+                                        <div class="combo">
+                                            <input type="text" id="province" name="province"
+                                                class="combo__input" placeholder="Select Province/City"
+                                                autocomplete="off" role="combobox"
+                                                aria-expanded="false" aria-autocomplete="list"
+                                                aria-controls="province-list" required>
+                                            <input type="hidden" id="provinceCode" name="provinceCode">
+                                            <ul class="combo__list" id="province-list" role="listbox" hidden></ul>
+                                        </div>
                                         <span class="error-message"></span>
                                     </div>
                                     <div class="form-group">
                                         <label for="ward">Ward <span class="required">*</span></label>
-                                        <select id="ward" name="ward" required disabled>
-                                            <option value="">Select Ward</option>
-                                        </select>
+                                        <div class="combo">
+                                            <input type="text" id="ward" name="ward"
+                                                class="combo__input" placeholder="Select Ward"
+                                                autocomplete="off" role="combobox"
+                                                aria-expanded="false" aria-autocomplete="list"
+                                                aria-controls="ward-list" required>
+                                            <input type="hidden" id="wardCode" name="wardCode">
+                                            <ul class="combo__list" id="ward-list" role="listbox" hidden></ul>
+                                        </div>
                                         <span class="error-message"></span>
                                     </div>
                                 </div>
@@ -297,15 +302,15 @@
                                 <div class="form-group full-width">
                                     <label for="address">Street Address <span class="required">*</span></label>
                                     <input type="text" id="address" name="address"
-                                        placeholder="Enter your street address" required>
+                                        placeholder="e.g. ABC Apartment, 123 Le Loi Street" required>
                                     <span class="error-message"></span>
                                 </div>
 
-                                <!-- New address note -->
+                                <!-- Old address note -->
                                 <div class="form-group full-width">
-                                    <label for="addressNote">New address note (if any)</label>
+                                    <label for="addressNote">Old address note (if needed)</label>
                                     <input type="text" id="addressNote" name="addressNote"
-                                        placeholder="Enter new address per updated administrative units (if any)">
+                                        placeholder="e.g. ABC Apartment, 123 Le Loi Street, District 1, Ho Chi Minh City">
                                     <span class="error-message"></span>
                                 </div>
 
@@ -440,18 +445,9 @@
                 </div>
             </section>
             <footer class="footer">
-                <div class="container flex-direction-row">
-                    <div class="language-switcher-wrapper-footer-left">
+                <div class="container flex-direction-column footer-container">
+                    <div class="footer-top-row">
                         <div class="logo-2" role="img" aria-label="Bloompod logo"></div>
-                        <p class="language-switcher-text-p">
-                            Global Education Amplify Co., Ltd.<br>
-                            Tax ID: 0318833596<br>
-                            Address: Lavida Plus Condominium, Nguyen Van Linh Road, Tan Hung Ward, HCM<br>
-                            Email: <a href="mailto:info@bloompod.vn">info@bloompod.vn</a><br>
-                            Hotline: <a href="tel:+84814433355">+84 814 433 355</a>
-                        </p>
-                    </div>
-                    <div class="language-switcher-wrapper-footer-right">
                         <nav class="language-switcher-wrapper-nav-tertiary" aria-label="Footer navigation">
                             <a href="support-en.html" class="footer-tab">
                                 <span class="terms-of-use"><span class="label-text-span-link">Payment
@@ -474,8 +470,23 @@
                                 <span class="terms-of-use"><span class="label-text-span-link"> Contact</span></span>
                             </a>
                         </nav>
-                        <div class="social-media-wrapper">
-                            <a href="#" target="_blank" class="social-icon" aria-label="Facebook">
+                    </div>
+                    <div class="footer-bottom-row">
+                        <div class="footer-bottom-left">
+                            <p class="language-switcher-text-p">
+                            Global Education Amplify Co., Ltd.<br>
+                            Tax ID: 0318833596<br>
+                            Address: B2.7.04, Lavida Plus Apartment Building, 
+                            part of the Riverside Residential Area Project – Functional Area No. 4,
+                            South Saigon New Urban Area, Tan Phong Ward, District 7, Ho Chi Minh City, Vietnam.<br>
+                            Email: <a href="mailto:info@bloompod.vn">info@bloompod.vn</a><br>
+                            Hotline: <a href="tel:+84814433355">+84 814 433 355</a>
+                        
+                            </p>
+                        </div>
+                        <div class="footer-bottom-right">
+                            <div class="social-media-wrapper">
+                            <a href="https://www.facebook.com/profile.php?id=61593967761838&mibextid=wwXIfr&rdid=VYqreJ8l1EjZPjQe&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1F61EQaZH8%2F%3Fmibextid%3DwwXIfr" target="_blank" class="social-icon" aria-label="Facebook">
                                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path
                                         d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" />
@@ -490,15 +501,14 @@
                                 </svg>
                             </a>
 
-                            <a href="#" target="_blank" class="social-icon" aria-label="YouTube">
+                            <a href="https://www.youtube.com/@BloomPod" target="_blank" class="social-icon" aria-label="YouTube">
                                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path
                                         d="M21.582 6.186c-.23-.86-.908-1.538-1.768-1.768C18.254 4 12 4 12 4s-6.254 0-7.814.418c-.86.23-1.538.908-1.768 1.768C2 7.746 2 12 2 12s0 4.254.418 5.814c.23.86.908 1.538 1.768 1.768C7.746 20 12 20 12 20s6.254 0 7.814-.418c.86-.23 1.538-.908 1.768-1.768C22 16.254 22 12 22 12s0-4.254-.418-5.814zM9.999 15.594v-7.188l6.328 3.594-6.328 3.594z" />
                                 </svg>
                             </a>
                         </div>
-                        <div class="language-switcher-wrapper-production-line">
-                            <p class="landing-hero-text-p">© 2026 Bloompod™ Developed by Amplify Global
+                            <p class="footer-copyright-text">© 2026 Bloompod™ Developed by Amplify Global
                                 Education</p>
                         </div>
                     </div>

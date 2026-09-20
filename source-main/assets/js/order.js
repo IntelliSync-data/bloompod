@@ -15,7 +15,8 @@
         ? { package_id: 4, payment_method_id: 3 }   // production
         : { package_id: 3, payment_method_id: 1 };   // demo
 
-    const API_BASE_URL = 'https://provinces.open-api.vn/api';
+    // v2 = địa giới hành chính mới từ 1/7/2025: 34 tỉnh/thành, bỏ cấp quận/huyện
+    const API_BASE_URL = 'https://provinces.open-api.vn/api/v2';
     const INQUIRY_API_URL = 'https://app.bloompod.vn/api/inquiry';
     const PAYMENT_API_URL = 'https://app.bloompod.vn/api/profile';
     const ORDER_DATA_KEY = 'bloomOrderData';
@@ -112,8 +113,8 @@
      */
     async function submitInquiry(formData) {
         try {
-            const fullAddress = `${formData.address}, ${formData.ward}, ${formData.district}, ${formData.province}`;
-            const addressNoteStr = formData.addressNote ? `, Địa chỉ mới: ${formData.addressNote}` : '';
+            const fullAddress = `${formData.address}, ${formData.ward}, ${formData.province}`;
+            const addressNoteStr = formData.addressNote ? `, Địa chỉ cũ: ${formData.addressNote}` : '';
             const message = `Bé ${formData.babyAge} tháng tuổi, ${fullAddress}${addressNoteStr}`;
 
             const response = await fetch(INQUIRY_API_URL, {
@@ -148,9 +149,12 @@
      */
     async function createOrder(formData) {
         try {
-            const fullAddress = `${formData.address}, ${formData.ward}, ${formData.district}, ${formData.province}`;
-            const addressNoteStr = formData.addressNote ? `, Địa chỉ mới: ${formData.addressNote}` : '';
-            const notes = `${formData.fullName}, ${formData.phone}, ${fullAddress}${addressNoteStr}, Bé ${formData.babyAge} tháng tuổi`;
+            // Địa chỉ mới đi vào key `address` riêng, ngăn nhau bằng dấu phẩy.
+            // Ghi chú địa chỉ cũ vẫn nằm trong `notes` như trước.
+            const fullAddress = `${formData.address}, ${formData.ward}, ${formData.province}`;
+            // Tên, SĐT và địa chỉ đã có key riêng nên không lặp lại trong notes
+            const addressNoteStr = formData.addressNote ? `Địa chỉ cũ: ${formData.addressNote}, ` : '';
+            const notes = `${addressNoteStr}Bé ${formData.babyAge} tháng tuổi`;
 
             const response = await fetch(`${PAYMENT_API_URL}/create`, {
                 method: 'POST',
@@ -161,7 +165,10 @@
                     jsonrpc: "2.0",
                     params: {
                         package_id: ENV_CONFIG.package_id,
+                        name: formData.fullName,
+                        phone: formData.phone,
                         email: formData.email,
+                        address: fullAddress,
                         notes: notes,
                         payment_method_id: ENV_CONFIG.payment_method_id
                     }
@@ -249,14 +256,13 @@
     // ==============================================
 
     /**
-     * Fetch provinces from API
+     * Fetch provinces (34 tỉnh/thành theo địa giới mới)
      */
     async function fetchProvinces() {
         try {
             const response = await fetch(`${API_BASE_URL}/p/`);
             if (!response.ok) throw new Error('Failed to fetch provinces');
-            const data = await response.json();
-            return data || [];
+            return (await response.json()) || [];
         } catch (error) {
             console.error('Error fetching provinces:', error);
             return [];
@@ -264,26 +270,13 @@
     }
 
     /**
-     * Fetch districts by province code
+     * Fetch wards of a province.
+     * Từ 1/7/2025 bỏ cấp quận/huyện nên xã/phường gắn thẳng vào tỉnh:
+     * v2 trả mảng wards ngay trong province, không còn endpoint /d/.
      */
-    async function fetchDistricts(provinceCode) {
+    async function fetchWards(provinceCode) {
         try {
             const response = await fetch(`${API_BASE_URL}/p/${provinceCode}?depth=2`);
-            if (!response.ok) throw new Error('Failed to fetch districts');
-            const data = await response.json();
-            return data.districts || [];
-        } catch (error) {
-            console.error('Error fetching districts:', error);
-            return [];
-        }
-    }
-
-    /**
-     * Fetch wards by district code
-     */
-    async function fetchWards(districtCode) {
-        try {
-            const response = await fetch(`${API_BASE_URL}/d/${districtCode}?depth=2`);
             if (!response.ok) throw new Error('Failed to fetch wards');
             const data = await response.json();
             return data.wards || [];
@@ -293,21 +286,133 @@
         }
     }
 
-    /**
-     * Populate dropdown with options
-     */
-    function populateDropdown(selectElement, items, valueProp, textProp) {
-        // Clear existing options except first one
-        selectElement.innerHTML = selectElement.querySelector('option:first-child').outerHTML;
+    // ==============================================
+    // SEARCHABLE DROPDOWN
+    // ==============================================
 
-        // Add new options
-        items.forEach(item => {
-            const option = document.createElement('option');
-            option.value = item[valueProp];
-            option.textContent = item[textProp];
-            option.dataset.fullData = JSON.stringify(item);
-            selectElement.appendChild(option);
+    /** Bỏ dấu để gõ "ben thanh" vẫn ra "Phường Bến Thành" */
+    function stripAccents(str) {
+        return String(str)
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/đ/g, 'd')
+            .replace(/Đ/g, 'D')
+            .toLowerCase();
+    }
+
+    /**
+     * Biến một ô input thành dropdown gõ tìm được.
+     * Tên hiển thị nằm ở input, mã vùng nằm ở input hidden đi kèm.
+     */
+    function createCombobox(fieldId) {
+        const input = document.getElementById(fieldId);
+        const wrapper = input.closest('.combo');
+        const list = wrapper.querySelector('.combo__list');
+        const hidden = wrapper.querySelector('input[type="hidden"]');
+
+        let items = [];
+        let shown = [];
+        let activeIndex = -1;
+        const listeners = [];
+
+        function open() {
+            if (!shown.length) return;
+            list.hidden = false;
+            input.setAttribute('aria-expanded', 'true');
+        }
+
+        function close() {
+            list.hidden = true;
+            input.setAttribute('aria-expanded', 'false');
+            activeIndex = -1;
+        }
+
+        function highlight(index) {
+            const options = list.children;
+            if (!options.length) return;
+            activeIndex = (index + options.length) % options.length;
+            Array.from(options).forEach((el, i) => {
+                el.classList.toggle('is-active', i === activeIndex);
+            });
+            options[activeIndex].scrollIntoView({ block: 'nearest' });
+        }
+
+        function choose(index) {
+            const item = shown[index];
+            if (!item) return;
+            input.value = item.name;
+            hidden.value = item.code;
+            close();
+            clearError(input);
+            listeners.forEach(fn => fn(item));
+        }
+
+        function render(query) {
+            const q = stripAccents(query.trim());
+            shown = q ? items.filter(i => stripAccents(i.name).includes(q)) : items.slice();
+
+            list.innerHTML = '';
+            shown.forEach((item, index) => {
+                const option = document.createElement('li');
+                option.className = 'combo__option';
+                option.setAttribute('role', 'option');
+                option.textContent = item.name;
+                // mousedown chứ không phải click: chặn blur bắn trước khi chọn xong
+                option.addEventListener('mousedown', function (event) {
+                    event.preventDefault();
+                    choose(index);
+                });
+                list.appendChild(option);
+            });
+
+            activeIndex = -1;
+            if (shown.length) { open(); } else { close(); }
+        }
+
+        input.addEventListener('focus', function () {
+            render('');
         });
+
+        input.addEventListener('input', function () {
+            hidden.value = '';
+            render(this.value);
+        });
+
+        input.addEventListener('keydown', function (event) {
+            if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+                event.preventDefault();
+                if (list.hidden) render(this.value);
+                highlight(activeIndex + (event.key === 'ArrowDown' ? 1 : -1));
+            } else if (event.key === 'Enter' && !list.hidden && activeIndex >= 0) {
+                event.preventDefault();
+                choose(activeIndex);
+            } else if (event.key === 'Escape') {
+                close();
+            }
+        });
+
+        // Gõ tay mà không chọn trong danh sách thì không tính là hợp lệ
+        input.addEventListener('blur', function () {
+            close();
+            if (hidden.value || !this.value) return;
+            this.value = '';
+            listeners.forEach(fn => fn(null));
+        });
+
+        return {
+            setItems(next) {
+                items = next || [];
+                input.value = '';
+                hidden.value = '';
+                close();
+            },
+            setEnabled(enabled) {
+                input.disabled = !enabled;
+            },
+            onChange(fn) {
+                listeners.push(fn);
+            }
+        };
     }
 
     // ==============================================
@@ -344,6 +449,17 @@
             const label = input.closest('.form-group').querySelector('label').textContent.replace('*', '').trim();
             showError(input, t('error.required', { field: label.toLowerCase() }));
             return false;
+        }
+
+        // Ô dạng combobox: phải chọn từ danh sách, gõ tay không tính
+        const comboWrapper = input.closest('.combo');
+        if (comboWrapper && input.hasAttribute('required')) {
+            const hiddenCode = comboWrapper.querySelector('input[type="hidden"]');
+            if (!hiddenCode || !hiddenCode.value) {
+                const label = input.closest('.form-group').querySelector('label').textContent.replace('*', '').trim();
+                showError(input, t('error.required', { field: label.toLowerCase() }));
+                return false;
+            }
         }
 
         // Check email format
@@ -761,55 +877,25 @@
      * Initialize address dropdowns
      */
     async function initAddressDropdowns() {
-        const provinceSelect = document.getElementById('province');
-        const districtSelect = document.getElementById('district');
-        const wardSelect = document.getElementById('ward');
+        const provinceCombo = createCombobox('province');
+        const wardCombo = createCombobox('ward');
 
-        // Load provinces on page load
-        const provinces = await fetchProvinces();
-        populateDropdown(provinceSelect, provinces, 'code', 'name');
+        wardCombo.setEnabled(false);
 
-        // Province change handler
-        provinceSelect.addEventListener('change', async function() {
-            const provinceCode = this.value;
+        // Chọn tỉnh thì nạp lại danh sách xã/phường của tỉnh đó
+        provinceCombo.onChange(async function (province) {
+            wardCombo.setItems([]);
+            wardCombo.setEnabled(false);
+            clearError(document.getElementById('ward'));
 
-            // Reset district and ward
-            const t = window.i18n || (k => k);
-            districtSelect.innerHTML = `<option value="">${t('address.selectDistrict')}</option>`;
-            wardSelect.innerHTML = `<option value="">${t('address.selectWard')}</option>`;
-            districtSelect.disabled = true;
-            wardSelect.disabled = true;
+            if (!province) return;
 
-            if (provinceCode) {
-                const districts = await fetchDistricts(provinceCode);
-                populateDropdown(districtSelect, districts, 'code', 'name');
-                districtSelect.disabled = false;
-            }
-
-            clearError(this);
+            const wards = await fetchWards(province.code);
+            wardCombo.setItems(wards);
+            wardCombo.setEnabled(true);
         });
 
-        // District change handler
-        districtSelect.addEventListener('change', async function() {
-            const districtCode = this.value;
-
-            // Reset ward
-            wardSelect.innerHTML = `<option value="">${(window.i18n || (k => k))('address.selectWard')}</option>`;
-            wardSelect.disabled = true;
-
-            if (districtCode) {
-                const wards = await fetchWards(districtCode);
-                populateDropdown(wardSelect, wards, 'code', 'name');
-                wardSelect.disabled = false;
-            }
-
-            clearError(this);
-        });
-
-        // Ward change handler
-        wardSelect.addEventListener('change', function() {
-            clearError(this);
-        });
+        provinceCombo.setItems(await fetchProvinces());
     }
 
     /**
@@ -848,12 +934,10 @@
                 fullName: document.getElementById('fullName').value.trim(),
                 phone: document.getElementById('phone').value.trim(),
                 email: document.getElementById('email').value.trim(),
-                province: document.getElementById('province').selectedOptions[0].text,
-                provinceCode: document.getElementById('province').value,
-                district: document.getElementById('district').selectedOptions[0].text,
-                districtCode: document.getElementById('district').value,
-                ward: document.getElementById('ward').selectedOptions[0].text,
-                wardCode: document.getElementById('ward').value,
+                province: document.getElementById('province').value.trim(),
+                provinceCode: document.getElementById('provinceCode').value,
+                ward: document.getElementById('ward').value.trim(),
+                wardCode: document.getElementById('wardCode').value,
                 address: document.getElementById('address').value.trim(),
                 addressNote: (document.getElementById('addressNote')?.value || '').trim(),
                 babyAge: document.getElementById('babyAge').value.trim()

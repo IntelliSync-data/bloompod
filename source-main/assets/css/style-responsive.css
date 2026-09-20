@@ -78,13 +78,8 @@
         width: 60%;
     }
 
-    .landing-hero-image-img-alternate {
-        width: 50%;
-        height: auto;
-    }
-
-    .landing-hero-wrapper-article-secondary {
-        width: 50%;
+    .home-wrapper-section-body-package {
+        gap: 24px;
     }
 
     .label-text-span-secondary.label-1 {
@@ -318,14 +313,6 @@
     .logo-2 {
         width: 260px;
         height: 34px;
-    }
-
-    .language-switcher-wrapper-footer-left {
-        width: 300px;
-    }
-
-    .language-switcher-wrapper-footer-right {
-        width: calc(100% - 300px);
     }
 
     .language-switcher-wrapper-nav-tertiary {
@@ -717,6 +704,8 @@
 
     .home-wrapper-section-body-package {
         flex-direction: column;
+        align-items: center;
+        gap: 24px;
         max-width: 500px;
     }
 
@@ -728,14 +717,21 @@
         display: block;
     }
 
-    .landing-hero-wrapper-article-secondary {
+    .home-wrapper-section-body-package>.landing-hero-wrapper-article-secondary {
+        flex: 0 0 auto;
         width: 100%;
     }
 
-    .landing-hero-image-img-alternate {
+    .home-wrapper-section-body-package>.landing-hero-image-img-alternate {
+        flex: 0 0 auto;
+        display: block;
         width: 100%;
-        margin-top: 40px;
-        padding: 0;
+        max-width: 626px;
+        height: auto;
+        /* để trình duyệt tự giữ tỉ lệ gốc */
+        max-height: none;
+        margin: 0 auto;
+        object-fit: contain;
     }
 
     .layout-section-img {
@@ -819,29 +815,39 @@
         margin-bottom: 0;
     }
 
-    .footer .flex-direction-row {
-        flex-direction: column;
-    }
-
-    .language-switcher-wrapper-footer-left {
-        width: 100%;
+    .footer-container {
         padding: 24px 0;
-        gap: 8px;
+        gap: 16px;
     }
 
-    .language-switcher-wrapper-footer-right {
-        width: 100%;
+    .footer-top-row {
+        flex-direction: column;
         align-items: flex-start;
-        padding-top: 0;
+        gap: 16px;
+    }
+
+    .footer-bottom-row {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .footer-bottom-left,
+    .footer-bottom-right {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .footer-bottom-right {
+        align-items: flex-start;
     }
 
     .language-switcher-wrapper-nav-tertiary {
         justify-content: left;
     }
 
-    .language-switcher-wrapper-production-line {
+    .footer-copyright-text {
         text-align: left;
-        margin-bottom: 16px;
+        white-space: normal;
     }
 
     .landing-hero-text-p>br {
