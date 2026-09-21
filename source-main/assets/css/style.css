@@ -447,12 +447,13 @@ details[open] .content-image-img {
 }
 
 .logo {
-    width: 252px;
-    height: 52px;
+    width: 15%;
+    height: auto;
     background-image: url(../images/logo.png);
     background-size: 100% 100%;
     background-repeat: no-repeat;
-    margin-top: 16px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .home-wrapper-section-banner {
