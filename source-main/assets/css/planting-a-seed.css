@@ -4,10 +4,6 @@
 
 :root {
   /* Aliased to style.css's palette (styleguide.css tokens) for brand consistency */
-  --green: var(--primaryprimary-800);
-  /* #5c763e — headings, matches style.css */
-  --dark: var(--primaryprimary-800);
-  /* #5c763e — headings/dark accents, matches style.css */
   --cream: var(--white);
   /* #ffffff — page background */
   --mint: var(--primaryprimary-300);
@@ -48,7 +44,7 @@ section.hero {
   font-size: 12px;
   letter-spacing: 5px;
   font-weight: 700;
-  color: var(--green);
+  color: var(--primaryprimary-800);
   margin: 0 0 16px
 }
 
@@ -56,7 +52,7 @@ section.hero {
 h2,
 h3 {
   font-family: "Trirong", Helvetica;
-  color: var(--dark)
+  color: var(--primaryprimary-800)
 }
 
 h1 {
@@ -74,7 +70,7 @@ h1 {
   display: flex;
   gap: 26px;
   margin-top: 26px;
-  color: var(--dark);
+  color: var(--primaryprimary-800);
   font-size: 14px
 }
 
@@ -164,9 +160,9 @@ select {
 }
 
 .filter.active {
-  background: var(--secondary-dark);
+  background: var(--primaryprimary-800);
   color: white;
-  border-color: var(--secondary-dark)
+  border-color: var(--primaryprimary-800)
 }
 
 select {
@@ -224,7 +220,7 @@ select {
 .gift,
 .primary {
   border: 0;
-  background: var(--secondary-dark);
+  background: var(--primaryprimary-800);
   color: white;
   border-radius: 24px;
   padding: 12px 14px;
@@ -291,7 +287,7 @@ select {
 .steps b {
   display: block;
   font-size: 13px;
-  color: var(--dark)
+  color: var(--primaryprimary-800)
 }
 
 .steps p {
@@ -352,7 +348,7 @@ section.impact {
   height: 32px;
   font-size: 23px;
   cursor: pointer;
-  color: var(--dark)
+  color: var(--primaryprimary-800)
 }
 
 .modal h2 {
@@ -362,7 +358,7 @@ section.impact {
 
 .modal h4 {
   margin: 20px 0 8px;
-  color: var(--dark)
+  color: var(--primaryprimary-800)
 }
 
 .modal-child {
@@ -398,7 +394,7 @@ section.impact {
 
 .new {
   font-size: 25px;
-  color: var(--green);
+  color: var(--primaryprimary-800);
   font-weight: 700
 }
 
