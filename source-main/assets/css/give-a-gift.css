@@ -42,6 +42,12 @@
    display: block;
  }
 
+ /* Nav language-switcher icon has its own fixed size (style.css .content-image-img);
+    max-width:100% on a flex sibling of a flex:1 item throws off the pill's auto-width. */
+ .content-image-img {
+   max-width: none;
+ }
+
  .button {
    display: inline-flex;
    align-items: center;
