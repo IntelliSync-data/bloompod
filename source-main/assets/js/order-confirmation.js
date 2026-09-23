@@ -107,6 +107,57 @@
     }
 
     /**
+     * Đơn đi từ trang Planting a Seed thì hai nút phải về đúng luồng đó:
+     * "Về trang chủ" -> danh sách bé, "Thử lại" -> đặt lại quà cho đúng bé.
+     */
+    function applyGiftLinks() {
+        const giftId = getQueryParam('gift');
+        if (!giftId) return;
+
+        const t = window.i18n || (k => k);
+        const isEnglish = window.location.pathname.includes('-en.html');
+        const orderPage = isEnglish ? 'order-en.html' : 'order.html';
+
+        // Chỉ có một bản trang Planting a Seed, không tách VI/EN
+        const seedPage = 'planting-a-seed.html';
+
+        document.querySelectorAll(
+            '#confirmationSuccess .btn-primary, #confirmationFailure .btn-secondary'
+        ).forEach(function (link) {
+            link.href = seedPage;
+            link.textContent = t('confirm.backToChildren');
+        });
+
+        const retry = document.querySelector('#confirmationFailure .btn-primary');
+        if (retry) {
+            const params = new URLSearchParams({ gift: giftId });
+            const childName = getQueryParam('child');
+            if (childName) params.set('child', childName);
+            retry.href = `${orderPage}?${params.toString()}`;
+        }
+    }
+
+    /**
+     * Mở lại một đơn đã thanh toán từ trước (order.html?order=<code> -> already=1):
+     * đổi tiêu đề thành "Đơn hàng XXX đã được thanh toán" thay vì lời cảm ơn
+     * như một đơn vừa đặt xong.
+     */
+    function applyAlreadyPaidText() {
+        if (getQueryParam('already') !== '1') return;
+
+        const successDiv = document.getElementById('confirmationSuccess');
+        if (!successDiv) return;
+
+        const t = window.i18n || (k => k);
+        const code = getQueryParam('order') || '';
+        const title = successDiv.querySelector('.confirmation-title');
+        const desc = successDiv.querySelector('.confirmation-description');
+
+        if (title) title.textContent = t('confirm.alreadyPaid', { code: code });
+        if (desc) desc.textContent = t('confirm.alreadyPaidDesc');
+    }
+
+    /**
      * Initialize confirmation page
      */
     function init() {
@@ -117,6 +168,9 @@
 
         // Get status from query parameter
         const status = getQueryParam('status');
+
+        applyGiftLinks();
+        applyAlreadyPaidText();
 
         // Get order data from LocalStorage
         let orderData = null;

@@ -611,3 +611,180 @@
         font-size: 14px;
     }
 }
+
+
+/* ===== Thanh toán: QR / PayPal / Tiền mặt ===== */
+.qr-hint {
+    margin: 12px 0 0;
+    font-family: var(--body-2-font-family);
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text);
+    text-align: center;
+}
+
+.payment-note {
+    max-width: 320px;
+    margin: 8px auto 0;
+}
+
+.payment-note p {
+    margin: 0;
+    font-family: var(--body-2-font-family);
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text);
+    text-align: center;
+}
+
+.paypal-pay-btn {
+    display: block;
+    width: 100%;
+    max-width: 280px;
+    margin: 8px auto 0;
+    padding: 14px 24px;
+    font-family: var(--body-1-font-family);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--white);
+    background: var(--secondary-dark);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.paypal-pay-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+/* ===== Popup chọn phương thức thanh toán ===== */
+.pm-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10001;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.55);
+}
+
+.pm-dialog {
+    width: 100%;
+    max-width: 460px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 32px 28px;
+    background: var(--white);
+    border-radius: 16px;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.22);
+}
+
+.pm-title {
+    margin: 0 0 6px;
+    font-family: var(--h5-font-family);
+    font-size: var(--h5-font-size);
+    color: var(--black);
+    text-align: center;
+}
+
+.pm-desc {
+    margin: 0 0 22px;
+    font-family: var(--body-2-font-family);
+    font-size: 14px;
+    color: var(--text);
+    text-align: center;
+}
+
+.pm-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.pm-option {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    padding: 14px 16px;
+    text-align: left;
+    background: var(--white);
+    border: 1.5px solid var(--line-color);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.pm-option:hover,
+.pm-option:focus-visible {
+    border-color: var(--secondary-dark);
+    background: var(--second-bg);
+    outline: none;
+}
+
+.pm-option img {
+    width: 44px;
+    height: 44px;
+    flex: none;
+    object-fit: contain;
+    border-radius: 6px;
+}
+
+.pm-option-text {
+    min-width: 0;
+}
+
+.pm-option-name {
+    font-family: var(--body-1-font-family);
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--black);
+}
+
+.pm-option-desc {
+    margin-top: 2px;
+    font-family: var(--body-2-font-family);
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--text);
+}
+
+@media (max-width: 480px) {
+    .pm-dialog {
+        padding: 26px 18px;
+    }
+}
+
+/* .qr-countdown đặt display nên [hidden] của trình duyệt bị đè, phải ẩn lại tay */
+#paymentQr[hidden],
+#paymentPaypal[hidden],
+#paymentCash[hidden],
+#paymentCountdown[hidden] {
+    display: none !important;
+}
+
+/* .form-group và .form-row đặt display nên [hidden] bị đè, ẩn lại tay.
+   Dùng cho chế độ tặng quà: giấu địa chỉ và tuổi bé. */
+.form-group[hidden],
+.form-row[hidden] {
+    display: none !important;
+}
+
+/* Nút trong hộp thoại đơn giản (đơn không tồn tại, đang tải...) */
+.pm-ok {
+    display: block;
+    width: 100%;
+    margin-top: 20px;
+    padding: 14px 20px;
+    font-family: var(--body-1-font-family);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--white);
+    background: var(--secondary-dark);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
