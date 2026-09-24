@@ -1,23 +1,284 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Planting a Seed | BloomPod</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/planting-a-seed.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Planting a Seed | BloomPod</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Same base stylesheets as index.html / give-a-gift.html, so the nav/footer render identically (fonts, colors, layout tokens) -->
+    <link rel="stylesheet" href="assets/css/globals.css?v=2">
+    <link rel="stylesheet" href="assets/css/styleguide.css?v=2">
+    <link rel="stylesheet" href="assets/css/style.css?v=2">
+    <link rel="stylesheet" href="assets/css/style-responsive.css?v=2">
+    <link rel="stylesheet" href="assets/css/planting-a-seed.css?v=2">
 </head>
+
 <body>
-<header class="header"><a class="brand" href="#"><span>🌱</span><b>BloomPod<small>Little Ears. A Brighter Tomorrow.</small></b></a>
-<nav><a href="#about">About</a><a href="#how">How It Works</a><a class="active" href="#children">Planting a Seed</a><a href="#impact">Impact</a><a href="#contact">Contact</a></nav><button class="lang">EN⌄</button><button class="menu">☰</button></header>
-<main>
-<section class="hero" id="about"><div><p class="eyebrow">PLANTING A SEED</p><h1>A Brighter Tomorrow<br>Starts with a Listening Ear</h1><p class="hero-text">Give a child the gift of language.<br>Sponsor a BloomPod for a child aged 0–3<br>and help plant a seed for their future.</p><div class="values"><span>♡ Give love</span><span>🌱 Build opportunities</span><span>♧ Brighten their tomorrow</span></div></div><div class="hero-art"><div class="plant">🌿</div><div class="hero-note">Small<br>Seeds<br><em>Big</em><br>Futures ♡</div></div></section>
-<section class="section" id="children"><div class="heading"><div><p class="eyebrow">MAKE A DIFFERENCE</p><h2>Choose a Child to Sponsor <span>♡</span></h2><p>These children are from families in need and would love to receive a BloomPod.<br>Your gift can help them discover a brighter future through language.</p></div><div class="quote">🌱 <i>“Every child deserves a fair start — and every act of kindness plants a seed of hope.”</i> ♡</div></div>
-<div class="filters"><div class="pills"><button class="filter active" data-age="all">All Children</button><button class="filter" data-age="0-1">0 – 1 year</button><button class="filter" data-age="1-2">1 – 2 years</button><button class="filter" data-age="2-3">2 – 3 years</button></div><select id="sort"><option value="youngest">Age (youngest first)</option><option value="oldest">Age (oldest first)</option><option value="name">Name (A–Z)</option></select></div>
-<div class="grid" id="grid"></div>
-<div class="panels"><div class="choose panel"><div class="panel-icon">🌱💌</div><div><h3>Can’t choose a specific child?</h3><p>Let BloomPod choose a child in need for you. Your gift will go to a child from our partner communities who truly needs it.</p><button class="primary" id="choose">♡ Sponsor a Child (Let Us Choose)</button></div></div><div class="panel" id="how"><h3>How It Works</h3><div class="steps"><div>👨‍👩‍👧<b>1. Choose</b><p>Select a child or let us choose for you.</p></div><div>💳<b>2. Give</b><p>Complete your secure payment.</p></div><div>❤️<b>3. Make an Impact</b><p>We deliver the BloomPod and share the joy.</p></div></div></div></div></section>
-<section class="impact" id="impact"><p class="eyebrow">YOUR KINDNESS MATTERS</p><h2>Plant a seed. Change a life.</h2><p>One BloomPod can become a first step toward a child’s language foundation, confidence, and brighter tomorrow.</p></section>
-</main><footer id="contact"><b>BloomPod</b><span>Structured Listening for Early English</span><span>© 2026 BloomPod. All rights reserved.</span></footer>
-<div class="backdrop" id="backdrop"><div class="modal"><button class="close" id="close">×</button><div id="modal"></div></div></div>
-<script src="assets/js/planting-a-seed.js"></script>
-</body></html>
+    <main class="main">
+        <section>
+            <header class="menu-bar">
+                <div class="container flex-direction-row justify-content-space-between">
+                    <div onclick="window.location.href='./'" class="logo" role="img" aria-label="Bloompod logo"></div>
+                    <nav class="home-wrapper-nav-tertiary desktop-nav" aria-label="Main navigation">
+                        <a href="index-en.html#home" class="menu-tab"><span
+                                class="home-text-span-tertiary">Home</span></a>
+                        <a href="give-a-gift.html" class="menu-tab"><span
+                                class="home-text-span-tertiary">Give a Gift</span></a>
+                        <a href="index-en.html#book-sharing" class="menu-tab"><span
+                                class="home-text-span-tertiary">Download Language Readiness Book</span></a>
+                        <a href="support-en.html" class="menu-tab"><span
+                                class="home-text-span-tertiary">Support</span></a>
+                    </nav>
+                    <div class="home-wrapper-div-extra">
+                        <button class="purchase-button-button-additional" type="button" aria-label="Order Bloompod"
+                            onclick="window.location.href='order-en.html'">
+                            <span class="purchase-button-span">Order Bloompod</span>
+                        </button>
+                        <div class="language-hero-wrapper-div" role="button" tabindex="0"
+                            aria-label="Change language to Vietnamese" onclick="window.location.href='index.html'">
+                            <div class="layout-section-div"><span class="label-text-span-lang">VN</span></div>
+                            <img class="content-image-img" src="./assets/images/united-kingdom.png" alt="Language flag">
+                        </div>
+                        <button id="hamburger-btn" class="hamburger-menu" aria-label="Open menu">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3 12H21M3 6H21M3 18H21" stroke="#605e5c" stroke-width="2"
+                                    stroke-linecap="round"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="mobile-menu">
+                <div class="mobile-menu-header">
+                    <div onclick="window.location.href='./'" class="logo" role="img" aria-label="Bloompod logo"></div>
+                    <div style="display: flex; gap: 8px;">
+                        <div class="language-hero-wrapper-div" role="button" tabindex="0"
+                            aria-label="Change language to Vietnamese" onclick="window.location.href='index.html'">
+                            <img class="content-image-img" src="./assets/images/circle---countries-flag.svg"
+                                alt="Language flag">
+                            <div class="layout-section-div"><span class="label-text-span-lang">VN</span></div>
+                        </div>
+                        <button id="mobile-menu-close" class="mobile-menu-close" aria-label="Close menu">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M18 6L6 18M6 6L18 18" stroke="#605e5c" stroke-width="2" stroke-linecap="round">
+                                </path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <nav class="mobile-nav" aria-label="Mobile navigation">
+                    <a href="index-en.html#home" class="mobile-nav-link"><span>Home</span></a>
+                    <a href="give-a-gift.html" class="mobile-nav-link"><span>Give a Gift</span></a>
+                    <a href="index-en.html#book-sharing" class="mobile-nav-link"><span>Download Language Readiness
+                            Book</span></a>
+                    <a href="support-en.html" class="mobile-nav-link"><span>Support</span></a>
+                </nav>
+                <div class="mobile-menu-footer">
+                    <nav class="language-switcher-wrapper-nav-tertiary" aria-label="Footer navigation">
+                        <a href="support-en.html" class="footer-tab">
+                            <span class="terms-of-use"><span class="label-text-span-link">Privacy Policy</span></span>
+                        </a>
+                        <a href="support-en.html" class="footer-tab">
+                            <span class="terms-of-use"><span class="label-text-span-link">Terms of Use</span></span>
+                        </a>
+                        <a href="support-en.html" class="footer-tab">
+                            <span class="terms-of-use"><span class="label-text-span-link">Shipping</span></span>
+                        </a>
+                        <a href="support-en.html" class="footer-tab">
+                            <span class="terms-of-use"><span class="label-text-span-link">Returns</span></span>
+                        </a>
+                        <a href="support-en.html" class="footer-tab">
+                            <span class="terms-of-use"><span class="label-text-span-link"> Contact</span></span>
+                        </a>
+                    </nav>
+                </div>
+            </div>
+
+        <section class="hero" id="about">
+            <div>
+                <p class="eyebrow">PLANTING A SEED</p>
+                <h1>A Brighter Tomorrow<br>Starts with a Listening Ear</h1>
+                <p class="hero-text">Give a child the gift of language.<br>Sponsor a BloomPod for a child aged
+                    0–3<br>and help plant a seed for their future.</p>
+                <div class="values"><span>♡ Give love</span><span>🌱 Build opportunities</span><span>♧ Brighten their
+                        tomorrow</span></div>
+            </div>
+            <div class="hero-art">
+                <div class="plant">🌿</div>
+                <div class="hero-note">Small<br>Seeds<br><em>Big</em><br>Futures ♡</div>
+            </div>
+        </section>
+        <section class="section" id="children">
+            <div class="heading">
+                <div>
+                    <p class="eyebrow">MAKE A DIFFERENCE</p>
+                    <h2>Choose a Child to Sponsor <span>♡</span></h2>
+                    <p>These children are from families in need and would love to receive a BloomPod.<br>Your gift can
+                        help them discover a brighter future through language.</p>
+                </div>
+                <div class="quote">🌱 <i>“Every child deserves a fair start — and every act of kindness plants a seed of
+                        hope.”</i> ♡</div>
+            </div>
+            <div class="filters">
+                <div class="pills"><button class="filter active" data-age="all">All Children</button><button
+                        class="filter" data-age="0-1">0 – 1 year</button><button class="filter" data-age="1-2">1 – 2
+                        years</button><button class="filter" data-age="2-3">2 – 3 years</button></div><select id="sort">
+                    <option value="youngest">Age (youngest first)</option>
+                    <option value="oldest">Age (oldest first)</option>
+                    <option value="name">Name (A–Z)</option>
+                </select>
+            </div>
+            <div class="grid" id="grid"></div>
+            <div class="panels">
+                <div class="choose panel">
+                    <div class="panel-icon">🌱💌</div>
+                    <div>
+                        <h3>Can’t choose a specific child?</h3>
+                        <p>Let BloomPod choose a child in need for you. Your gift will go to a child from our partner
+                            communities who truly needs it.</p><button class="primary" id="choose">♡ Sponsor a Child
+                            (Let Us Choose)</button>
+                    </div>
+                </div>
+                <div class="panel" id="how">
+                    <h3>How It Works</h3>
+                    <div class="steps">
+                        <div>👨‍👩‍👧<b>1. Choose</b>
+                            <p>Select a child or let us choose for you.</p>
+                        </div>
+                        <div>💳<b>2. Give</b>
+                            <p>Complete your secure payment.</p>
+                        </div>
+                        <div>❤️<b>3. Make an Impact</b>
+                            <p>We deliver the BloomPod and share the joy.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="impact" id="impact">
+            <p class="eyebrow">YOUR KINDNESS MATTERS</p>
+            <h2>Plant a seed. Change a life.</h2>
+            <p>One BloomPod can become a first step toward a child’s language foundation, confidence, and brighter
+                tomorrow.</p>
+        </section>
+
+            <footer class="footer">
+                <div class="container flex-direction-column footer-container">
+                    <div class="footer-top-row">
+                        <div class="logo-2" role="img" aria-label="Bloompod logo"></div>
+                        <nav class="language-switcher-wrapper-nav-tertiary" aria-label="Footer navigation">
+                            <a href="support-en.html" class="footer-tab">
+                                <span class="terms-of-use"><span class="label-text-span-link">Payment
+                                        Policy</span></span>
+                            </a>
+                            <a href="support-en.html" class="footer-tab">
+                                <span class="terms-of-use"><span class="label-text-span-link">Privacy
+                                        Policy</span></span>
+                            </a>
+                            <a href="support-en.html" class="footer-tab">
+                                <span class="terms-of-use"><span class="label-text-span-link">Terms of Use</span></span>
+                            </a>
+                            <a href="support-en.html" class="footer-tab">
+                                <span class="terms-of-use"><span class="label-text-span-link">Shipping</span></span>
+                            </a>
+                            <a href="support-en.html" class="footer-tab">
+                                <span class="terms-of-use"><span class="label-text-span-link">Returns</span></span>
+                            </a>
+                            <a href="support-en.html" class="footer-tab">
+                                <span class="terms-of-use"><span class="label-text-span-link"> Contact</span></span>
+                            </a>
+                        </nav>
+                    </div>
+                    <div class="footer-bottom-row">
+                        <div class="footer-bottom-left">
+                            <p class="language-switcher-text-p">
+                                Global Education Amplify Co., Ltd.<br>
+                                Tax ID: 0318833596<br>
+                                Address: B2.7.04, Lavida Plus Apartment Building,
+                                part of the Riverside Residential Area Project – Functional Area No. 4,
+                                South Saigon New Urban Area, Tan Phong Ward, District 7, Ho Chi Minh City, Vietnam.<br>
+                                Email: <a href="mailto:info@bloompod.vn">info@bloompod.vn</a><br>
+                                Hotline: <a href="tel:+84814433355">+84 814 433 355</a>
+                            </p>
+                        </div>
+                        <div class="footer-bottom-right">
+                            <div class="social-media-wrapper">
+                                <a href="https://www.facebook.com/profile.php?id=61593967761838&mibextid=wwXIfr&rdid=VYqreJ8l1EjZPjQe&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1F61EQaZH8%2F%3Fmibextid%3DwwXIfr"
+                                    target="_blank" class="social-icon" aria-label="Facebook">
+                                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" />
+                                    </svg>
+                                </a>
+                                <a href="#" target="_blank" class="social-icon" aria-label="TikTok">
+                                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
+                                        style="transform: scale(0.85);">
+                                        <path
+                                            d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z" />
+                                    </svg>
+                                </a>
+                                <a href="https://www.youtube.com/@BloomPod" target="_blank" class="social-icon"
+                                    aria-label="YouTube">
+                                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M21.582 6.186c-.23-.86-.908-1.538-1.768-1.768C18.254 4 12 4 12 4s-6.254 0-7.814.418c-.86.23-1.538.908-1.768 1.768C2 7.746 2 12 2 12s0 4.254.418 5.814c.23.86.908 1.538 1.768 1.768C7.746 20 12 20 12 20s6.254 0 7.814-.418c.86-.23 1.538-.908 1.768-1.768C22 16.254 22 12 22 12s0-4.254-.418-5.814zM9.999 15.594v-7.188l6.328 3.594-6.328 3.594z" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <p class="footer-copyright-text">© 2026 Bloompod™ Developed by Amplify Global Education</p>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </section>
+    </main>
+
+    <div class="backdrop" id="backdrop">
+        <div class="modal"><button class="close" id="close">×</button>
+            <div id="modal"></div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const hamburger = document.getElementById('hamburger-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuClose = document.getElementById('mobile-menu-close');
+            if (hamburger && mobileMenu) {
+                hamburger.addEventListener('click', function () {
+                    mobileMenu.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                });
+            }
+            if (mobileMenuClose && mobileMenu) {
+                mobileMenuClose.addEventListener('click', function () {
+                    mobileMenu.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            }
+            document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
+                anchor.addEventListener('click', function (e) {
+                    const href = this.getAttribute('href');
+                    if (href === '#' || !href) return;
+                    const target = document.querySelector(href);
+                    if (target) {
+                        e.preventDefault();
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        if (mobileMenu && mobileMenu.classList.contains('active')) {
+                            mobileMenu.classList.remove('active');
+                            document.body.style.overflow = '';
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+    <script src="assets/js/planting-a-seed.js?v=2"></script>
+</body>
+
+</html>

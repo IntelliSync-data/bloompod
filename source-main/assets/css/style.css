@@ -198,11 +198,11 @@ html {
     all: unset;
     box-sizing: border-box;
     display: inline-flex;
-    height: 44px;
+    height: 48px;
     align-items: center;
     justify-content: center;
     gap: 10px;
-    padding: 10px 24px;
+    padding: 12px 26px;
     position: relative;
     flex: 0 0 auto;
     background-color: var(--secondary-dark);
@@ -447,12 +447,14 @@ details[open] .content-image-img {
 }
 
 .logo {
-    width: 252px;
-    height: 52px;
+    width: 30%;
+    height: auto;
     background-image: url(../images/logo.png);
     background-size: 100% 100%;
     background-repeat: no-repeat;
-    margin-top: 16px;
+    margin-right: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .home-wrapper-section-banner {
@@ -3322,7 +3324,7 @@ select {
     border: none;
     padding: 0;
     margin: 0;
-    width: 100%;
+    width: auto;
     cursor: pointer;
 }
 
