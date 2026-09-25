@@ -790,12 +790,14 @@
 }
 
 /* ===== Tải QR + nội dung chuyển khoản ===== */
+/* Máy tính thì khách quét bằng điện thoại nên không cần lưu ảnh.
+   Chỉ hiện trên thiết bị cảm ứng, nơi không tự quét màn hình của mình được. */
 .qr-download {
-    display: block;
-    margin: 14px auto 0;
-    padding: 10px 20px;
+    display: none;
+    margin: 18px auto 0;
+    padding: 15px 30px;
     font-family: var(--body-2-font-family);
-    font-size: 14px;
+    font-size: 21px;
     font-weight: 600;
     color: var(--secondary-dark);
     background: var(--white);
@@ -807,5 +809,11 @@
 
 .qr-download:hover {
     background: var(--second-bg);
+}
+
+@media (pointer: coarse) {
+    .qr-download {
+        display: block;
+    }
 }
 
