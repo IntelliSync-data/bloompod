@@ -22,8 +22,16 @@
     const PAYMENT_API_URL = 'https://app.bloompod.vn/api/profile';
     const PRODUCTS_API_URL = 'https://app.bloompod.vn/api/v1/products';
     const ORDER_DATA_KEY = 'bloomOrderData';
-    const POLLING_INTERVAL = 5000; // 5 seconds
-    const POLLING_TIMEOUT = 300000; // 5 minutes
+    // Backend đặt expired_at = create_date + 1 tiếng, frontend bám theo
+    const PAYMENT_WINDOW_SECONDS = 3600;
+
+    // Giãn dần nhịp hỏi: dồn vào lúc khách nhiều khả năng đang thao tác,
+    // thưa dần về sau. Giữ 5 giây suốt 1 tiếng là 720 request mỗi khách.
+    const POLLING_STEPS = [
+        { until: 120, every: 5000 },    // 2 phút đầu
+        { until: 600, every: 15000 },   // tới phút thứ 10
+        { until: Infinity, every: 30000 }
+    ];
 
     // ==============================================
     // GLOBAL STATE
@@ -764,6 +772,38 @@
         paymentWindow = null;
     }
 
+    function setTransactionCode(code) {
+        const orderCode = document.getElementById('orderCode');
+        if (orderCode) orderCode.textContent = code || '-';
+    }
+
+    /** Tải ảnh QR về máy để quét bằng app ngân hàng từ thư viện ảnh */
+    async function downloadQrCode() {
+        const img = document.querySelector('#paymentQr img');
+        if (!img || !img.src) return;
+
+        const fileName = `bloompod-qr-${orderData.transaction_id || 'payment'}.png`;
+
+        try {
+            const response = await fetch(img.src);
+            const blob = await response.blob();
+            const url = URL.createObjectURL(blob);
+
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = fileName;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+
+            setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+        } catch (error) {
+            // Host ảnh chặn CORS thì mở tab mới cho khách tự lưu
+            console.error('Error downloading QR:', error);
+            window.open(img.src, '_blank');
+        }
+    }
+
     /** Bật đúng khối tương ứng với loại thanh toán ở bước 2 */
     function renderPaymentStep(type) {
         const t = window.i18n || (k => k);
@@ -860,7 +900,7 @@
                 orderData.status = paymentType === 'cash' ? 'awaiting_contact' : 'processing';
 
                 // Update UI with API data
-                document.getElementById('orderCode').textContent = response.result.transaction_id;
+                setTransactionCode(response.result.transaction_id);
 
                 // Update amount display (keep the struck-through original price
                 // when the package is on a promotional price)
@@ -1011,16 +1051,22 @@
      * Format seconds to MM:SS
      */
     function formatTime(seconds) {
-        const minutes = Math.floor(seconds / 60);
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
         const secs = seconds % 60;
-        return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+
+        const mm = String(minutes).padStart(2, '0');
+        const ss = String(secs).padStart(2, '0');
+
+        // Dưới 1 tiếng giữ dạng MM:SS như cũ, từ 1 tiếng trở lên thì H:MM:SS
+        return hours > 0 ? `${hours}:${mm}:${ss}` : `${mm}:${ss}`;
     }
 
     /**
      * Start countdown timer
      */
     function startCountdown(seconds) {
-        remainingSeconds = seconds > 0 ? Math.floor(seconds) : 300;
+        remainingSeconds = seconds > 0 ? Math.floor(seconds) : PAYMENT_WINDOW_SECONDS;
         const timerElement = document.getElementById('countdownTimer');
         const countdownDiv = document.querySelector('.qr-countdown');
 
@@ -1079,8 +1125,16 @@
         // Start countdown timer
         startCountdown(seconds);
 
-        // Start polling every 5 seconds
-        pollingInterval = setInterval(async () => {
+        const startedAt = Date.now();
+
+        function nextDelay() {
+            const elapsed = (Date.now() - startedAt) / 1000;
+            return POLLING_STEPS.find(step => elapsed < step.until).every;
+        }
+
+        // Tự hẹn lại sau mỗi lần hỏi thay vì setInterval cố định: đổi được nhịp,
+        // và một lần gọi chậm không làm dồn cuộc gọi kế tiếp
+        async function poll() {
             try {
                 const response = await checkPaymentStatus(
                     orderData.user_profile_id,
@@ -1109,14 +1163,21 @@
                 console.error('Error during polling:', error);
                 // Continue polling even if there's an error
             }
-        }, POLLING_INTERVAL);
 
-        // Set timeout for 5 minutes - auto go back to step 1
+            // stopPaymentPolling() đặt lại về null, nhờ đó vòng lặp dừng hẳn
+            if (pollingInterval !== null) {
+                pollingInterval = setTimeout(poll, nextDelay());
+            }
+        }
+
+        pollingInterval = setTimeout(poll, POLLING_STEPS[0].every);
+
+        // Hết hạn thanh toán thì quay lại bước 1
         pollingTimeoutId = setTimeout(() => {
             console.log('Polling timeout reached - returning to step 1');
             stopPaymentPolling();
             goBackToStep1();
-        }, seconds > 0 ? seconds * 1000 : POLLING_TIMEOUT);
+        }, (seconds > 0 ? seconds : PAYMENT_WINDOW_SECONDS) * 1000);
     }
 
     /**
@@ -1126,7 +1187,7 @@
         closePaymentWindow();
 
         if (pollingInterval) {
-            clearInterval(pollingInterval);
+            clearTimeout(pollingInterval);
             pollingInterval = null;
         }
         if (pollingTimeoutId) {
@@ -1146,7 +1207,7 @@
 
         // Clear all intervals and timeouts to ensure nothing runs in background
         if (pollingInterval) {
-            clearInterval(pollingInterval);
+            clearTimeout(pollingInterval);
             pollingInterval = null;
         }
         if (pollingTimeoutId) {
@@ -1161,7 +1222,7 @@
         // Reset countdown display
         const timerElement = document.getElementById('countdownTimer');
         if (timerElement) {
-            timerElement.textContent = '05:00';
+            timerElement.textContent = formatTime(PAYMENT_WINDOW_SECONDS);
         }
         const countdownDiv = document.querySelector('.qr-countdown');
         if (countdownDiv) {
@@ -1419,7 +1480,7 @@
         orderData.payment_type = paymentType;
         orderData.status = paymentType === 'cash' ? 'awaiting_contact' : 'processing';
 
-        document.getElementById('orderCode').textContent = transaction.transaction_id || '-';
+        setTransactionCode(transaction.transaction_id);
         updatePriceDisplay(Number(transaction.amount), null);
 
         if (paymentType === 'sepay') {
@@ -1621,6 +1682,10 @@
 
         initGiftMode();
         initResumeOrder();
+
+        const downloadBtn = document.getElementById('downloadQrBtn');
+        if (downloadBtn) downloadBtn.addEventListener('click', downloadQrCode);
+
 
         // Initialize components
         initPackagePricing();
