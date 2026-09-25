@@ -55,6 +55,9 @@
     // Cửa sổ thanh toán PayPal
     let paymentWindow = null;
 
+    // Ảnh QR tải sẵn dưới dạng File, phục vụ nút lưu ảnh
+    let qrFile = null;
+
     // Đơn tặng quà từ trang Planting a Seed: { giftId, childName } hoặc null
     let giftMode = null;
 
@@ -777,31 +780,70 @@
         if (orderCode) orderCode.textContent = code || '-';
     }
 
-    /** Tải ảnh QR về máy để quét bằng app ngân hàng từ thư viện ảnh */
-    async function downloadQrCode() {
-        const img = document.querySelector('#paymentQr img');
-        if (!img || !img.src) return;
+    /**
+     * Tải sẵn ảnh QR thành File ngay khi hiện QR.
+     * Phải có sẵn trước lúc bấm, vì navigator.share() đòi user gesture còn
+     * hiệu lực - await fetch trong handler là mất gesture trên iOS Safari.
+     */
+    function prefetchQrFile(url) {
+        qrFile = null;
+        if (!url) return;
+
+        // Máy tính không hiện nút lưu ảnh nên khỏi tải về cho tốn request
+        if (!window.matchMedia('(pointer: coarse)').matches) return;
 
         const fileName = `bloompod-qr-${orderData.transaction_id || 'payment'}.png`;
 
-        try {
-            const response = await fetch(img.src);
-            const blob = await response.blob();
-            const url = URL.createObjectURL(blob);
+        fetch(url)
+            .then(response => response.blob())
+            .then(blob => {
+                qrFile = new File([blob], fileName, { type: blob.type || 'image/png' });
+            })
+            .catch(error => {
+                // Host ảnh chặn CORS thì lát nữa mở tab mới cho khách tự lưu
+                console.error('Error prefetching QR:', error);
+            });
+    }
 
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = fileName;
-            document.body.appendChild(link);
-            link.click();
-            link.remove();
-
-            setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
-        } catch (error) {
-            // Host ảnh chặn CORS thì mở tab mới cho khách tự lưu
-            console.error('Error downloading QR:', error);
-            window.open(img.src, '_blank');
+    /** Tải file về máy, dùng khi máy không hỗ trợ chia sẻ file */
+    function saveQrAsDownload(file, fallbackUrl) {
+        if (!file) {
+            window.open(fallbackUrl, '_blank');
+            return;
         }
+
+        const url = URL.createObjectURL(file);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = file.name;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+
+        setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    }
+
+    /**
+     * Lưu ảnh QR.
+     * Điện thoại: mở share sheet để khách chọn "Lưu ảnh" - trên iOS thì
+     * <a download> chỉ bỏ file vào Files chứ không vào thư viện Ảnh.
+     * Máy tính: tải thẳng về.
+     */
+    function downloadQrCode() {
+        const img = document.querySelector('#paymentQr img');
+        if (!img || !img.src) return;
+
+        if (qrFile && navigator.canShare && navigator.canShare({ files: [qrFile] })) {
+            navigator.share({ files: [qrFile] }).catch(error => {
+                // Khách bấm huỷ trên share sheet thì thôi, không tải ngầm
+                if (error && error.name === 'AbortError') return;
+                console.error('Error sharing QR:', error);
+                saveQrAsDownload(qrFile, img.src);
+            });
+            return;
+        }
+
+        saveQrAsDownload(qrFile, img.src);
     }
 
     /** Bật đúng khối tương ứng với loại thanh toán ở bước 2 */
@@ -916,6 +958,7 @@
                         qrImg.src = response.result.qr_url;
                         qrImg.alt = t('order.qrAlt');
                     }
+                    prefetchQrFile(response.result.qr_url);
                 }
 
                 if (paymentType === 'paypal') {
@@ -1489,6 +1532,7 @@
                 qrImg.src = transaction.qr_url;
                 qrImg.alt = t('order.qrAlt');
             }
+            prefetchQrFile(transaction.qr_url);
         }
 
         if (paymentType === 'paypal') {
