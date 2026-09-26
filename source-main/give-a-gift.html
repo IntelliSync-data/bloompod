@@ -10,6 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <!-- Same base stylesheets as index.html, so the nav/footer render identically (fonts, colors, layout tokens) -->
   <link rel="stylesheet" href="assets/css/globals.css?v=2">
   <link rel="stylesheet" href="assets/css/styleguide.css?v=2">
@@ -285,7 +286,7 @@
       <img background class="gag-background" src="./assets/images/Bg_GaG.jpg" alt="Give a Gift Background" />
       <div class="hero-copy">
         <p class="eyebrow">MỘT MÓN QUÀ NHỎ<br>CHO MỘT TƯƠNG LAI TƯƠI SÁNG</p>
-        <h1>Trao Tặng<br><span>Yêu Thương </span></h1>
+        <h1>Trao Tặng<br><span class="heart-anchor">Yêu Thương<span class="note-heart-header" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21 C6 16.5 2 13 2 8.5 C2 5.2 4.6 3 7.2 3 C9.6 3 11.3 5.2 12 10 C12.7 5.2 14.4 3 16.8 3 C19.4 3 22 5.2 22 8.5 C22 13 18 16.5 12 21 Z"/></svg></span></span></h1>
         <p class="script">Gieo những hạt mầm đầu tiên</p>
         <p class="hero-description">
           Một món quà BloomPod không chỉ là chiếc máy nghe.
@@ -390,65 +391,95 @@
     </section>
 
     <section id="product" class="foundation section-shell">
+      <svg class="clip-defs" width="0" height="0" aria-hidden="true" focusable="false">
+        <clipPath id="wave-clip" clipPathUnits="objectBoundingBox">
+          <path d="M0,0.3 C0,0.1 0.12,0.02 0.3,0.04 C0.48,0.06 0.6,0.06 0.7,0.1 C0.8,0.14 0.84,0.26 1,0.34 L1,1 L0,1 Z" />
+        </clipPath>
+      </svg>
+
       <div class="product-photo">
-        <img src="assets/images/bloompod-player.jpeg" alt="Máy nghe BloomPod màu xanh lá" />
+        <img src="./assets/images/Product_GaG.jpg" alt="Máy nghe BloomPod màu xanh lá" />
         <span class="photo-note">Âm thanh nhỏ<br>mở ra thế giới lớn ♡</span>
       </div>
 
-      <div class="foundation-copy">
-        <p class="eyebrow">MỘT MÓN QUÀ</p>
-        <h2>Một nền tảng tiếng Anh<br>vững chắc.</h2>
+      <div class="foundation-head">
+        <h2>Một món quà. <br>Một nền tảng tiếng Anh vững chắc.</h2>
         <p>
           Với nội dung được thiết kế riêng cho bé 0–3 tuổi,
           BloomPod giúp bé làm quen với tiếng Anh một cách tự nhiên,
           thông qua âm thanh, từ vựng, câu giao tiếp và những câu chuyện gần gũi.
         </p>
+      </div>
 
-        <div class="benefit-grid">
-          <div class="benefit">
-            <div class="benefit-icon">◉</div>
-            <h3>Làm quen</h3>
-            <p>Với âm thanh và nhịp điệu tiếng Anh từ sớm</p>
+      <div class="benefit-grid">
+        <div class="benefit">
+          <div class="benefit-icon">
+            <svg viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 8.5a6.5 6.5 0 1 1 13 0c0 5-3.5 7.5-3.5 10a2.5 2.5 0 0 1-5 0c0-1.5 1-2.5 2.5-2.5"/>
+              <path d="M10 9a2.5 2.5 0 0 1 5 0c0 2-1.5 3-2 4"/>
+            </svg>
           </div>
-          <div class="benefit">
-            <div class="benefit-icon">◌</div>
-            <h3>Cảm nhận</h3>
-            <p>Cách phát âm và ngữ điệu tự nhiên</p>
+          <h3>Làm quen</h3>
+          <p>Với âm thanh và nhịp điệu tiếng Anh từ sớm</p>
+        </div>
+        <div class="benefit">
+          <div class="benefit-icon">
+            <svg viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2.5 12c2.5-3 5.5-4 7.5-2.5 1 .75 3 .75 4 0 2-1.5 5-0.5 7.5 2.5-2.5 4.5-6 6.5-9.5 6.5S5 16.5 2.5 12z"/>
+              <path d="M2.5 12c4 1 7.5 1.5 9.5 0.5 2 1 5.5 0.5 9.5-0.5"/>
+            </svg>
           </div>
-          <div class="benefit">
-            <div class="benefit-icon">Aa</div>
-            <h3>Nhận biết</h3>
-            <p>Từ vựng và câu nói quen thuộc qua nghe lặp lại</p>
+          <h3>Cảm nhận</h3>
+          <p>Cách phát âm và ngữ điệu tự nhiên</p>
+        </div>
+        <div class="benefit">
+          <div class="benefit-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <text x="12" y="17" text-anchor="middle" font-size="14" font-weight="600" stroke="none" fill="currentColor" font-family="sans-serif">Aa</text>
+            </svg>
           </div>
-          <div class="benefit">
-            <div class="benefit-icon">✿</div>
-            <h3>Tiếp thu</h3>
-            <p>Từng bước xây nền tiếng Anh qua việc lắng nghe mỗi ngày</p>
+          <h3>Nhận biết</h3>
+          <p>Từ vựng và câu nói quen thuộc qua nghe lặp lại</p>
+        </div>
+        <div class="benefit">
+          <div class="benefit-icon">
+            <svg viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 4.5A4 4 0 0 0 7 5a4 4 0 0 0-2.5 4.5A3.5 3.5 0 0 0 5 15a4 4 0 0 0 4.5 4.5 4 4 0 0 0 2.5-1"/>
+              <path d="M12 4.5A4 4 0 0 1 17 5a4 4 0 0 1 2.5 4.5A3.5 3.5 0 0 1 19 15a4 4 0 0 1-4.5 4.5 4 4 0 0 1-2.5-1"/>
+              <path d="M12 4.5v14"/>
+              <path d="M5.5 12.5a3.5 3.5 0 0 0 3-1.5"/>
+              <path d="M18.5 12.5a3.5 3.5 0 0 1-3-1.5"/>
+            </svg>
           </div>
+          <h3>Tiếp thu</h3>
+          <p>Từng bước xây nền tiếng Anh qua việc lắng nghe mỗi ngày</p>
         </div>
       </div>
     </section>
 
     <section id="about" class="organization section-shell">
       <div class="seed-visual">
-        <div class="seed-art">🌱</div>
-        <p>Cùng nhau<br>gieo những<br>hạt mầm<br>tốt đẹp hơn</p>
+        <img class="seed-photo" src="./assets/images/Seed_GaG.jpg" alt="Hạt mầm" />
+        <div class="leaf-note note-one">Cùng nhau <br>gieo những
+          <br>hạt mầm tốt đẹp hơn <br> 
+          <span class="note-heart">♡</span>
+        </div>
       </div>
       <div class="organization-copy">
         <p class="eyebrow">DÀNH CHO CÔNG TY, TỔ CHỨC VÀ CỘNG ĐỒNG</p>
-        <h2>Một tương lai tử tế hơn,<br>cùng nhau.</h2>
+        <h2>Cùng trao một khởi đầu tốt đẹp hơn.</h2>
         <p>
-          Nếu công ty, tổ chức hoặc nhóm cộng đồng mong muốn mua BloomPod
+          Nếu công ty, tổ chức hoặc nhóm cộng đồng mong muốn mua Bloompod
           để trao tặng các em nhỏ cần thêm sự hỗ trợ, chúng tôi có chính sách
           giá ưu đãi đặc biệt dành cho đơn hàng mua tặng.
         </p>
         <ul class="check-list">
           <li>Giá ưu đãi cho đơn hàng mua tặng số lượng lớn</li>
-          <li>Hỗ trợ tư vấn chương trình gifting</li>
-          <li>Phù hợp cho các hoạt động cộng đồng và trao tặng</li>
+          <li>Hỗ trợ tư vấn chương trình tặng quà</li>
+          <li>Phù hợp cho các hoạt động cộng đồng và thiện nguyện</li>
           <li>Cùng mang cơ hội làm quen tiếng Anh đến nhiều em bé hơn</li>
         </ul>
-        <a class="button" href="#contact">Liên hệ với chúng tôi <span>→</span></a>
+        <a class="button" href="#contact"> <span>✉︎</span>Liên hệ với chúng tôi <span>❯</span></a>
       </div>
     </section>
 
