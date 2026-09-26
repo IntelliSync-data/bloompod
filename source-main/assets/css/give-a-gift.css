@@ -99,7 +99,7 @@
   }
  .eyebrow {
    letter-spacing: 4px;
-   font-size: clamp(11px, 0.8vw, 13px);
+   font-size: clamp(13px, 1vw, 17px);
    font-weight: 600;
    color: var(--muted);
  }
@@ -160,7 +160,7 @@
  .note-one {
    top: 25px;
    right: 10px;
-   transform: rotate(-5deg);
+   transform: rotate(-5deg);  
  }
 
  .floating-note {
@@ -169,6 +169,31 @@
    transform: rotate(-6deg);
  }
 
+ .heart-anchor {
+  position: relative;
+  white-space: nowrap;
+ }
+
+ .note-heart-header {
+  position: absolute;
+  left: 100%;
+  top: -0.1em;
+  margin-left: .1em;
+  line-height: 0;
+ }
+ .note-heart{
+  display: block;
+  text-align: center;
+  transform: rotate(20deg);
+  color: #b85f54;
+ }
+
+ .note-heart-header svg {
+  width: 1em;
+  height: 1em;
+  color:#b85f54;
+  transform: rotate(20deg);
+ }
  .gift-section {
    padding: 65px 4vw 80px;
    background: var(--sage);
@@ -279,7 +304,7 @@
  .recipient-card h3 {
    margin: 0;
    color: var(--primaryprimary-800);
-   font-weight: 600;
+   font-weight: 800;
    font-size: 19px;
    line-height: 1.15;
  }
@@ -291,39 +316,68 @@
  }
 
  section.foundation {
+   position: relative;
+   overflow: hidden;
    display: grid;
-   grid-template-columns: .9fr 1.1fr;
-   gap: 55px;
-   align-items: center;
+   grid-template-columns: 0.85fr 1.3fr;
+   column-gap: 48px;
+   row-gap: 32px;
    background: var(--cream);
  }
 
+ .clip-defs {
+   position: absolute;
+ }
+
  .product-photo {
+   grid-column: 1;
+   grid-row: 1 / 3;
+   align-self: center;
    position: relative;
+   margin-left: -6vw;
  }
 
  .product-photo img {
    width: 100%;
-   border-radius: 30px;
-   mix-blend-mode: multiply;
+   aspect-ratio: 3 / 2;
+   object-fit: cover;
+   object-position: 65% center;
+   clip-path: url(#wave-clip);
+   -webkit-mask-image: linear-gradient(to right, #000 82%, transparent);
+   mask-image: linear-gradient(to right, #000 82%, transparent);
  }
 
  .photo-note {
-   left: 30px;
-   top: 30px;
+   top: 0;
+   left: calc(6vw + 8px);
    transform: rotate(-7deg);
  }
 
- .foundation-copy>p:not(.eyebrow) {
-   max-width: 650px;
-   font-size: 16px;
+ .foundation-head {
+   grid-column: 2;
+   grid-row: 1;
+   position: relative;
+   z-index: 1;
+ }
+
+ .foundation-head h2 {
+   margin-left: -9vw;
+   font-size: clamp(28px, 3vw, 44px);
+ }
+
+ .foundation-head p {
+   margin: 0;
+   font-size: clamp(15px, 1.1vw, 17px);
+   color: var(--muted);
  }
 
  .benefit-grid {
+   grid-column: 2;
+   grid-row: 2;
+   align-self: start;
    display: grid;
    grid-template-columns: repeat(4, 1fr);
    gap: 18px;
-   margin-top: 30px;
  }
 
  .benefit {
@@ -331,21 +385,29 @@
  }
 
  .benefit-icon {
-   width: 58px;
-   height: 58px;
+   width: 72px;
+   height: 72px;
    margin: 0 auto 10px;
    display: grid;
    place-items: center;
    border-radius: 50%;
    background: var(--sage);
    color: var(--primaryprimary-800);
-   font-weight: 700;
-   font-size: 23px;
+ }
+
+ .benefit-icon svg {
+   width: 70%;
+   height: 70%;
+ }
+
+ .benefit:nth-child(1) .benefit-icon {
+   background: #fbe5df;
+   color: #bd7162;
  }
 
  .benefit:nth-child(2) .benefit-icon {
-   background: #fbe5df;
-   color: #bd7162;
+   background: var(--sage);
+   color: var(--primaryprimary-800);
  }
 
  .benefit:nth-child(3) .benefit-icon {
@@ -361,12 +423,13 @@
  .benefit h3 {
    margin: 0 0 6px;
    color: var(--primaryprimary-800);
-   font-size: 16px;
+   font-weight: 800;
+   font-size: 18px;
  }
 
  .benefit p {
    margin: 0;
-   font-size: 13px;
+   font-size: 14px;
    color: var(--muted);
  }
 
@@ -377,7 +440,6 @@
    align-items: center;
    background: var(--sage);
    border-radius: 35px;
-   margin: 0 4vw 60px;
  }
 
  .seed-visual {
@@ -385,8 +447,18 @@
    display: grid;
    place-items: center;
    position: relative;
+   overflow: hidden;
    border-radius: 28px;
    background: linear-gradient(145deg, var(--cream), var(--sage));
+ }
+
+ .seed-photo {
+   position: absolute;
+   inset: 0;
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+   object-position: 55% center;
  }
 
  .seed-art {
@@ -481,9 +553,36 @@
      min-height: 400px;
    }
 
-   .foundation,
-   .organization {
+   section.foundation,
+   section.organization {
      grid-template-columns: 1fr;
+   }
+
+   .foundation-head {
+     grid-column: 1;
+     grid-row: 1;
+     justify-self: center;
+     max-width: 780px;
+     text-align: center;
+   }
+
+   .foundation-head h2 {
+     margin-left: 0;
+   }
+
+   .product-photo {
+     grid-column: 1;
+     grid-row: 2;
+   }
+
+   .product-photo img {
+     aspect-ratio: 16 / 9;
+     object-position: 65% 25%;
+   }
+
+   .benefit-grid {
+     grid-column: 1;
+     grid-row: 3;
    }
 
    .benefit-grid {
@@ -498,6 +597,14 @@
 
    .gag-wrapper-section-banner h1 {
      font-size: 55px;
+   }
+
+   .note-heart-header {
+     left: auto;
+     right: -0.15em;
+     top: -0.45em;
+     margin-left: 0;
+     font-size: .5em;
    }
 
    .script {
@@ -537,7 +644,15 @@
      grid-template-columns: repeat(2, 1fr);
    }
 
-   .organization {
+   .product-photo {
+     margin-left: -5vw;
+   }
+
+   .photo-note {
+     left: calc(5vw + 8px);
+   }
+
+   section.organization {
      margin: 0 5vw 40px;
    }
 
