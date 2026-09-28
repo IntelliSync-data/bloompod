@@ -17,6 +17,9 @@ html {
 #book-sharing {
     scroll-margin-top: 90px;
 }
+#package {
+    scroll-margin-top: -100px;
+}
 
 .home {
     display: flex;
