@@ -66,6 +66,68 @@
    background: var(--button-hover);
  }
 
+ .contact-open {
+   border: 0;
+   cursor: pointer;
+   font-family: inherit;
+   font-size: inherit;
+ }
+
+ .contact-modal-list {
+   display: flex;
+   flex-direction: column;
+   gap: 12px;
+ }
+
+ .contact-modal-item {
+   display: flex;
+   align-items: center;
+   gap: 16px;
+   padding: 14px 18px;
+   border: 2px solid var(--line-color);
+   border-radius: 12px;
+   transition: border-color .2s ease, background .2s ease;
+ }
+
+ .contact-modal-item:hover {
+   border-color: var(--secondary-dark);
+   background: var(--primaryprimary-200);
+ }
+
+ .contact-modal-item-icon {
+   flex: none;
+   width: 44px;
+   height: 44px;
+   display: grid;
+   place-items: center;
+   border-radius: 50%;
+   background: var(--primaryprimary-200);
+   color: var(--secondary-dark);
+ }
+
+ .contact-modal-item-icon svg {
+   width: 22px;
+   height: 22px;
+ }
+
+ .contact-modal-item-text {
+   display: flex;
+   flex-direction: column;
+   min-width: 0;
+ }
+
+ .contact-modal-item-label {
+   font-size: 13px;
+   color: var(--muted);
+ }
+
+ .contact-modal-item-value {
+   font-size: 16px;
+   font-weight: 700;
+   color: var(--secondary-dark);
+   overflow-wrap: anywhere;
+ }
+
  .section-shell {
    padding: 70px 6vw;
  }

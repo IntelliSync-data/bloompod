@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="assets/css/styleguide.css?v=2">
   <link rel="stylesheet" href="assets/css/style.css?v=2">
   <link rel="stylesheet" href="assets/css/style-responsive.css?v=2">
+  <link rel="stylesheet" href="assets/css/email-modal.css">
   <link rel="stylesheet" href="assets/css/give-a-gift.css?v=2" />
 </head>
 
@@ -478,7 +479,7 @@
           <li>Phù hợp cho các hoạt động cộng đồng và thiện nguyện</li>
           <li>Cùng mang cơ hội làm quen tiếng Anh đến nhiều em bé hơn</li>
         </ul>
-        <a class="button" href="#contact"> <span>✉︎</span>Liên hệ với chúng tôi <span>❯</span></a>
+        <button type="button" id="contactOpenBtn" class="button contact-open" aria-haspopup="dialog"> <span>✉︎</span>Liên hệ với chúng tôi <span>❯</span></button>
       </div>
     </section>
 
@@ -561,6 +562,52 @@
     </section>
   </main>
 
+
+  <!-- Contact Modal -->
+  <div id="contactModalOverlay" class="email-modal-overlay">
+    <div class="email-modal" role="dialog" aria-modal="true" aria-labelledby="contactModalTitle">
+      <button id="contactModalClose" class="email-modal-close" type="button" aria-label="Đóng">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18 6L6 18M6 6L18 18" stroke="#605e5c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </button>
+
+      <div class="email-modal-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M3 11h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-5Zm0 0a9 9 0 1 1 18 0m0 0v5a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3Z" />
+          <path d="M21 16v2a4 4 0 0 1-4 4h-5" />
+        </svg>
+      </div>
+      <h2 id="contactModalTitle" class="email-modal-title">Liên hệ với chúng tôi</h2>
+      <p class="email-modal-description">Bloompod luôn sẵn sàng tư vấn chương trình tặng quà cho công ty, tổ chức và cộng đồng.</p>
+
+      <div class="contact-modal-list">
+        <a class="contact-modal-item" href="mailto:wyonaphung@bloompod.vn">
+          <span class="contact-modal-item-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7" />
+              <rect x="2" y="4" width="20" height="16" rx="2" />
+            </svg>
+          </span>
+          <span class="contact-modal-item-text">
+            <span class="contact-modal-item-label">Email</span>
+            <span class="contact-modal-item-value">wyonaphung@bloompod.vn</span>
+          </span>
+        </a>
+        <a class="contact-modal-item" href="tel:+84814433355">
+          <span class="contact-modal-item-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384" />
+            </svg>
+          </span>
+          <span class="contact-modal-item-text">
+            <span class="contact-modal-item-label">Số điện thoại</span>
+            <span class="contact-modal-item-value">+84 814 433 355</span>
+          </span>
+        </a>
+      </div>
+    </div>
+  </div>
 
   <script src="assets/js/give-a-gift.js?v=2"></script>
 </body>
