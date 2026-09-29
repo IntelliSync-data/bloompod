@@ -1,0 +1,661 @@
+/**
+ * TRANG THANH TOÁN - payment.html / payment-en.html
+ *
+ * Vào bằng payment.html?order=<order_code>. Trang tự dựng lại trạng thái từ
+ * API nên refresh không mất gì; sessionStorage chỉ để vẽ ngay khỏi nháy trắng.
+ */
+
+(function () {
+    'use strict';
+
+    // ==============================================
+    // CONFIGURATION
+    // ==============================================
+
+    const isProduction = window.location.hostname === 'bloompod.vn' ||
+        window.location.hostname === 'www.bloompod.vn';
+
+    const PAYMENT_API_URL = 'https://app.bloompod.vn/api/profile';
+    const SESSION_KEY = 'bloomPaymentOrder';
+
+    // Backend đặt expired_at = create_date + 1 tiếng
+    const PAYMENT_WINDOW_SECONDS = 3600;
+
+    // Giãn dần nhịp hỏi: dồn vào lúc khách đang thao tác, thưa dần về sau
+    const POLLING_STEPS = [
+        { until: 120, every: 5000 },
+        { until: 600, every: 15000 },
+        { until: Infinity, every: 30000 }
+    ];
+
+    // Bloompod luôn thu đủ 100%. Fishing sẽ bật cờ này khi khách chọn cọc 50%.
+    const HALF_PAYMENT = false;
+
+    // ==============================================
+    // STATE
+    // ==============================================
+
+    let orderCode = '';
+    let orderInfo = null;
+    let paymentMethods = [];
+    let paymentWindow = null;
+    let qrFile = null;
+
+    let pollingTimer = null;
+    let pollingTimeoutId = null;
+    let countdownInterval = null;
+    let remainingSeconds = PAYMENT_WINDOW_SECONDS;
+
+    const t = (key, vars) => (window.i18n || (k => k))(key, vars);
+    const isEnglish = () => window.i18nLang === 'en';
+
+    // ==============================================
+    // HELPERS
+    // ==============================================
+
+    function formatCurrency(amount) {
+        const suffix = isEnglish() ? ' VND' : ' VNĐ';
+        return new Intl.NumberFormat('vi-VN', {
+            style: 'decimal',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
+        }).format(amount || 0) + suffix;
+    }
+
+    function formatTime(seconds) {
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        const secs = seconds % 60;
+        const mm = String(minutes).padStart(2, '0');
+        const ss = String(secs).padStart(2, '0');
+        return hours > 0 ? `${hours}:${mm}:${ss}` : `${mm}:${ss}`;
+    }
+
+    /** Odoo trả "YYYY-MM-DD HH:MM:SS" giờ UTC */
+    function secondsUntil(expiredAt) {
+        if (!expiredAt) return 0;
+        const timestamp = Date.parse(String(expiredAt).replace(' ', 'T') + 'Z');
+        if (isNaN(timestamp)) return 0;
+        return Math.max(0, Math.floor((timestamp - Date.now()) / 1000));
+    }
+
+    /** description dạng "Tiếng Việt|English" hoặc "Tiếng Việt/English" */
+    function methodDescription(method) {
+        const raw = String(method.description || '');
+        const parts = raw.includes('|') ? raw.split('|') : raw.split('/');
+        const text = isEnglish() ? (parts[1] || parts[0]) : parts[0];
+        return (text || '').trim();
+    }
+
+    function show(id, visible) {
+        const el = document.getElementById(id);
+        if (el) el.hidden = !visible;
+    }
+
+    function setText(id, value) {
+        const el = document.getElementById(id);
+        if (el) el.textContent = value;
+    }
+
+    // ==============================================
+    // API
+    // ==============================================
+
+    async function callApi(path, params) {
+        const response = await fetch(`${PAYMENT_API_URL}/${path}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ jsonrpc: '2.0', params: params })
+        });
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.json();
+        console.log(`${path} response:`, data);
+        return data.result || {};
+    }
+
+    const fetchOrderInfo = refresh =>
+        callApi('order-info', { order_code: orderCode, refresh: !!refresh });
+
+    const fetchPackageInfo = packageId =>
+        callApi('package-info', { package_id: packageId });
+
+    const createPayment = methodId =>
+        callApi('create-payment', {
+            order_code: orderCode,
+            payment_method_id: methodId,
+            half_payment: HALF_PAYMENT
+        });
+
+    const checkPayment = () =>
+        callApi('check-payment', {
+            user_profile_id: orderInfo.order.id,
+            transaction_code: orderInfo.transaction.transaction_id
+        });
+
+    // ==============================================
+    // SESSION CACHE
+    // ==============================================
+
+    /** Chỉ để vẽ ngay khi refresh. Nguồn thật vẫn là order-info gọi lại mỗi lần. */
+    function cacheOrder(info) {
+        try {
+            sessionStorage.setItem(SESSION_KEY, JSON.stringify({ code: orderCode, info: info }));
+        } catch (error) {
+            console.error('Cannot write session cache:', error);
+        }
+    }
+
+    function readCachedOrder() {
+        try {
+            const raw = sessionStorage.getItem(SESSION_KEY);
+            if (!raw) return null;
+            const saved = JSON.parse(raw);
+            return saved && saved.code === orderCode ? saved.info : null;
+        } catch (error) {
+            return null;
+        }
+    }
+
+    // ==============================================
+    // CỘT TRÁI - THÔNG TIN ĐƠN
+    // ==============================================
+
+    function renderOrderSummary(info) {
+        const order = info.order || {};
+        const transaction = info.transaction;
+
+        // order_code để tra đơn; transaction_id là nội dung chuyển khoản.
+        // Hai thứ khác nhau, không được hiện lẫn.
+        setText('orderCode', orderCode || '-');
+
+        // Giá trị đơn luôn là 100%; số phải trả lấy theo giao dịch đang mở
+        const total = Number(order.total_cost) || 0;
+        const due = transaction ? Number(transaction.amount) : total;
+
+        setText('orderValue', formatCurrency(total));
+        setText('totalAmount', formatCurrency(due));
+    }
+
+    // ==============================================
+    // DANH SÁCH PHƯƠNG THỨC
+    // ==============================================
+
+    function filterByEnvironment(methods) {
+        const wanted = isProduction ? 'live' : 'test';
+        const list = methods || [];
+        const matched = list.filter(m => !m.environment || m.environment === wanted);
+
+        if (!matched.length && list.length) {
+            console.warn(`No payment method for environment "${wanted}", showing all`);
+            return list;
+        }
+        return matched;
+    }
+
+    function renderMethodList() {
+        const container = document.getElementById('methodList');
+        container.innerHTML = '';
+
+        paymentMethods.forEach(function (method) {
+            const item = document.createElement('button');
+            item.type = 'button';
+            item.className = 'method-item';
+
+            const image = document.createElement('img');
+            image.src = method.image_url || '';
+            image.alt = '';
+            image.addEventListener('error', function () {
+                image.style.visibility = 'hidden';
+            });
+
+            const text = document.createElement('div');
+            text.className = 'method-text';
+
+            const name = document.createElement('div');
+            name.className = 'method-name';
+            name.textContent = method.name || '';
+            text.appendChild(name);
+
+            const description = methodDescription(method);
+            if (description) {
+                const note = document.createElement('div');
+                note.className = 'method-desc';
+                note.textContent = description;
+                text.appendChild(note);
+            }
+
+            item.appendChild(image);
+            item.appendChild(text);
+            item.addEventListener('click', function () {
+                chooseMethod(method);
+            });
+            container.appendChild(item);
+        });
+
+        show('methodList', true);
+        show('methodDetail', false);
+        setText('paymentSectionTitle', t('payment.chooseTitle'));
+        setText('paymentDescription', t('payment.chooseDesc'));
+    }
+
+    // ==============================================
+    // CHI TIẾT MỘT PHƯƠNG THỨC
+    // ==============================================
+
+    /** Ẩn hết các khối chi tiết trước khi bật đúng khối cần */
+    function resetDetail() {
+        ['paymentQr', 'paymentTransfer', 'paymentPaypal', 'paymentCountdown']
+            .forEach(id => show(id, false));
+    }
+
+    function renderTransfer(transfer, amount, memo) {
+        setText('trBank', transfer.bank_name || transfer.bank_code || '-');
+        setText('trAccount', transfer.bank_account || '-');
+        setText('trAmount', String(Math.round(Number(amount) || 0)));
+        setText('trMemo', memo || '-');
+        show('paymentTransfer', true);
+    }
+
+    /**
+     * Dựng màn hình theo giao dịch đang mở.
+     * `method` lấy từ transaction.payment_method, trong đó có khối `transfer`
+     * cho biết phương thức này cho quét QR, chuyển khoản tay, hay cả hai.
+     */
+    function renderTransaction(order, transaction) {
+        const method = transaction.payment_method || {};
+        const transfer = method.transfer || {};
+        const types = transfer.types || [];
+
+        resetDetail();
+        show('methodList', false);
+        show('methodDetail', true);
+        setText('paymentSectionTitle', method.name || t('payment.chooseTitle'));
+
+        // PayPal và VNPay đưa khách sang trang của họ
+        if (transaction.payment_url) {
+            setText('paymentDescription', t('payment.paypalDesc'));
+            show('paymentPaypal', true);
+            document.getElementById('paypalPayBtn').onclick = function () {
+                openPaymentWindow(transaction.payment_url);
+            };
+        } else {
+            setText('paymentDescription', t('payment.transferDesc'));
+
+            if (transaction.qr_url && (!types.length || types.indexOf('qr_pay') !== -1)) {
+                const img = document.querySelector('#paymentQr img');
+                img.src = transaction.qr_url;
+                img.alt = t('order.qrAlt');
+                prefetchQrFile(transaction.qr_url);
+                show('paymentQr', true);
+            }
+
+            if (types.indexOf('bank_transfer') !== -1) {
+                renderTransfer(transfer, transaction.amount, transaction.transaction_id);
+            }
+        }
+
+        show('paymentCountdown', true);
+        startPolling(secondsUntil(transaction.expired_at));
+    }
+
+    async function chooseMethod(method) {
+        // Tiền mặt không sinh giao dịch để chờ: ghi nhận rồi báo sẽ liên hệ
+        const container = document.getElementById('methodList');
+        container.classList.add('is-busy');
+
+        try {
+            const result = await createPayment(method.id);
+
+            if (!result.success) {
+                if (result.error_code === 'ALREADY_PAID') {
+                    goToConfirmation('success');
+                    return;
+                }
+                showToast(result.error || t('order.createFailed'), 'error');
+                return;
+            }
+
+            if (method.type === 'cash') {
+                goToConfirmation('cash');
+                return;
+            }
+
+            // Hỏi lại order-info để có expired_at và khối transfer đầy đủ
+            const info = await fetchOrderInfo(false);
+            if (info.success && info.transaction) {
+                orderInfo = info;
+                cacheOrder(info);
+                renderOrderSummary(info);
+                renderTransaction(info.order, info.transaction);
+            } else {
+                showToast(t('order.networkError'), 'error');
+            }
+        } catch (error) {
+            console.error('Error choosing payment method:', error);
+            showToast(t('order.networkError'), 'error');
+        } finally {
+            container.classList.remove('is-busy');
+        }
+    }
+
+    // ==============================================
+    // CỬA SỔ THANH TOÁN (PayPal)
+    // ==============================================
+
+    function openPaymentWindow(url) {
+        const width = 500;
+        const height = 720;
+        const left = window.screenX + Math.max(0, (window.outerWidth - width) / 2);
+        const top = window.screenY + Math.max(0, (window.outerHeight - height) / 2);
+
+        paymentWindow = window.open(
+            url,
+            'bloompodPaymentWindow',
+            `width=${width},height=${height},left=${Math.round(left)},top=${Math.round(top)},resizable=yes,scrollbars=yes`
+        );
+        if (paymentWindow) paymentWindow.focus();
+    }
+
+    function closePaymentWindow() {
+        if (paymentWindow && !paymentWindow.closed) paymentWindow.close();
+        paymentWindow = null;
+    }
+
+    // ==============================================
+    // LƯU ẢNH QR
+    // ==============================================
+
+    function prefetchQrFile(url) {
+        qrFile = null;
+        if (!url) return;
+
+        // Máy tính không hiện nút lưu ảnh nên khỏi tải cho tốn request
+        if (!window.matchMedia('(pointer: coarse)').matches) return;
+
+        const fileName = `bloompod-qr-${orderCode || 'payment'}.png`;
+        fetch(url)
+            .then(response => response.blob())
+            .then(blob => {
+                qrFile = new File([blob], fileName, { type: blob.type || 'image/png' });
+            })
+            .catch(error => console.error('Error prefetching QR:', error));
+    }
+
+    function saveQrAsDownload(file, fallbackUrl) {
+        if (!file) {
+            window.open(fallbackUrl, '_blank');
+            return;
+        }
+        const url = URL.createObjectURL(file);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = file.name;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    /** iOS: <a download> chỉ bỏ file vào Files, muốn vào thư viện Ảnh phải qua share sheet */
+    function downloadQrCode() {
+        const img = document.querySelector('#paymentQr img');
+        if (!img || !img.src) return;
+
+        if (qrFile && navigator.canShare && navigator.canShare({ files: [qrFile] })) {
+            navigator.share({ files: [qrFile] }).catch(function (error) {
+                if (error && error.name === 'AbortError') return;
+                saveQrAsDownload(qrFile, img.src);
+            });
+            return;
+        }
+        saveQrAsDownload(qrFile, img.src);
+    }
+
+    // ==============================================
+    // COPY
+    // ==============================================
+
+    async function copyValue(button) {
+        const target = document.getElementById(button.dataset.copy);
+        const value = target ? target.textContent.trim() : '';
+        if (!value || value === '-') return;
+
+        try {
+            await navigator.clipboard.writeText(value);
+        } catch (error) {
+            const field = document.createElement('textarea');
+            field.value = value;
+            field.setAttribute('readonly', '');
+            field.style.position = 'fixed';
+            field.style.opacity = '0';
+            document.body.appendChild(field);
+            field.select();
+            document.execCommand('copy');
+            field.remove();
+        }
+
+        button.classList.add('is-copied');
+        setTimeout(() => button.classList.remove('is-copied'), 1500);
+    }
+
+    // ==============================================
+    // ĐẾM NGƯỢC + POLLING
+    // ==============================================
+
+    function startCountdown(seconds) {
+        remainingSeconds = seconds > 0 ? Math.floor(seconds) : PAYMENT_WINDOW_SECONDS;
+        const timer = document.getElementById('countdownTimer');
+        if (!timer) return;
+
+        timer.textContent = formatTime(remainingSeconds);
+        if (countdownInterval) clearInterval(countdownInterval);
+
+        countdownInterval = setInterval(function () {
+            remainingSeconds--;
+            timer.textContent = formatTime(Math.max(0, remainingSeconds));
+            if (remainingSeconds <= 0) {
+                clearInterval(countdownInterval);
+                countdownInterval = null;
+            }
+        }, 1000);
+    }
+
+    function stopPolling() {
+        closePaymentWindow();
+        if (pollingTimer) clearTimeout(pollingTimer);
+        pollingTimer = null;
+        if (pollingTimeoutId) clearTimeout(pollingTimeoutId);
+        pollingTimeoutId = null;
+        if (countdownInterval) clearInterval(countdownInterval);
+        countdownInterval = null;
+    }
+
+    function startPolling(seconds) {
+        stopPolling();
+        startCountdown(seconds);
+
+        const startedAt = Date.now();
+        const nextDelay = () => {
+            const elapsed = (Date.now() - startedAt) / 1000;
+            return POLLING_STEPS.find(step => elapsed < step.until).every;
+        };
+
+        async function poll() {
+            try {
+                const result = await checkPayment();
+                if (result.success) {
+                    if (result.status === 'confirmed') {
+                        stopPolling();
+                        goToConfirmation('success');
+                        return;
+                    }
+                    if (result.status === 'expired') {
+                        stopPolling();
+                        showToast(t('payment.expiredRetry'), 'error');
+                        await loadMethods();
+                        return;
+                    }
+                }
+            } catch (error) {
+                console.error('Error during polling:', error);
+            }
+
+            if (pollingTimer !== null) pollingTimer = setTimeout(poll, nextDelay());
+        }
+
+        pollingTimer = setTimeout(poll, POLLING_STEPS[0].every);
+        pollingTimeoutId = setTimeout(function () {
+            stopPolling();
+            showToast(t('payment.expiredRetry'), 'error');
+            loadMethods();
+        }, (seconds > 0 ? seconds : PAYMENT_WINDOW_SECONDS) * 1000);
+    }
+
+    // ==============================================
+    // ĐIỀU HƯỚNG
+    // ==============================================
+
+    /** mode: 'success' cho đã thu tiền, 'cash' cho đơn chờ liên hệ */
+    function goToConfirmation(mode) {
+        stopPolling();
+
+        const page = isEnglish() ? 'order-confirmation-en.html' : 'order-confirmation.html';
+        const params = new URLSearchParams({ status: 'success', order: orderCode });
+        if (mode === 'cash') params.set('cash', '1');
+
+        window.location.href = `${page}?${params.toString()}`;
+    }
+
+    function showBlockingModal(title, message, buttonLabel, onClose) {
+        const overlay = document.createElement('div');
+        overlay.className = 'pm-overlay';
+
+        const dialog = document.createElement('div');
+        dialog.className = 'pm-dialog';
+
+        const heading = document.createElement('h3');
+        heading.className = 'pm-title';
+        heading.textContent = title;
+
+        const text = document.createElement('p');
+        text.className = 'pm-desc';
+        text.textContent = message;
+
+        dialog.appendChild(heading);
+        dialog.appendChild(text);
+
+        if (buttonLabel) {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'pm-ok';
+            button.textContent = buttonLabel;
+            button.addEventListener('click', function () {
+                overlay.remove();
+                document.body.style.overflow = '';
+                if (onClose) onClose();
+            });
+            dialog.appendChild(button);
+        }
+
+        overlay.appendChild(dialog);
+        document.body.appendChild(overlay);
+        document.body.style.overflow = 'hidden';
+        return overlay;
+    }
+
+    // ==============================================
+    // KHỞI ĐỘNG
+    // ==============================================
+
+    async function loadMethods() {
+        stopPolling();
+        resetDetail();
+
+        const packageId = orderInfo && orderInfo.order && orderInfo.order.package
+            ? orderInfo.order.package.id
+            : null;
+
+        if (!paymentMethods.length && packageId) {
+            const data = await fetchPackageInfo(packageId);
+            if (data.success) paymentMethods = filterByEnvironment(data.payment_methods);
+        }
+
+        if (!paymentMethods.length) {
+            showToast(t('payment.methodFailed'), 'error');
+            return;
+        }
+
+        // Một phương thức thì chọn luôn, khỏi bắt khách bấm thừa một nhịp
+        if (paymentMethods.length === 1) {
+            renderMethodList();
+            await chooseMethod(paymentMethods[0]);
+            return;
+        }
+
+        renderMethodList();
+    }
+
+    async function init() {
+        if (!document.getElementById('methodList')) return;
+
+        orderCode = new URLSearchParams(window.location.search).get('order') || '';
+        if (!orderCode) {
+            showBlockingModal(t('order.notFoundTitle'), t('order.notFoundDesc'), t('order.gotIt'),
+                () => { window.location.href = isEnglish() ? 'order-en.html' : 'order.html'; });
+            return;
+        }
+
+        document.getElementById('downloadQrBtn')
+            .addEventListener('click', downloadQrCode);
+        document.getElementById('methodBack')
+            .addEventListener('click', loadMethods);
+        document.querySelectorAll('.transfer-copy').forEach(function (button) {
+            button.addEventListener('click', function () { copyValue(button); });
+        });
+
+        // Vẽ ngay từ cache để khỏi nháy trắng, rồi mới hỏi lại server
+        const cached = readCachedOrder();
+        if (cached) renderOrderSummary(cached);
+
+        const loading = showBlockingModal(t('order.loadingTitle'), t('order.loadingDesc'), '');
+
+        try {
+            const info = await fetchOrderInfo(true);
+            loading.remove();
+            document.body.style.overflow = '';
+
+            if (!info.success || (info.order && info.order.state === 'cancelled')) {
+                showBlockingModal(t('order.notFoundTitle'), t('order.notFoundDesc'), t('order.gotIt'),
+                    () => { window.location.href = isEnglish() ? 'order-en.html' : 'order.html'; });
+                return;
+            }
+
+            orderInfo = info;
+            cacheOrder(info);
+            renderOrderSummary(info);
+
+            if (info.next_action === 'done') {
+                goToConfirmation('success');
+                return;
+            }
+
+            if (info.next_action === 'wait' && info.transaction) {
+                renderTransaction(info.order, info.transaction);
+                return;
+            }
+
+            await loadMethods();
+        } catch (error) {
+            console.error('Error loading payment page:', error);
+            loading.remove();
+            document.body.style.overflow = '';
+            showToast(t('order.networkError'), 'error');
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+})();

@@ -829,3 +829,155 @@
         display: block;
     }
 }
+/* ===== Danh sách phương thức thanh toán ===== */
+.method-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+}
+
+.method-list.is-busy {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.method-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    padding: 14px 16px;
+    text-align: left;
+    background: var(--white);
+    border: 1.5px solid var(--line-color);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.method-item:hover,
+.method-item:focus-visible {
+    border-color: var(--secondary-dark);
+    background: var(--second-bg);
+    outline: none;
+}
+
+.method-item img {
+    width: 44px;
+    height: 44px;
+    flex: none;
+    object-fit: contain;
+    border-radius: 6px;
+}
+
+.method-name {
+    font-family: var(--body-1-font-family);
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--black);
+}
+
+.method-desc {
+    margin-top: 2px;
+    font-family: var(--body-2-font-family);
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--text);
+}
+
+.method-back {
+    align-self: flex-start;
+    margin-bottom: 14px;
+    padding: 6px 0;
+    font-family: var(--body-2-font-family);
+    font-size: 14px;
+    color: var(--secondary-dark);
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.method-back:hover {
+    text-decoration: underline;
+}
+
+/* ===== Chuyển khoản tay ===== */
+.transfer-box {
+    width: 100%;
+    max-width: 360px;
+    margin: 0 auto;
+}
+
+.transfer-intro {
+    margin: 0 0 12px;
+    font-family: var(--body-2-font-family);
+    font-size: 14px;
+    color: var(--text);
+    text-align: center;
+}
+
+.transfer-line {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    background: var(--second-bg);
+    border-radius: 8px;
+}
+
+.transfer-key {
+    flex: none;
+    width: 96px;
+    font-family: var(--body-2-font-family);
+    font-size: 13px;
+    color: var(--text);
+}
+
+.transfer-val {
+    flex: 1;
+    min-width: 0;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--black);
+    word-break: break-all;
+}
+
+.transfer-copy {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    color: var(--secondary-dark);
+    background: var(--white);
+    border: 1px solid var(--line-color);
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.transfer-copy svg {
+    width: 16px;
+    height: 16px;
+}
+
+.transfer-copy.is-copied {
+    color: var(--white);
+    background: var(--secondary-dark);
+    border-color: var(--secondary-dark);
+}
+
+.transfer-warning {
+    margin: 12px 0 0;
+    padding: 10px 12px;
+    font-family: var(--body-2-font-family);
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--black);
+    background: #FFF6E5;
+    border-radius: 8px;
+}

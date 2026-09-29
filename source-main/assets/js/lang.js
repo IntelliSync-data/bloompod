@@ -48,8 +48,12 @@
             'payment.cashDesc':         'Đơn hàng của bạn đã được ghi nhận:',
             'payment.cashStatus':       'Đã tiếp nhận yêu cầu',
             'payment.methodFailed':     'Không lấy được phương thức thanh toán. Vui lòng thử lại.',
+            'payment.transferDesc':     'Hoàn tất thanh toán theo hướng dẫn bên dưới:',
+            'payment.expiredRetry':     'Giao dịch đã hết hạn. Vui lòng chọn lại phương thức thanh toán.',
 
             // Confirmation page
+            'confirm.cashTitle':        'Đã tiếp nhận đơn hàng {code}',
+            'confirm.cashDesc':         'Chúng tôi đã ghi nhận đơn hàng của bạn và sẽ liên hệ trong vòng 24 giờ để xác nhận và hướng dẫn thanh toán.',
             'confirm.alreadyPaid':      'Đơn hàng {code} đã được thanh toán',
             'confirm.alreadyPaidDesc':  'Đơn hàng này đã hoàn tất thanh toán. Cảm ơn bạn!',
             'confirm.backToChildren':   'Quay lại danh sách bé',
@@ -95,8 +99,12 @@
             'payment.cashDesc':         'Your order has been recorded:',
             'payment.cashStatus':       'Request received',
             'payment.methodFailed':     'Could not load payment methods. Please try again.',
+            'payment.transferDesc':     'Complete your payment using the details below:',
+            'payment.expiredRetry':     'This payment has expired. Please choose a payment method again.',
 
             // Confirmation page
+            'confirm.cashTitle':        'Order {code} received',
+            'confirm.cashDesc':         'We have recorded your order and will contact you within 24 hours to confirm it and arrange payment.',
             'confirm.alreadyPaid':      'Order {code} has already been paid',
             'confirm.alreadyPaidDesc':  'This order has been paid in full. Thank you!',
             'confirm.backToChildren':   'Back to Children',
