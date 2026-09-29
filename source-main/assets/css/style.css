@@ -17,6 +17,7 @@ html {
 #book-sharing {
     scroll-margin-top: 90px;
 }
+
 #package {
     scroll-margin-top: -100px;
 }
@@ -453,8 +454,9 @@ details[open] .content-image-img {
     width: 30%;
     height: auto;
     background-image: url(../images/logo.png);
-    background-size: 100% 100%;
+    background-size: contain;
     background-repeat: no-repeat;
+    background-position: center left;
     margin-right: 10px;
     margin-top: 10px;
     margin-bottom: 10px;
@@ -2293,8 +2295,10 @@ details[open] .landing-hero-wrapper-summary {
     position: relative;
     width: 349px;
     height: 45.79px;
-    background-image: url(../images/layer-1-2.svg);
-    background-size: 100% 100%;
+    background-image: url(../images/logo_w.png);
+    background-size: contain;
+    background-position: center left;
+    background-repeat: no-repeat;
 }
 
 .language-switcher-text-p {
@@ -3586,7 +3590,7 @@ details:focus-visible {
     transform: translate(-55%, -50%);
 }
 
-.journey-quote-device-right {   
+.journey-quote-device-right {
     width: 15%;
     right: 0;
     --tx: 55%;
