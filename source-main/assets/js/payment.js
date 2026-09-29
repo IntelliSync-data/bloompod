@@ -41,6 +41,11 @@
     let paymentWindow = null;
     let qrFile = null;
 
+    // Chỉ có một phương thức thì hiện thẳng cột phải; nhiều hơn thì mở popup,
+    // vì trên điện thoại danh sách cộng chi tiết làm trang rất dài.
+    let detailInModal = false;
+    let detailHome = null;
+
     let pollingTimer = null;
     let pollingTimeoutId = null;
     let countdownInterval = null;
@@ -174,6 +179,12 @@
 
         setText('orderValue', formatCurrency(total));
         setText('totalAmount', formatCurrency(due));
+
+        const customer = order.customer || {};
+        setText('payName', customer.name || '-');
+        setText('payPhone', customer.phone || '-');
+        setText('payEmail', customer.email || '-');
+        setText('payAddress', order.address || '-');
     }
 
     // ==============================================
@@ -261,13 +272,13 @@
      * `method` lấy từ transaction.payment_method, trong đó có khối `transfer`
      * cho biết phương thức này cho quét QR, chuyển khoản tay, hay cả hai.
      */
-    function renderTransaction(order, transaction) {
+    function renderTransaction(order, transaction, inline) {
         const method = transaction.payment_method || {};
         const transfer = method.transfer || {};
         const types = transfer.types || [];
 
         resetDetail();
-        show('methodList', false);
+        show('methodList', !!inline ? false : true);
         show('methodDetail', true);
         setText('paymentSectionTitle', method.name || t('payment.chooseTitle'));
 
@@ -278,6 +289,12 @@
             document.getElementById('paypalPayBtn').onclick = function () {
                 openPaymentWindow(transaction.payment_url);
             };
+
+            // Khách đã bấm chọn phương thức rồi, đừng bắt bấm thêm lần nữa:
+            // cửa sổ trống đã mở sẵn từ cú click đó, giờ chỉ việc đưa nó tới link
+            if (!inline && paymentWindow && !paymentWindow.closed) {
+                navigatePaymentWindow(transaction.payment_url);
+            }
         } else {
             setText('paymentDescription', t('payment.transferDesc'));
 
@@ -295,28 +312,83 @@
         }
 
         show('paymentCountdown', true);
+
+        // Một phương thức thì để luôn trong cột phải, khỏi bắt khách đóng mở
+        show('methodBack', !inline);
+        if (!inline) openDetailModal();
+
         startPolling(secondsUntil(transaction.expired_at));
     }
 
-    async function chooseMethod(method) {
-        // Tiền mặt không sinh giao dịch để chờ: ghi nhận rồi báo sẽ liên hệ
+    /** Khối tiền mặt ở cột phải: hiện rõ phương thức rồi mới cho bấm xác nhận */
+    function showCashPanel(method) {
+        resetDetail();
+        show('methodList', false);
+        show('methodDetail', true);
+        show('methodBack', false);
+        show('paymentCash', true);
+        setText('paymentSectionTitle', method.name || t('payment.cashTitle'));
+        setText('paymentDescription', t('payment.cashPanelDesc'));
+
+        document.getElementById('cashConfirmBtn').onclick = function () {
+            confirmCash(method);
+        };
+    }
+
+    /** Chốt đơn tiền mặt: ghi nhận rồi sang trang xác nhận */
+    async function confirmCash(method) {
+        try {
+            const result = await createPayment(method.id);
+            if (!result.success && result.error_code !== 'ALREADY_PAID') {
+                showToast(result.error || t('order.createFailed'), 'error');
+                return;
+            }
+            goToConfirmation('cash');
+        } catch (error) {
+            console.error('Error confirming cash payment:', error);
+            showToast(t('order.networkError'), 'error');
+        }
+    }
+
+    /** inline = true khi chỉ có đúng một phương thức, lúc đó không mở popup */
+    async function chooseMethod(method, forceInline) {
+        const inline = forceInline || isSingleMethod();
+
+        if (method.type === 'cash') {
+            if (inline) {
+                showCashPanel(method);
+                return;
+            }
+            // Hỏi lại vì tiền mặt không có bước thanh toán nào để khách sửa sai
+            const agreed = await showConfirmModal(
+                t('payment.cashConfirmTitle'),
+                t('payment.cashConfirmDesc'),
+                t('payment.cashConfirmOk'),
+                t('payment.cashConfirmCancel')
+            );
+            if (!agreed) return;
+            await confirmCash(method);
+            return;
+        }
+
         const container = document.getElementById('methodList');
         container.classList.add('is-busy');
+
+        // Mở ngay tại đây, khi user gesture còn hiệu lực. Mở sau await thì
+        // trình duyệt coi là popup tự bung và chặn.
+        const willRedirect = !inline && isRedirectMethod(method);
+        if (willRedirect) openPaymentWindow('about:blank');
 
         try {
             const result = await createPayment(method.id);
 
             if (!result.success) {
+                closePaymentWindow();
                 if (result.error_code === 'ALREADY_PAID') {
                     goToConfirmation('success');
                     return;
                 }
                 showToast(result.error || t('order.createFailed'), 'error');
-                return;
-            }
-
-            if (method.type === 'cash') {
-                goToConfirmation('cash');
                 return;
             }
 
@@ -326,12 +398,14 @@
                 orderInfo = info;
                 cacheOrder(info);
                 renderOrderSummary(info);
-                renderTransaction(info.order, info.transaction);
+                renderTransaction(info.order, info.transaction, inline);
             } else {
+                closePaymentWindow();
                 showToast(t('order.networkError'), 'error');
             }
         } catch (error) {
             console.error('Error choosing payment method:', error);
+            closePaymentWindow();
             showToast(t('order.networkError'), 'error');
         } finally {
             container.classList.remove('is-busy');
@@ -341,6 +415,26 @@
     // ==============================================
     // CỬA SỔ THANH TOÁN (PayPal)
     // ==============================================
+
+    /**
+     * Phương thức đưa khách sang trang của cổng (PayPal, VNPay).
+     * Nhận biết bằng việc không có kiểu chuyển khoản nào: sepay thì có
+     * qr_pay/bank_transfer, cash thì đã tách riêng.
+     */
+    function isRedirectMethod(method) {
+        if (!method || method.type === 'cash') return false;
+        return !((method.transfer && method.transfer.types) || []).length;
+    }
+
+    /** Đưa cửa sổ đã mở sẵn tới link thanh toán */
+    function navigatePaymentWindow(url) {
+        if (paymentWindow && !paymentWindow.closed) {
+            paymentWindow.location.href = url;
+            paymentWindow.focus();
+        } else {
+            openPaymentWindow(url);
+        }
+    }
 
     function openPaymentWindow(url) {
         const width = 500;
@@ -526,6 +620,102 @@
         window.location.href = `${page}?${params.toString()}`;
     }
 
+    /** Hỏi lại trước khi chốt, tránh khách bấm nhầm. Resolve true nếu đồng ý. */
+    function showConfirmModal(title, message, okLabel, cancelLabel) {
+        return new Promise(function (resolve) {
+            const overlay = document.createElement('div');
+            overlay.className = 'pm-overlay';
+
+            const dialog = document.createElement('div');
+            dialog.className = 'pm-dialog';
+            dialog.innerHTML = '<h3 class="pm-title"></h3><p class="pm-desc"></p>';
+            dialog.querySelector('.pm-title').textContent = title;
+            dialog.querySelector('.pm-desc').textContent = message;
+
+            const actions = document.createElement('div');
+            actions.className = 'pm-actions';
+
+            function close(answer) {
+                overlay.remove();
+                document.body.style.overflow = '';
+                resolve(answer);
+            }
+
+            const cancel = document.createElement('button');
+            cancel.type = 'button';
+            cancel.className = 'pm-cancel';
+            cancel.textContent = cancelLabel;
+            cancel.addEventListener('click', () => close(false));
+
+            const ok = document.createElement('button');
+            ok.type = 'button';
+            ok.className = 'pm-ok';
+            ok.textContent = okLabel;
+            ok.addEventListener('click', () => close(true));
+
+            actions.appendChild(cancel);
+            actions.appendChild(ok);
+            dialog.appendChild(actions);
+            overlay.appendChild(dialog);
+            overlay.addEventListener('click', function (event) {
+                if (event.target === overlay) close(false);
+            });
+
+            document.body.appendChild(overlay);
+            document.body.style.overflow = 'hidden';
+        });
+    }
+
+    // ==============================================
+    // CHI TIẾT: TRONG CỘT PHẢI HAY TRONG POPUP
+    // ==============================================
+
+    /**
+     * Đưa khối chi tiết vào popup bằng cách di chuyển chính node đó, thay vì
+     * dựng lại markup lần hai - nhờ vậy mọi id và sự kiện giữ nguyên.
+     */
+    function openDetailModal() {
+        const detail = document.getElementById('methodDetail');
+        if (!detailHome) detailHome = detail.parentNode;
+
+        const overlay = document.createElement('div');
+        overlay.className = 'pm-overlay';
+        overlay.id = 'detailOverlay';
+
+        const dialog = document.createElement('div');
+        dialog.className = 'pm-dialog pm-dialog--detail';
+
+        dialog.appendChild(detail);
+        overlay.appendChild(dialog);
+        overlay.addEventListener('click', function (event) {
+            if (event.target === overlay) closeDetail();
+        });
+
+        document.body.appendChild(overlay);
+        document.body.style.overflow = 'hidden';
+        detailInModal = true;
+    }
+
+    /** Đóng popup chi tiết, trả node về cột phải và quay lại danh sách */
+    function closeDetail() {
+        const detail = document.getElementById('methodDetail');
+        const overlay = document.getElementById('detailOverlay');
+
+        if (detailInModal && detailHome) {
+            detailHome.appendChild(detail);
+            if (overlay) overlay.remove();
+            document.body.style.overflow = '';
+            detailInModal = false;
+        }
+
+        stopPolling();
+        resetDetail();
+        show('methodDetail', false);
+        show('methodList', true);
+        setText('paymentSectionTitle', t('payment.chooseTitle'));
+        setText('paymentDescription', t('payment.chooseDesc'));
+    }
+
     function showBlockingModal(title, message, buttonLabel, onClose) {
         const overlay = document.createElement('div');
         overlay.className = 'pm-overlay';
@@ -567,32 +757,39 @@
     // KHỞI ĐỘNG
     // ==============================================
 
-    async function loadMethods() {
-        stopPolling();
-        resetDetail();
+    /** Nạp danh sách phương thức theo gói của đơn. Chỉ nạp, không vẽ. */
+    async function ensureMethods() {
+        if (paymentMethods.length) return paymentMethods;
 
         const packageId = orderInfo && orderInfo.order && orderInfo.order.package
             ? orderInfo.order.package.id
             : null;
+        if (!packageId) return paymentMethods;
 
-        if (!paymentMethods.length && packageId) {
-            const data = await fetchPackageInfo(packageId);
-            if (data.success) paymentMethods = filterByEnvironment(data.payment_methods);
-        }
+        const data = await fetchPackageInfo(packageId);
+        if (data.success) paymentMethods = filterByEnvironment(data.payment_methods);
+        return paymentMethods;
+    }
+
+    /** Chỉ còn một phương thức thì không có gì để chọn, khỏi mở popup */
+    const isSingleMethod = () => paymentMethods.length <= 1;
+
+    async function loadMethods() {
+        stopPolling();
+        resetDetail();
+        await ensureMethods();
 
         if (!paymentMethods.length) {
             showToast(t('payment.methodFailed'), 'error');
             return;
         }
 
-        // Một phương thức thì chọn luôn, khỏi bắt khách bấm thừa một nhịp
-        if (paymentMethods.length === 1) {
-            renderMethodList();
-            await chooseMethod(paymentMethods[0]);
-            return;
-        }
-
         renderMethodList();
+
+        // Một phương thức thì chọn luôn và hiện ngay tại cột phải
+        if (paymentMethods.length === 1) {
+            await chooseMethod(paymentMethods[0], true);
+        }
     }
 
     async function init() {
@@ -608,7 +805,7 @@
         document.getElementById('downloadQrBtn')
             .addEventListener('click', downloadQrCode);
         document.getElementById('methodBack')
-            .addEventListener('click', loadMethods);
+            .addEventListener('click', closeDetail);
         document.querySelectorAll('.transfer-copy').forEach(function (button) {
             button.addEventListener('click', function () { copyValue(button); });
         });
@@ -640,7 +837,12 @@
             }
 
             if (info.next_action === 'wait' && info.transaction) {
-                renderTransaction(info.order, info.transaction);
+                // Phải biết có bao nhiêu phương thức trước khi quyết định
+                // hiện popup hay để thẳng cột phải, và để nút "chọn phương
+                // thức khác" còn có danh sách mà quay về
+                await ensureMethods();
+                renderMethodList();
+                renderTransaction(info.order, info.transaction, isSingleMethod());
                 return;
             }
 

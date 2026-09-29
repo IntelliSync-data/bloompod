@@ -1,9 +1,9 @@
 /**
- * ORDER PAGE JAVASCRIPT - Bloom Language Readiness System
+ * ORDER PAGE JAVASCRIPT - Bloompod Language Readiness System
  * Handles: Form validation, vAPI address dropdown, step navigation, LocalStorage
  */
 
-(function() {
+(function () {
     'use strict';
 
     // ==============================================
@@ -532,13 +532,13 @@
 
         // Add blur validation
         inputs.forEach(input => {
-            input.addEventListener('blur', function() {
+            input.addEventListener('blur', function () {
                 if (this.value.trim()) {
                     validateField(this);
                 }
             });
 
-            input.addEventListener('input', function() {
+            input.addEventListener('input', function () {
                 if (this.classList.contains('error')) {
                     clearError(this);
                 }
@@ -546,7 +546,7 @@
         });
 
         // Form submit handler
-        form.addEventListener('submit', async function(e) {
+        form.addEventListener('submit', async function (e) {
             e.preventDefault();
 
             if (!validateForm(this)) {

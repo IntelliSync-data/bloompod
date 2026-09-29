@@ -1,5 +1,5 @@
 /* ==============================================
-   ORDER PAGE STYLES - Bloom Language Readiness System
+   ORDER PAGE STYLES - Bloompod Language Readiness System
    ============================================== */
 
 /* Container */
@@ -569,8 +569,6 @@
     .payment-container {
         grid-template-columns: 1fr;
         gap: 24px;
-        flex-direction: column-reverse;
-        display: flex;
     }
 
     .benefits-wrapper {
@@ -771,7 +769,12 @@
     }
 }
 
-/* .qr-countdown đặt display nên [hidden] của trình duyệt bị đè, phải ẩn lại tay */
+/* Các khối này có rule đặt display, mà author style thì đè lên [hidden] của
+   trình duyệt, nên gán el.hidden = true sẽ không ẩn được. Phải ẩn lại tay. */
+#methodList[hidden],
+#methodDetail[hidden],
+#methodBack[hidden],
+#paymentTransfer[hidden],
 #paymentQr[hidden],
 #paymentPaypal[hidden],
 #paymentCash[hidden],
@@ -829,6 +832,7 @@
         display: block;
     }
 }
+
 /* ===== Danh sách phương thức thanh toán ===== */
 .method-list {
     display: flex;
@@ -980,4 +984,38 @@
     color: var(--black);
     background: #FFF6E5;
     border-radius: 8px;
+}
+
+/* Popup chi tiết phương thức: rộng hơn hộp thoại thường cho vừa QR */
+.pm-dialog--detail {
+    max-width: 420px;
+    text-align: center;
+}
+
+.pm-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.pm-actions .pm-ok,
+.pm-actions .pm-cancel {
+    flex: 1;
+    margin-top: 0;
+}
+
+.pm-cancel {
+    padding: 14px 20px;
+    font-family: var(--body-1-font-family);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    background: var(--white);
+    border: 1.5px solid var(--line-color);
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.pm-cancel:hover {
+    background: var(--second-bg);
 }
