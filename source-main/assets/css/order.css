@@ -771,6 +771,7 @@
 
 /* Các khối này có rule đặt display, mà author style thì đè lên [hidden] của
    trình duyệt, nên gán el.hidden = true sẽ không ẩn được. Phải ẩn lại tay. */
+#payNotesRow[hidden],
 #methodList[hidden],
 #methodDetail[hidden],
 #methodBack[hidden],

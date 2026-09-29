@@ -185,6 +185,12 @@
         setText('payPhone', customer.phone || '-');
         setText('payEmail', customer.email || '-');
         setText('payAddress', order.address || '-');
+
+        // Ghi chú gồm địa chỉ cũ và số tháng tuổi của bé. order-info chưa trả
+        // trường này nên hàng tự ẩn cho tới khi backend thêm vào.
+        const notes = (order.notes || '').trim();
+        setText('payNotes', notes || '-');
+        show('payNotesRow', !!notes);
     }
 
     // ==============================================
