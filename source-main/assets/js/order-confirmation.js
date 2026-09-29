@@ -143,6 +143,21 @@
      * như một đơn vừa đặt xong.
      */
     function applyAlreadyPaidText() {
+        // Đơn tiền mặt chưa thu được đồng nào, không thể gọi là thành công
+        if (getQueryParam('cash') === '1') {
+            const successDiv = document.getElementById('confirmationSuccess');
+            if (!successDiv) return;
+
+            const t = window.i18n || (k => k);
+            const code = getQueryParam('order') || '';
+            const title = successDiv.querySelector('.confirmation-title');
+            const desc = successDiv.querySelector('.confirmation-description');
+
+            if (title) title.textContent = t('confirm.cashTitle', { code: code });
+            if (desc) desc.textContent = t('confirm.cashDesc');
+            return;
+        }
+
         if (getQueryParam('already') !== '1') return;
 
         const successDiv = document.getElementById('confirmationSuccess');
