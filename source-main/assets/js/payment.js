@@ -84,12 +84,26 @@
         return Math.max(0, Math.floor((timestamp - Date.now()) / 1000));
     }
 
-    /** description dạng "Tiếng Việt|English" hoặc "Tiếng Việt/English" */
+    /**
+     * API đã trả theo `lang`, nhưng dữ liệu cũ còn dạng "Tiếng Việt|English"
+     * nên vẫn tách nếu gặp. Chỉ nhận dấu "|" - dấu "/" xuất hiện hợp lệ trong
+     * chính nội dung (vd "Visa/Mastercard") nên tách theo nó là cắt cụt chữ.
+     */
     function methodDescription(method) {
         const raw = String(method.description || '');
-        const parts = raw.includes('|') ? raw.split('|') : raw.split('/');
-        const text = isEnglish() ? (parts[1] || parts[0]) : parts[0];
-        return (text || '').trim();
+        if (!raw.includes('|')) return raw.trim();
+
+        const parts = raw.split('|');
+        return ((isEnglish() ? parts[1] : parts[0]) || parts[0] || '').trim();
+    }
+
+    /** Ghi chú riêng của phương thức do backend cấu hình, có thể rỗng */
+    function methodNotice(method) {
+        const notice = (method && method.notice) || {};
+        return {
+            title: (notice.title || '').trim(),
+            description: (notice.description || '').trim()
+        };
     }
 
     function show(id, visible) {
@@ -106,11 +120,17 @@
     // API
     // ==============================================
 
+    /** Mã ngôn ngữ Odoo, để API trả tên và mô tả đúng thứ tiếng của trang */
+    const apiLang = () => (isEnglish() ? 'en_US' : 'vi_VN');
+
     async function callApi(path, params) {
         const response = await fetch(`${PAYMENT_API_URL}/${path}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ jsonrpc: '2.0', params: params })
+            body: JSON.stringify({
+                jsonrpc: '2.0',
+                params: Object.assign({ lang: apiLang() }, params)
+            })
         });
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
@@ -336,6 +356,10 @@
         setText('paymentSectionTitle', method.name || t('payment.cashTitle'));
         setText('paymentDescription', t('payment.cashPanelDesc'));
 
+        // Một phương thức thì không có popup, chỉ lấy phần mô tả của notice
+        const notice = methodNotice(method);
+        if (notice.description) setText('cashNote', notice.description);
+
         document.getElementById('cashConfirmBtn').onclick = function () {
             confirmCash(method);
         };
@@ -366,9 +390,12 @@
                 return;
             }
             // Hỏi lại vì tiền mặt không có bước thanh toán nào để khách sửa sai
+            // Backend cấu hình được lời nhắc riêng cho tiền mặt; chưa có thì
+            // dùng chuỗi mặc định của trang
+            const notice = methodNotice(method);
             const agreed = await showConfirmModal(
-                t('payment.cashConfirmTitle'),
-                t('payment.cashConfirmDesc'),
+                notice.title || t('payment.cashConfirmTitle'),
+                notice.description || t('payment.cashConfirmDesc'),
                 t('payment.cashConfirmOk'),
                 t('payment.cashConfirmCancel')
             );
@@ -764,6 +791,23 @@
     // ==============================================
 
     /** Nạp danh sách phương thức theo gói của đơn. Chỉ nạp, không vẽ. */
+    /**
+     * Nút đổi ngôn ngữ trong header là onclick cứng sang trang kia, không mang
+     * theo ?order= nên bấm vào là mất đơn. Gắn lại cho giữ nguyên tham số.
+     */
+    function keepOrderOnLanguageSwitch() {
+        const target = isEnglish() ? './payment.html' : './payment-en.html';
+        const url = `${target}${window.location.search}`;
+
+        document.querySelectorAll('[onclick*="payment-en.html"], [onclick*="payment.html"]')
+            .forEach(function (el) {
+                el.removeAttribute('onclick');
+                el.addEventListener('click', function () {
+                    window.location.href = url;
+                });
+            });
+    }
+
     async function ensureMethods() {
         if (paymentMethods.length) return paymentMethods;
 
@@ -807,6 +851,8 @@
                 () => { window.location.href = isEnglish() ? 'order-en.html' : 'order.html'; });
             return;
         }
+
+        keepOrderOnLanguageSwitch();
 
         document.getElementById('downloadQrBtn')
             .addEventListener('click', downloadQrCode);
