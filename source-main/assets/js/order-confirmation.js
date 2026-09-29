@@ -34,6 +34,52 @@
         }).format(amount) + ' VNĐ';
     }
 
+    const PAYMENT_API_URL = 'https://app.bloompod.vn/api/profile';
+
+    /**
+     * Lấy đơn từ API theo ?order=<code>.
+     * Luồng thanh toán mới không còn ghi localStorage nên đây là nguồn duy nhất,
+     * và nhờ vậy mở lại link trên máy khác vẫn thấy đủ thông tin.
+     */
+    async function fetchOrder(orderCode) {
+        const response = await fetch(`${PAYMENT_API_URL}/order-info`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                jsonrpc: '2.0',
+                params: { order_code: orderCode, refresh: false }
+            })
+        });
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.json();
+        return data.result || {};
+    }
+
+    function setText(id, value) {
+        const el = document.getElementById(id);
+        if (el) el.textContent = value;
+    }
+
+    /** Đổ thông tin đơn lấy từ API vào khối chi tiết */
+    function fillFromApi(orderCode, info) {
+        const order = info.order || {};
+        const customer = order.customer || {};
+        const transaction = info.transaction;
+
+        setText('displayOrderCode', orderCode || '-');
+        setText('displayFullName', customer.name || '-');
+        setText('displayPhone', customer.phone || '-');
+        setText('displayEmail', customer.email || '-');
+        setText('displayAddress', order.address || '-');
+        if (order.package && order.package.name) {
+            setText('displayProduct', order.package.name);
+        }
+
+        const amount = transaction ? transaction.amount : order.total_cost;
+        document.querySelectorAll('.info-row.total .info-value')
+            .forEach(el => { el.textContent = formatCurrency(amount); });
+    }
+
     /**
      * Display success state with order data
      */
@@ -143,6 +189,21 @@
      * như một đơn vừa đặt xong.
      */
     function applyAlreadyPaidText() {
+        // Đơn tiền mặt chưa thu được đồng nào, không thể gọi là thành công
+        if (getQueryParam('cash') === '1') {
+            const successDiv = document.getElementById('confirmationSuccess');
+            if (!successDiv) return;
+
+            const t = window.i18n || (k => k);
+            const code = getQueryParam('order') || '';
+            const title = successDiv.querySelector('.confirmation-title');
+            const desc = successDiv.querySelector('.confirmation-description');
+
+            if (title) title.textContent = t('confirm.cashTitle', { code: code });
+            if (desc) desc.textContent = t('confirm.cashDesc');
+            return;
+        }
+
         if (getQueryParam('already') !== '1') return;
 
         const successDiv = document.getElementById('confirmationSuccess');
@@ -181,6 +242,19 @@
             }
         } catch (error) {
             console.error('Error loading order data:', error);
+        }
+
+        // Đơn đi từ trang thanh toán mới: dữ liệu lấy thẳng từ API
+        const orderCode = getQueryParam('order');
+        if (status === 'success' && orderCode) {
+            displaySuccess(orderData || {});
+            fetchOrder(orderCode)
+                .then(info => {
+                    if (info.success) fillFromApi(orderCode, info);
+                })
+                .catch(error => console.error('Error loading order:', error));
+            console.log('Order confirmation page initialized');
+            return;
         }
 
         // Display appropriate state

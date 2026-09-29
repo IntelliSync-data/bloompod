@@ -16,7 +16,7 @@
     <link rel="shortcut icon" href="./assets/images/favicon.png" type="image/png">
     <link rel="stylesheet" href="./assets/css/globals.css">
     <link rel="stylesheet" href="./assets/css/styleguide.css">
-    <link rel="stylesheet" href="./assets/css/style.css?v=9">
+    <link rel="stylesheet" href="./assets/css/style.css">
     <link rel="stylesheet" href="./assets/css/style-responsive.css">
     <link rel="stylesheet" href="./assets/css/order.css">
     <script src="https://app.bloompod.vn/chatbot/widget.js?lang=en"></script>
@@ -25,7 +25,7 @@
 <body style="user-select: unset;">
     <script src="./assets/js/toast.js"></script>
     <script src="./assets/js/lang.js"></script>
-    <script src="./assets/js/order.js"></script>
+    <script src="./assets/js/payment.js"></script>
     <script>
         // Smooth scroll for anchor links
         document.addEventListener('DOMContentLoaded', function () {
@@ -151,8 +151,8 @@
                     <nav class="home-wrapper-nav-tertiary desktop-nav" aria-label="Main navigation">
                         <a href="./index-en.html" class="menu-tab active"><span
                                 class="home-text-span-tertiary">Home</span></a>
-                        <a href="give-a-gift.html" class="menu-tab"><span class="home-text-span-tertiary">Give a
-                                Gift</span></a>
+                        <!-- <a href="give-a-gift.html" class="menu-tab"><span
+                                class="home-text-span-tertiary">Give a Gift</span></a> -->
                         <a href="./index-en.html#book-sharing" class="menu-tab"><span
                                 class="home-text-span-tertiary">Download
                                 Language Readiness
@@ -162,7 +162,7 @@
                     </nav>
                     <div class="home-wrapper-div-extra">
                         <button class="purchase-button-button-additional" type="button" aria-label="Order Bloompod"
-                            onclick="window.location.href='index-en.html#package'">
+                            onclick="window.location.href='order-en.html'">
                             <span class="purchase-button-span">Order <span>Bloompod</span></span>
                         </button>
                         <div class="language-hero-wrapper-div" role="button" tabindex="0"
@@ -187,7 +187,7 @@
                     <div onclick="window.location.href='./'" class="logo" role="img" aria-label="Bloompod logo"></div>
                     <div style="display: flex; gap: 8px;">
                         <div class="language-hero-wrapper-div" role="button" tabindex="0"
-                            aria-label="Change language to Vietnamese" onclick="window.location.href='./order.html'">
+                            aria-label="Change language to Vietnamese" onclick="window.location.href='./payment.html'">
                             <img class="content-image-img" src="./assets/images/circle---countries-flag.svg"
                                 alt="Language flag">
                             <div class="layout-section-div"><span class="label-text-span-lang">VI</span></div>
@@ -203,7 +203,7 @@
                 </div>
                 <nav class="mobile-nav" aria-label="Mobile navigation">
                     <a href="./#home" class="mobile-nav-link active"><span>Home</span></a>
-                    <a href="give-a-gift.html" class="mobile-nav-link"><span>Give a Gift</span></a>
+                    <!-- <a href="give-a-gift.html" class="mobile-nav-link"><span>Give a Gift</span></a> -->
                     <a href="./index-en.html#book-sharing" class="mobile-nav-link"><span>Download Language Readiness
                             Book</span></a>
                     <a href="support-en.html" class="mobile-nav-link"><span>Support</span></a>
@@ -241,96 +241,216 @@
 
             <section class="home-wrapper-section-order-full">
                 <div class="container flex-direction-column order-container">
-                    <!-- STEP 1: RECIPIENT INFORMATION -->
-                    <div id="step1" class="order-step active">
+                    <div class="order-step active">
                         <div class="step-content">
-                            <h1 class="step-title">Recipient Information</h1>
-                            <p class="step-description">Please provide your information so we can prepare the Bloompod
-                                system for your family.</p>
+                            <h1 class="step-title" style="display: none;">Complete your payment</h1>
+                            <p class="step-description" id="paymentDescription" style="display: none;">Choose a payment
+                                method below:</p>
 
-                            <form id="orderForm" class="order-form">
-                                <!-- Full Name -->
-                                <div class="form-group full-width">
-                                    <label for="fullName">Full Name <span class="required">*</span></label>
-                                    <input type="text" id="fullName" name="fullName" placeholder="Enter your full name"
-                                        required>
-                                    <span class="error-message"></span>
-                                </div>
+                            <div id="paymentStatus" class="payment-status">
+                                <span class="status-icon">⏳</span>
+                                <span class="status-text">Waiting for payment...</span>
+                            </div>
 
-                                <!-- Phone & Email -->
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label for="phone">Phone Number <span class="required">*</span></label>
-                                        <input type="tel" id="phone" name="phone" placeholder="Enter your phone number"
-                                            required>
-                                        <span class="error-message"></span>
+                            <div class="payment-container">
+                                <!-- Left column: Order Information -->
+                                <div class="order-info">
+                                    <div style="display: flex; justify-content: space-between; width: 100%;">
+                                        <h3 class="section-title">Order Information</h3>
+                                        <h3 class="section-title" id="orderCode">-</h3>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="email">Email <span class="required">*</span></label>
-                                        <input type="email" id="email" name="email"
-                                            placeholder="Enter your email address" required>
-                                        <span class="error-message"></span>
-                                    </div>
-                                </div>
-
-                                <!-- Province/Ward (bỏ cấp quận/huyện theo địa giới mới 2025) -->
-                                <div class="form-row form-row-2">
-                                    <div class="form-group">
-                                        <label for="province">Province/City <span class="required">*</span></label>
-                                        <div class="combo">
-                                            <input type="text" id="province" name="province" class="combo__input"
-                                                placeholder="Select Province/City" autocomplete="off" role="combobox"
-                                                aria-expanded="false" aria-autocomplete="list"
-                                                aria-controls="province-list" required>
-                                            <input type="hidden" id="provinceCode" name="provinceCode">
-                                            <ul class="combo__list" id="province-list" role="listbox" hidden></ul>
+                                    <div class="order-details">
+                                        <div class="detail-row">
+                                            <span class="detail-label">Bloompod Language Readiness™ System</span>
                                         </div>
-                                        <span class="error-message"></span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="ward">Ward <span class="required">*</span></label>
-                                        <div class="combo">
-                                            <input type="text" id="ward" name="ward" class="combo__input"
-                                                placeholder="Select Ward" autocomplete="off" role="combobox"
-                                                aria-expanded="false" aria-autocomplete="list" aria-controls="ward-list"
-                                                required>
-                                            <input type="hidden" id="wardCode" name="wardCode">
-                                            <ul class="combo__list" id="ward-list" role="listbox" hidden></ul>
+                                        <div class="detail-row">
+                                            <span class="detail-label">Recipient:</span>
+                                            <span class="detail-value detail-value-wrap" id="payName">-</span>
                                         </div>
-                                        <span class="error-message"></span>
+                                        <div class="detail-row">
+                                            <span class="detail-label">Phone:</span>
+                                            <span class="detail-value detail-value-wrap" id="payPhone">-</span>
+                                        </div>
+                                        <div class="detail-row">
+                                            <span class="detail-label">Email:</span>
+                                            <span class="detail-value detail-value-wrap" id="payEmail">-</span>
+                                        </div>
+                                        <div class="detail-row">
+                                            <span class="detail-label">Delivery address:</span>
+                                            <span class="detail-value detail-value-wrap" id="payAddress">-</span>
+                                        </div>
+                                        <div class="detail-row" style="display: none;">
+                                            <span class="detail-label">Provider:</span>
+                                            <span class="detail-value detail-value-wrap">Amplify Global Education Co.,
+                                                Ltd</span>
+                                        </div>
+                                        <div class="detail-row">
+                                            <span class="detail-label">Order Value:</span>
+                                            <span class="detail-value" id="orderValue">2,100,000 VND</span>
+                                        </div>
+                                        <div class="detail-row total-row">
+                                            <span class="detail-label">Amount to Pay:</span>
+                                            <span class="detail-value total-value" id="totalAmount">2,100,000 VND</span>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <!-- Street Address -->
-                                <div class="form-group full-width">
-                                    <label for="address">Street Address <span class="required">*</span></label>
-                                    <input type="text" id="address" name="address"
-                                        placeholder="e.g. ABC Apartment, 123 Le Loi Street" required>
-                                    <span class="error-message"></span>
-                                </div>
+                                <!-- Cột phải: chọn phương thức rồi hiện chi tiết -->
+                                <div class="qr-code-section">
+                                    <h3 class="section-title" id="paymentSectionTitle">Choose a payment method</h3>
 
-                                <!-- Old address note -->
-                                <div class="form-group full-width">
-                                    <label for="addressNote">Old address note (if needed)</label>
-                                    <input type="text" id="addressNote" name="addressNote"
-                                        placeholder="e.g. ABC Apartment, 123 Le Loi Street, District 1, Ho Chi Minh City">
-                                    <span class="error-message"></span>
-                                </div>
+                                    <div id="methodList" class="method-list"></div>
 
-                                <!-- Baby age in months -->
-                                <div class="form-group full-width">
-                                    <label for="babyAge">How old is your baby? (months) <span
-                                            class="required">*</span></label>
-                                    <input type="number" id="babyAge" name="babyAge" placeholder="Enter age in months"
-                                        min="0" max="36" required>
-                                    <span class="error-message"></span>
-                                </div>
+                                    <div id="methodDetail" hidden>
+                                        <button type="button" id="methodBack" class="method-back">&larr; Choose another
+                                            method</button>
 
-                                <!-- Submit Button -->
-                                <div class="form-actions">
-                                    <button type="submit" class="btn-primary">Confirm & Payment</button>
+                                        <!-- QR -->
+                                        <div id="paymentQr" hidden>
+                                            <div class="qr-code">
+                                                <img src="" alt="QR Code" width="200" height="200">
+                                            </div>
+                                            <p class="qr-hint">Scan with your banking app or Momo</p>
+                                            <button type="button" id="downloadQrBtn" class="qr-download">Download QR
+                                                code</button>
+                                        </div>
+
+                                        <!-- Chuyển khoản tay -->
+                                        <div id="paymentTransfer" class="transfer-box" hidden>
+                                            <p class="transfer-intro">Transfer using the details below:</p>
+                                            <div class="transfer-line">
+                                                <span class="transfer-key">Bank</span>
+                                                <span class="transfer-val" id="trBank">-</span>
+                                                <button type="button" class="transfer-copy" data-copy="trBank"
+                                                    aria-label="Copy">
+                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                        stroke-width="1.8" stroke-linecap="round"
+                                                        stroke-linejoin="round" aria-hidden="true">
+                                                        <rect x="9" y="9" width="12" height="12" rx="2" />
+                                                        <path
+                                                            d="M6 15H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            <div class="transfer-line">
+                                                <span class="transfer-key">Account number</span>
+                                                <span class="transfer-val" id="trAccount">-</span>
+                                                <button type="button" class="transfer-copy" data-copy="trAccount"
+                                                    aria-label="Copy">
+                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                        stroke-width="1.8" stroke-linecap="round"
+                                                        stroke-linejoin="round" aria-hidden="true">
+                                                        <rect x="9" y="9" width="12" height="12" rx="2" />
+                                                        <path
+                                                            d="M6 15H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            <div class="transfer-line">
+                                                <span class="transfer-key">Amount</span>
+                                                <span class="transfer-val" id="trAmount">-</span>
+                                                <button type="button" class="transfer-copy" data-copy="trAmount"
+                                                    aria-label="Copy">
+                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                        stroke-width="1.8" stroke-linecap="round"
+                                                        stroke-linejoin="round" aria-hidden="true">
+                                                        <rect x="9" y="9" width="12" height="12" rx="2" />
+                                                        <path
+                                                            d="M6 15H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            <div class="transfer-line">
+                                                <span class="transfer-key">Description</span>
+                                                <span class="transfer-val" id="trMemo">-</span>
+                                                <button type="button" class="transfer-copy" data-copy="trMemo"
+                                                    aria-label="Copy">
+                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                        stroke-width="1.8" stroke-linecap="round"
+                                                        stroke-linejoin="round" aria-hidden="true">
+                                                        <rect x="9" y="9" width="12" height="12" rx="2" />
+                                                        <path
+                                                            d="M6 15H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            <p class="transfer-warning">The description must be copied exactly, with
+                                                nothing added or removed. A wrong description means the transfer is not
+                                                matched automatically and your order will be delayed.</p>
+                                        </div>
+
+                                        <!-- Tiền mặt -->
+                                        <div id="paymentCash" class="payment-note" hidden>
+                                            <p>You have chosen to pay by cash. We will contact you within 24 hours to
+                                                confirm your order and arrange payment.</p>
+                                            <button type="button" id="cashConfirmBtn" class="paypal-pay-btn">Confirm
+                                                order</button>
+                                        </div>
+
+                                        <!-- PayPal -->
+                                        <div id="paymentPaypal" hidden>
+                                            <button type="button" id="paypalPayBtn" class="paypal-pay-btn">Pay with
+                                                PayPal</button>
+                                        </div>
+
+                                        <div class="qr-countdown" id="paymentCountdown" hidden>
+                                            <span class="countdown-icon">⏱</span>
+                                            <span class="countdown-text">Time remaining: <strong
+                                                    id="countdownTimer">1:00:00</strong></span>
+                                        </div>
+                                    </div>
                                 </div>
-                            </form>
+                            </div>
+
+                            <!-- Benefits Icons -->
+                            <div class="benefits-wrapper">
+                                <div class="benefit-item">
+                                    <span class="benefit-icon">
+                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                            <circle cx="10" cy="10" r="10" fill="currentColor" />
+                                            <path d="M6 10L9 13L14 7" stroke="white" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </span>
+                                    <span class="benefit-text">Secure payment</span>
+                                </div>
+                                <div class="benefit-item">
+                                    <span class="benefit-icon">
+                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                            <circle cx="10" cy="10" r="10" fill="currentColor" />
+                                            <path d="M6 10L9 13L14 7" stroke="white" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </span>
+                                    <span class="benefit-text">Free nationwide shipping</span>
+                                </div>
+                                <div class="benefit-item">
+                                    <span class="benefit-icon">
+                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                            <circle cx="10" cy="10" r="10" fill="currentColor" />
+                                            <path d="M6 10L9 13L14 7" stroke="white" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </span>
+                                    <span class="benefit-text">Bloompod warranty per policy</span>
+                                </div>
+                                <div class="benefit-item">
+                                    <span class="benefit-icon">
+                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                            <circle cx="10" cy="10" r="10" fill="currentColor" />
+                                            <path d="M6 10L9 13L14 7" stroke="white" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </span>
+                                    <span class="benefit-text">Bloompod will send a confirmation email after
+                                        payment</span>
+                                </div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="form-actions">
+                                <a href="./order-en.html" class="btn-secondary">Go back</a>
+                            </div>
                         </div>
                     </div>
                 </div>

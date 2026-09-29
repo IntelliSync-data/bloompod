@@ -16,7 +16,7 @@
     <link rel="shortcut icon" href="./assets/images/favicon.png" type="image/png">
     <link rel="stylesheet" href="./assets/css/globals.css">
     <link rel="stylesheet" href="./assets/css/styleguide.css">
-    <link rel="stylesheet" href="./assets/css/style.css?v=9">
+    <link rel="stylesheet" href="./assets/css/style.css">
     <link rel="stylesheet" href="./assets/css/style-responsive.css">
     <link rel="stylesheet" href="./assets/css/order.css">
     <script src="https://app.bloompod.vn/chatbot/widget.js"></script>
@@ -25,7 +25,7 @@
 <body style="user-select: unset;">
     <script src="./assets/js/toast.js"></script>
     <script src="./assets/js/lang.js"></script>
-    <script src="./assets/js/order.js"></script>
+    <script src="./assets/js/payment.js"></script>
     <script>
         // Smooth scroll for anchor links
         document.addEventListener('DOMContentLoaded', function () {
@@ -151,8 +151,8 @@
                     <nav class="home-wrapper-nav-tertiary desktop-nav" aria-label="Main navigation">
                         <a href="./#home" class="menu-tab active"><span class="home-text-span-tertiary">Trang
                                 Chủ</span></a>
-                        <a href="give-a-gift.html" class="menu-tab"><span class="home-text-span-tertiary">Tặng
-                                Quà</span></a>
+                        <!-- <a href="give-a-gift.html" class="menu-tab"><span class="home-text-span-tertiary">Tặng
+                                Quà</span></a> -->
                         <a href="./index.html#book-sharing" class="menu-tab"><span class="home-text-span-tertiary">Tải
                                 Sách
                                 Language Readiness</span></a>
@@ -160,11 +160,11 @@
                     </nav>
                     <div class="home-wrapper-div-extra">
                         <button class="purchase-button-button-additional" type="button" aria-label="Đặt mua Bloompod"
-                            onclick="window.location.href='index.html#package'">
+                            onclick="window.location.href='order.html'">
                             <span class="purchase-button-span">Đặt mua <span>Bloompod</span></span>
                         </button>
                         <div class="language-hero-wrapper-div" role="button" tabindex="0"
-                            aria-label="Change language to English" onclick="window.location.href='./order-en.html'">
+                            aria-label="Change language to English" onclick="window.location.href='./payment-en.html'">
                             <img class="content-image-img" src="./assets/images/circle---countries-flag.svg"
                                 alt="Language flag">
                             <div class="layout-section-div"><span class="label-text-span-lang">EN</span></div>
@@ -186,7 +186,7 @@
                     <div onclick="window.location.href='./'" class="logo" role="img" aria-label="Bloompod logo"></div>
                     <div style="display: flex; gap: 8px;">
                         <div class="language-hero-wrapper-div" role="button" tabindex="0"
-                            aria-label="Change language to English" onclick="window.location.href='./order-en.html'">
+                            aria-label="Change language to English" onclick="window.location.href='./payment-en.html'">
                             <img class="content-image-img" src="./assets/images/circle---countries-flag.svg"
                                 alt="Language flag">
                             <div class="layout-section-div"><span class="label-text-span-lang">EN</span></div>
@@ -202,7 +202,7 @@
                 </div>
                 <nav class="mobile-nav" aria-label="Mobile navigation">
                     <a href="./#home" class="mobile-nav-link active"><span>Trang Chủ</span></a>
-                    <a href="give-a-gift.html" class="mobile-nav-link"><span>Tặng Quà</span></a>
+                    <!-- <a href="give-a-gift.html" class="mobile-nav-link"><span>Tặng Quà</span></a> -->
                     <a href="./index.html#book-sharing" class="mobile-nav-link"><span>Tải Sách Language
                             Readiness</span></a>
                     <a href="support.html" class="mobile-nav-link"><span>Hỗ Trợ</span></a>
@@ -240,108 +240,12 @@
 
             <section class="home-wrapper-section-order-full">
                 <div class="container flex-direction-column order-container">
-                    <!-- BƯỚC 1: THÔNG TIN NGƯỜI NHẬN -->
-                    <div id="step1" class="order-step active">
+                    <div class="order-step active">
                         <div class="step-content">
-                            <h1 class="step-title">Thông tin người nhận</h1>
-                            <p class="step-description">Vui lòng cung cấp thông tin để chúng tôi chuẩn bị hệ thống
-                                Bloompod cho gia đình bạn.</p>
+                            <h1 class="step-title" style="display: none;">Hoàn tất thanh toán</h1>
+                            <p class="step-description" id="paymentDescription" style="display: none;">Chọn phương thức
+                                thanh toán bên dưới:</p>
 
-                            <form id="orderForm" class="order-form">
-                                <!-- Họ & Tên -->
-                                <div class="form-group full-width">
-                                    <label for="fullName">Họ & Tên <span class="required">*</span></label>
-                                    <input type="text" id="fullName" name="fullName" placeholder="Nhập họ & tên"
-                                        required>
-                                    <span class="error-message"></span>
-                                </div>
-
-                                <!-- Số điện thoại & Email -->
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label for="phone">Số điện thoại <span class="required">*</span></label>
-                                        <input type="tel" id="phone" name="phone" placeholder="Nhập số điện thoại"
-                                            required>
-                                        <span class="error-message"></span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="email">Email <span class="required">*</span></label>
-                                        <input type="email" id="email" name="email" placeholder="Nhập địa chỉ Email"
-                                            required>
-                                        <span class="error-message"></span>
-                                    </div>
-                                </div>
-
-                                <!-- Tỉnh/Xã (bỏ cấp quận/huyện theo địa giới mới 2025) -->
-                                <div class="form-row form-row-2">
-                                    <div class="form-group">
-                                        <label for="province">Tỉnh/ Thành Phố <span class="required">*</span></label>
-                                        <div class="combo">
-                                            <input type="text" id="province" name="province" class="combo__input"
-                                                placeholder="Chọn Tỉnh/ Thành Phố" autocomplete="off" role="combobox"
-                                                aria-expanded="false" aria-autocomplete="list"
-                                                aria-controls="province-list" required>
-                                            <input type="hidden" id="provinceCode" name="provinceCode">
-                                            <ul class="combo__list" id="province-list" role="listbox" hidden></ul>
-                                        </div>
-                                        <span class="error-message"></span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="ward">Xã/ Phường <span class="required">*</span></label>
-                                        <div class="combo">
-                                            <input type="text" id="ward" name="ward" class="combo__input"
-                                                placeholder="Chọn Xã/ Phường" autocomplete="off" role="combobox"
-                                                aria-expanded="false" aria-autocomplete="list" aria-controls="ward-list"
-                                                required>
-                                            <input type="hidden" id="wardCode" name="wardCode">
-                                            <ul class="combo__list" id="ward-list" role="listbox" hidden></ul>
-                                        </div>
-                                        <span class="error-message"></span>
-                                    </div>
-                                </div>
-
-                                <!-- Địa chỉ cụ thể -->
-                                <div class="form-group full-width">
-                                    <label for="address">Địa chỉ cụ thể <span class="required">*</span></label>
-                                    <input type="text" id="address" name="address"
-                                        placeholder="vd: chung cư ABC, 123 đường Lê Lợi" required>
-                                    <span class="error-message"></span>
-                                </div>
-
-                                <!-- Ghi chú địa chỉ cũ -->
-                                <div class="form-group full-width">
-                                    <label for="addressNote">Ghi chú địa chỉ cũ (nếu cần)</label>
-                                    <input type="text" id="addressNote" name="addressNote"
-                                        placeholder="vd: chung cư ABC, 123 đường Lê Lợi, Quận 1, Thành Phố Hồ Chí Minh">
-                                    <span class="error-message"></span>
-                                </div>
-
-                                <!-- Bé hiện bao nhiêu tháng tuổi -->
-                                <div class="form-group full-width">
-                                    <label for="babyAge">Bé hiện bao nhiêu tháng tuổi? <span
-                                            class="required">*</span></label>
-                                    <input type="number" id="babyAge" name="babyAge" placeholder="Nhập số tháng tuổi"
-                                        min="0" max="36" required>
-                                    <span class="error-message"></span>
-                                </div>
-
-                                <!-- Submit Button -->
-                                <div class="form-actions">
-                                    <button type="submit" class="btn-primary">Xác nhận và Thanh toán</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-<<<<<<< HEAD
-
-                    <!-- BƯỚC 2: HOÀN TẤT THANH TOÁN -->
-                    <div id="step2" class="order-step">
-                        <div class="step-content">
-                            <h1 class="step-title" style="display: none;">Tiếp tục thanh toán</h1>
-                            <p class="step-description" id="paymentDescription" style="display: none;">Chuyển khoản trực
-                                tiếp vào tài khoản công ty:</p>
-
-                            <!-- Payment Status Indicator -->
                             <div id="paymentStatus" class="payment-status">
                                 <span class="status-icon">⏳</span>
                                 <span class="status-text">Đang chờ thanh toán...</span>
@@ -350,42 +254,38 @@
                             <div class="payment-container">
                                 <!-- Cột trái: Thông tin đơn hàng -->
                                 <div class="order-info">
-                                    <h3 class="section-title">Thông tin đơn hàng</h3>
+                                    <div style="display: flex; justify-content: space-between; width: 100%;">
+                                        <h3 class="section-title">Thông tin đơn hàng: </h3>
+                                        <h3 class="section-title" id="orderCode">-</h3>
+                                    </div>
                                     <div class="order-details">
                                         <div class="detail-row">
                                             <span class="detail-label">Bloompod Language Readiness™ System</span>
                                         </div>
                                         <div class="detail-row">
-                                            <span class="detail-label">Mã đơn hàng:</span>
-                                            <span class="detail-value" id="orderCode">-</span>
-                                        </div>
-                                        <div class="detail-row">
                                             <span class="detail-label">Người nhận:</span>
-                                            <!-- <span class="detail-value" id="orderCode">-</span> -->
+                                            <span class="detail-value detail-value-wrap" id="payName">-</span>
                                         </div>
                                         <div class="detail-row">
                                             <span class="detail-label">Số điện thoại:</span>
-                                            <!-- <span class="detail-value" id="orderCode">-</span> -->
+                                            <span class="detail-value detail-value-wrap" id="payPhone">-</span>
                                         </div>
                                         <div class="detail-row">
                                             <span class="detail-label">Email:</span>
-                                            <!-- <span class="detail-value" id="orderCode">-</span> -->
+                                            <span class="detail-value detail-value-wrap" id="payEmail">-</span>
                                         </div>
                                         <div class="detail-row">
                                             <span class="detail-label">Địa chỉ giao hàng:</span>
-                                            <!-- <span class="detail-value" id="orderCode">-</span> -->
+                                            <span class="detail-value detail-value-wrap" id="payAddress">-</span>
                                         </div>
-                                        <div class="detail-row">
-                                            <span class="detail-label">Sản phẩm:</span>
-                                            <!-- <span class="detail-value" id="orderCode">-</span> -->
+                                        <div class="detail-row" style="display: none;">
+                                            <span class="detail-label">Nhà cung cấp:</span>
+                                            <span class="detail-value detail-value-wrap">Công ty TNHH Giáo Dục Toàn Cầu
+                                                Amplify</span>
                                         </div>
                                         <div class="detail-row">
                                             <span class="detail-label">Giá trị đơn hàng:</span>
                                             <span class="detail-value" id="orderValue">2,100,000 VNĐ</span>
-                                        </div>
-                                        <div class="detail-row">
-                                            <span class="detail-label">Phí giao dịch:</span>
-                                            <span class="detail-value">0 VNĐ</span>
                                         </div>
                                         <div class="detail-row total-row">
                                             <span class="detail-label">Số tiền thanh toán:</span>
@@ -394,20 +294,96 @@
                                     </div>
                                 </div>
 
-                                <!-- Cột phải: QR Code -->
+                                <!-- Cột phải: chọn phương thức rồi hiện chi tiết -->
                                 <div class="qr-code-section">
-                                    <h3 class="section-title" id="paymentSectionTitle">Quét mã qua ứng dụng Ngân hàng/Ví
-                                        điện tử</h3>
-                                    <div class="qr-code-wrapper">
-                                        <!-- SePay -->
-                                        <div id="paymentQr">
+                                    <h3 class="section-title" id="paymentSectionTitle">Chọn phương thức thanh toán</h3>
+
+                                    <div id="methodList" class="method-list"></div>
+
+                                    <div id="methodDetail" hidden>
+                                        <button type="button" id="methodBack" class="method-back">&larr; Chọn phương
+                                            thức khác</button>
+
+                                        <!-- QR -->
+                                        <div id="paymentQr" hidden>
                                             <div class="qr-code">
                                                 <img src="" alt="QR Code" width="200" height="200">
                                             </div>
                                             <p class="qr-hint">Quét bằng app Ngân hàng/Momo</p>
-
                                             <button type="button" id="downloadQrBtn" class="qr-download">Tải mã
                                                 QR</button>
+                                        </div>
+
+                                        <!-- Chuyển khoản tay -->
+                                        <div id="paymentTransfer" class="transfer-box" hidden>
+                                            <p class="transfer-intro">Chuyển khoản theo thông tin sau:</p>
+                                            <div class="transfer-line">
+                                                <span class="transfer-key">Ngân hàng</span>
+                                                <span class="transfer-val" id="trBank">-</span>
+                                                <button type="button" class="transfer-copy" data-copy="trBank"
+                                                    aria-label="Sao chép">
+                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                        stroke-width="1.8" stroke-linecap="round"
+                                                        stroke-linejoin="round" aria-hidden="true">
+                                                        <rect x="9" y="9" width="12" height="12" rx="2" />
+                                                        <path
+                                                            d="M6 15H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            <div class="transfer-line">
+                                                <span class="transfer-key">Số tài khoản</span>
+                                                <span class="transfer-val" id="trAccount">-</span>
+                                                <button type="button" class="transfer-copy" data-copy="trAccount"
+                                                    aria-label="Sao chép">
+                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                        stroke-width="1.8" stroke-linecap="round"
+                                                        stroke-linejoin="round" aria-hidden="true">
+                                                        <rect x="9" y="9" width="12" height="12" rx="2" />
+                                                        <path
+                                                            d="M6 15H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            <div class="transfer-line">
+                                                <span class="transfer-key">Số tiền</span>
+                                                <span class="transfer-val" id="trAmount">-</span>
+                                                <button type="button" class="transfer-copy" data-copy="trAmount"
+                                                    aria-label="Sao chép">
+                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                        stroke-width="1.8" stroke-linecap="round"
+                                                        stroke-linejoin="round" aria-hidden="true">
+                                                        <rect x="9" y="9" width="12" height="12" rx="2" />
+                                                        <path
+                                                            d="M6 15H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            <div class="transfer-line">
+                                                <span class="transfer-key">Nội dung</span>
+                                                <span class="transfer-val" id="trMemo">-</span>
+                                                <button type="button" class="transfer-copy" data-copy="trMemo"
+                                                    aria-label="Sao chép">
+                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                        stroke-width="1.8" stroke-linecap="round"
+                                                        stroke-linejoin="round" aria-hidden="true">
+                                                        <rect x="9" y="9" width="12" height="12" rx="2" />
+                                                        <path
+                                                            d="M6 15H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            <p class="transfer-warning">Nội dung chuyển khoản phải giữ nguyên, không
+                                                thêm bớt ký tự nào. Sai nội dung thì hệ thống không tự nhận được tiền và
+                                                đơn sẽ chậm xử lý.</p>
+                                        </div>
+
+                                        <!-- Tiền mặt -->
+                                        <div id="paymentCash" class="payment-note" hidden>
+                                            <p>Bạn đã chọn thanh toán bằng tiền mặt. Chúng tôi sẽ liên hệ trong vòng 24
+                                                giờ để xác nhận đơn hàng và hướng dẫn thanh toán.</p>
+                                            <button type="button" id="cashConfirmBtn" class="paypal-pay-btn">Xác nhận
+                                                đặt hàng</button>
                                         </div>
 
                                         <!-- PayPal -->
@@ -416,16 +392,10 @@
                                                 qua PayPal</button>
                                         </div>
 
-                                        <!-- Tiền mặt -->
-                                        <div id="paymentCash" class="payment-note" hidden>
-                                            <p>Chúng tôi đã tiếp nhận yêu cầu đặt hàng và sẽ liên hệ với bạn trong vòng
-                                                24 giờ để xác nhận và hướng dẫn thanh toán.</p>
-                                        </div>
-
-                                        <div class="qr-countdown" id="paymentCountdown">
+                                        <div class="qr-countdown" id="paymentCountdown" hidden>
                                             <span class="countdown-icon">⏱</span>
                                             <span class="countdown-text">Thời gian còn lại: <strong
-                                                    id="countdownTimer">05:00</strong></span>
+                                                    id="countdownTimer">1:00:00</strong></span>
                                         </div>
                                     </div>
                                 </div>
@@ -477,16 +447,13 @@
 
                             <!-- Action Buttons -->
                             <div class="form-actions">
-                                <button type="button" id="btnBack" class="btn-secondary">Quay lại trang trước</button>
+                                <a href="./order.html" class="btn-secondary">Quay lại trang trước</a>
                             </div>
                         </div>
                     </div>
-=======
->>>>>>> d15774932d76175c472bc1ca96412cf8c473d240
                 </div>
             </section>
             <footer class="footer">
-
                 <div class="container flex-direction-column footer-container">
                     <div class="footer-top-row">
                         <div class="logo-2" role="img" aria-label="Bloompod logo"></div>
