@@ -3119,7 +3119,7 @@ details[open] .landing-hero-wrapper-summary {
     opacity: 0.7;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 991px) {
     .hamburger-menu {
         display: block;
     }

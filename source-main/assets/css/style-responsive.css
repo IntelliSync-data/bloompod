@@ -1,7 +1,6 @@
-@media screen and (max-width: 1366px) {
+@media screen and (max-width: 1366px) {}
 
-}
-@media screen and (max-width: 1199px) {
+@media screen and (max-width: 1200px) {
 
     .main>section>header>.container,
     .main>section>section>.container,
@@ -22,8 +21,12 @@
     }
 
     .home-wrapper-nav-tertiary {
-        gap: 12px;
+        gap: 4px;
         height: auto;
+    }
+
+    .home-text-span-tertiary {
+        font-size: 18px;
     }
 
     .home-wrapper-div-extra {
@@ -323,6 +326,28 @@
     }
 }
 
+@media screen and (max-width: 991px) {
+
+    /* Từ 991px trở xuống dùng menu mobile: ẩn nav desktop và ô đổi ngôn ngữ
+       trên header, nút hamburger bật ở style.css cùng mốc này. */
+    .home-wrapper-nav-tertiary {
+        display: none;
+    }
+
+    .language-hero-wrapper-div {
+        display: none;
+    }
+
+    /* Ô đổi ngôn ngữ vẫn hiện, nhưng nằm bên trong menu mobile */
+    .mobile-menu-header .language-hero-wrapper-div {
+        display: flex;
+    }
+
+    .purchase-button-span span {
+        display: none;
+    }
+}
+
 @media screen and (max-width: 880px) {
 
     .content-image-img-primary {
@@ -332,17 +357,8 @@
 
 @media screen and (max-width: 768px) {
 
-    .home-wrapper-nav-tertiary {
-        display: none;
-    }
 
-    .language-hero-wrapper-div {
-        display: none;
-    }
 
-    .mobile-menu-header .language-hero-wrapper-div {
-        display: flex;
-    }
 
     .logo {
         margin-top: 8px;
@@ -374,9 +390,6 @@
         line-height: 26px;
     }
 
-    .purchase-button-span span {
-        display: none;
-    }
 
     .language-readiness-l {
         margin-top: 8px;
