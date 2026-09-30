@@ -499,3 +499,24 @@ section.impact {
     grid-template-columns: 1fr
   }
 }
+
+/* ===== Popup tặng quà ===== */
+.gift-child{display:flex;gap:16px;align-items:flex-start}
+.gift-child img{width:132px;height:132px;object-fit:cover;border-radius:14px;flex:none}
+.gift-child-text h3{font-family:"DM Sans",sans-serif;font-size:20px;margin:0 0 2px}
+.gift-age{margin:0;font-size:13px;color:#6a716d}
+.gift-sprout{font-size:22px;margin:12px 0 6px}
+.gift-quote{margin:0;font-size:14px;line-height:1.5;color:#5a7760;font-family:"Playfair Display",serif}
+.gift-product{margin-top:20px;border-top:1px solid #e8ece4;padding-top:16px}
+.gift-product h4{margin:0 0 12px}
+.gift-product-row{display:flex;gap:14px;align-items:center}
+.gift-product-row img{width:74px;height:74px;object-fit:contain;border-radius:10px;background:#f4f8ef;flex:none}
+.gift-product-row strong{display:block;font-size:15px;color:var(--dark)}
+.gift-product-row p{margin:3px 0 0;font-size:13px;color:#6a716d}
+.gift-price{color:var(--dark);font-weight:700}
+.gift-cta{margin-top:20px}
+@media(max-width:480px){.gift-child img{width:104px;height:104px}}
+
+/* Bé đã được tặng: làm mờ và khoá nút */
+.card.is-gifted{opacity:.5;filter:grayscale(.7)}
+.card.is-gifted .gift{background:#9aa8a0;cursor:not-allowed}
