@@ -485,7 +485,16 @@
             }
 
             const page = window.i18nLang === 'en' ? 'payment-en.html' : 'payment.html';
-            window.location.href = `${page}?order=${encodeURIComponent(orderCode)}`;
+            const params = new URLSearchParams({ order: orderCode });
+
+            // Đơn tặng quà phải mang ngữ cảnh đi tiếp: trang thanh toán cần nó
+            // để ẩn bé sau khi trả tiền, trang xác nhận cần để quay lại đúng chỗ
+            if (giftMode) {
+                params.set('gift', giftMode.giftId);
+                if (giftMode.childName) params.set('child', giftMode.childName);
+            }
+
+            window.location.href = `${page}?${params.toString()}`;
 
         } catch (error) {
             console.error('Error submitting order:', error);

@@ -16,6 +16,7 @@
         window.location.hostname === 'www.bloompod.vn';
 
     const PAYMENT_API_URL = 'https://app.bloompod.vn/api/profile';
+    const PRODUCTS_API_URL = 'https://app.bloompod.vn/api/v1/products';
     const SESSION_KEY = 'bloomPaymentOrder';
 
     // Backend đặt expired_at = create_date + 1 tiếng
@@ -37,6 +38,9 @@
 
     let orderCode = '';
     let orderInfo = null;
+
+    // Đơn đi từ trang Planting a Seed: { giftId, childName } hoặc null
+    let giftMode = null;
     let paymentMethods = [];
     let paymentWindow = null;
     let qrFile = null;
@@ -643,12 +647,42 @@
     // ==============================================
 
     /** mode: 'success' cho đã thu tiền, 'cash' cho đơn chờ liên hệ */
-    function goToConfirmation(mode) {
+    /**
+     * Ẩn bé đã được tặng khỏi trang Planting a Seed.
+     * Lỗi ở đây không được chặn luồng: khách trả tiền rồi thì vẫn phải sang
+     * được trang xác nhận.
+     */
+    async function hideGiftedChild() {
+        if (!giftMode) return;
+
+        try {
+            const response = await fetch(`${PRODUCTS_API_URL}/${giftMode.giftId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ is_visible: false })
+            });
+            console.log('Hide gifted child:', response.status);
+        } catch (error) {
+            console.error('Error hiding gifted child:', error);
+        }
+    }
+
+    async function goToConfirmation(mode) {
         stopPolling();
+
+        // Chỉ ẩn bé khi đã thật sự thu được tiền. Đơn tiền mặt chưa trả đồng nào
+        // nên vẫn để bé trong danh sách.
+        if (mode === 'success') await hideGiftedChild();
 
         const page = isEnglish() ? 'order-confirmation-en.html' : 'order-confirmation.html';
         const params = new URLSearchParams({ status: 'success', order: orderCode });
         if (mode === 'cash') params.set('cash', '1');
+
+        // Trang xác nhận dùng cái này để đổi nút về đúng trang Planting a Seed
+        if (giftMode) {
+            params.set('gift', giftMode.giftId);
+            if (giftMode.childName) params.set('child', giftMode.childName);
+        }
 
         window.location.href = `${page}?${params.toString()}`;
     }
@@ -845,7 +879,13 @@
     async function init() {
         if (!document.getElementById('methodList')) return;
 
-        orderCode = new URLSearchParams(window.location.search).get('order') || '';
+        const params = new URLSearchParams(window.location.search);
+        orderCode = params.get('order') || '';
+
+        const giftId = params.get('gift');
+        if (giftId) {
+            giftMode = { giftId: giftId, childName: (params.get('child') || '').trim() };
+        }
         if (!orderCode) {
             showBlockingModal(t('order.notFoundTitle'), t('order.notFoundDesc'), t('order.gotIt'),
                 () => { window.location.href = isEnglish() ? 'order-en.html' : 'order.html'; });

@@ -1,29 +1,231 @@
-const children = [
-    { id: 1, name: "Minh Khang", age: 2, group: "2-3", img: "assets/images/child-1.jpg", quote: "A bright smile and a curious mind." },
-    { id: 2, name: "Gia Hưng", age: 1, group: "1-2", img: "assets/images/child-2.jpg", quote: "Exploring the world one sound at a time." },
-    { id: 3, name: "Bảo Ngọc", age: 2, group: "2-3", img: "assets/images/child-3.jpg", quote: "A little girl with big dreams." },
-    { id: 4, name: "Tuệ An", age: 1, group: "1-2", img: "assets/images/child-4.jpg", quote: "Small steps towards a bright future." },
-    { id: 5, name: "Hoàng Nam", age: 1, group: "1-2", img: "assets/images/child-5.jpg", quote: "Every child has a story to grow." },
-    { id: 6, name: "Đức Phát", age: 0, group: "0-1", img: "assets/images/child-6.jpg", quote: "A world of possibilities awaits." },
-    { id: 7, name: "Sơn Tùng", age: 2, group: "2-3", img: "assets/images/child-7.jpg", quote: "Brave, kind and full of potential." },
-    { id: 8, name: "Thảo My", age: 2, group: "2-3", img: "assets/images/child-8.jpg", quote: "A smile that lights up the day." },
-    { id: 9, name: "Khánh Linh", age: 2, group: "2-3", img: "assets/images/child-9.jpg", quote: "Curious today, confident tomorrow." },
-    { id: 10, name: "Hồng Anh", age: 2, group: "2-3", img: "assets/images/child-10.jpg", quote: "A little one with a bright tomorrow." }];
-let age = "all"; 
-const grid = document.querySelector("#grid"), 
-money = n => new Intl.NumberFormat("vi-VN").format(n) + " VND";
-function render() 
-{ let list = children.filter(c => age === "all" || c.group === age), 
-    s = document.querySelector("#sort").value; 
-    if (s === "youngest") list.sort((a, b) => a.age - b.age); 
-    if (s === "oldest") list.sort((a, b) => b.age - a.age); 
-    if (s === "name") list.sort((a, b) => a.name.localeCompare(b.name, "vi")); 
-    grid.innerHTML = list.map(c => `<article class="card"><img src="${c.img}" alt="${c.name}"><div class="card-info">
-        <span class="age">${c.age === 0 ? "0 – 1 year" : c.age + " years"}</span><h3>${c.name}
-        </h3><p>“${c.quote}”</p><button class="gift" data-id="${c.id}">
-        🎁 Gift BloomPod</button></div></article>`).join("") }
-const backdrop = document.querySelector("#backdrop"), modal = document.querySelector("#modal");
-function openGift(c) { c = c || { name: "a child in need", img: "assets/images/child-1.jpg", quote: "Let BloomPod choose a child for you." }; modal.innerHTML = `<h2>Gift a BloomPod</h2><p>Plant a seed of language and opportunity.</p><div class="modal-child"><img src="${c.img}" alt="${c.name}"><div><strong>${c.name}</strong><br><small>${c.quote}</small></div></div><div class="price"><div><small>Regular price</small><div class="old">1,950,000 VND</div><small>30% gifting discount</small></div><div class="new">${money(1350000)}</div></div><h4>Recipient / Sponsor information</h4><form id="form"><div class="form-row"><input required placeholder="Your full name"><input required type="email" placeholder="Email address"></div><div class="form-row"><input required placeholder="Phone number"><input required placeholder="City / Province"></div><h4>Payment method</h4><select required><option value="">Choose payment method</option><option>Bank transfer</option><option>QR payment</option><option>Cash / Direct support</option></select><button class="primary">Continue to Payment · ${money(1350000)}</button></form><p style="font-size:11px;color:#78847d">Demo only: this prototype does not process real payments.</p>`; backdrop.classList.add("open"); document.querySelector("#form").onsubmit = e => { e.preventDefault(); modal.innerHTML = `<div class="success"><div class="heart">🌱❤️</div><h2>Thank you for planting a seed.</h2><p>Your support will help a child take a small step toward a brighter tomorrow.</p><button class="primary" id="done">Back to children</button></div>`; document.querySelector("#done").onclick = closeGift } }
-function closeGift() { backdrop.classList.remove("open") }
-document.querySelectorAll(".filter").forEach(b => b.onclick = () => { document.querySelectorAll(".filter").forEach(x => x.classList.remove("active")); b.classList.add("active"); age = b.dataset.age; render() });
-document.querySelector("#sort").onchange = render; grid.onclick = e => { let b = e.target.closest("[data-id]"); if (b) window.location.href = "order-en.html" }; document.querySelector("#choose").onclick = () => openGift(); document.querySelector("#close").onclick = closeGift; backdrop.onclick = e => { if (e.target === backdrop) closeGift() }; render();
+/**
+ * Planting a Seed — danh sách bé và popup tặng quà.
+ *
+ * Dữ liệu lấy từ API sản phẩm: mỗi "product" là một bé,
+ * `description` là câu trích, `categories[0]` là nhóm tuổi.
+ */
+
+const API_BASE = 'https://app.bloompod.vn';
+
+// Gói dành cho đơn tặng quà. Giá lấy từ API, phần còn lại cố định.
+// Phải khớp với gift_package_id trong order.js.
+const IS_PRODUCTION = window.location.hostname === 'bloompod.vn' ||
+    window.location.hostname === 'www.bloompod.vn';
+const GIFT_PACKAGE_ID = IS_PRODUCTION ? 6 : 5;
+
+const GIFT = {
+    name: 'Bloompod Audio Learning Kit',
+    forAge: 'For children aged 0 – 3',
+    quantity: '01 Bloompod set',
+    price: null,
+    image: 'assets/images/bloompod_sp.png'
+};
+
+/** Lấy giá gói tặng quà (total_cost) từ package-info */
+async function loadGiftPrice() {
+    try {
+        const response = await fetch(API_BASE + '/api/profile/package-info', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ jsonrpc: '2.0', params: { package_id: GIFT_PACKAGE_ID } })
+        });
+        const body = await response.json();
+        const pkg = body?.result?.success ? body.result.package : null;
+        if (pkg) GIFT.price = Number(pkg.total_cost);
+    } catch (error) {
+        console.error('Error loading gift price:', error);
+    }
+}
+
+const money = n => new Intl.NumberFormat('vi-VN').format(n) + ' VND';
+
+/** URL ảnh từ API là đường dẫn tương đối, phải ghép thêm host */
+const resolveUrl = path => {
+    if (!path) return '';
+    return /^https?:\/\//i.test(path) ? path : API_BASE + path;
+};
+
+const escapeHtml = value => String(value == null ? '' : value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+
+let children = [];
+let activeCategoryId = null;   // null = All Children
+
+const grid = document.querySelector('#grid');
+const pills = document.querySelector('.pills');
+const sortSelect = document.querySelector('#sort');
+const backdrop = document.querySelector('#backdrop');
+const modal = document.querySelector('#modal');
+
+async function api(path) {
+    const response = await fetch(API_BASE + path);
+    if (!response.ok) throw new Error('HTTP ' + response.status);
+    const body = await response.json();
+    return body.data || [];
+}
+
+/** Bé đã được tặng thì API trả is_visible = false */
+const isGifted = child => child.is_visible === false;
+
+const firstCategory = child => (child.categories || [])[0] || null;
+const ageLabel = child => (firstCategory(child) || {}).name || '';
+const ageOrder = child => (firstCategory(child) || {}).id || 0;
+
+// ==============================================
+// DANH SÁCH
+// ==============================================
+
+async function loadCategories() {
+    let categories = [];
+    try {
+        categories = await api('/api/v1/products/categories');
+    } catch (error) {
+        console.error('Error loading categories:', error);
+    }
+
+    // "All Children" cố định, các nhóm tuổi phía sau lấy từ API
+    pills.innerHTML = '';
+    pills.appendChild(makePill('All Children', '', true));
+    categories.forEach(category => {
+        pills.appendChild(makePill(category.name, category.id, false));
+    });
+}
+
+function makePill(label, categoryId, isActive) {
+    const button = document.createElement('button');
+    button.className = isActive ? 'filter active' : 'filter';
+    button.textContent = label;
+    button.dataset.categoryId = categoryId;
+    return button;
+}
+
+async function loadChildren() {
+    grid.innerHTML = '';
+    try {
+        // include_hidden để bé đã được tặng vẫn trả về (kèm is_visible: false),
+        // nhờ vậy mới hiện mờ ở cuối danh sách thay vì biến mất
+        const params = new URLSearchParams({ include_hidden: '1' });
+        if (activeCategoryId) params.set('categoryId', activeCategoryId);
+        children = await api('/api/v1/products?' + params.toString());
+    } catch (error) {
+        console.error('Error loading children:', error);
+        children = [];
+    }
+    render();
+}
+
+function render() {
+    const list = children.slice();
+    const sort = sortSelect.value;
+
+    // API không trả tuổi dạng số, dùng id nhóm tuổi làm thứ tự
+    if (sort === 'youngest') list.sort((a, b) => ageOrder(a) - ageOrder(b));
+    else if (sort === 'oldest') list.sort((a, b) => ageOrder(b) - ageOrder(a));
+    else if (sort === 'name') list.sort((a, b) => String(a.name).localeCompare(String(b.name), 'vi'));
+
+    // Bé đã được tặng luôn nằm cuối, bất kể đang sắp xếp kiểu nào
+    list.sort((a, b) => Number(isGifted(a)) - Number(isGifted(b)));
+
+    grid.innerHTML = list.map(child => {
+        const gifted = isGifted(child);
+        return `
+        <article class="card${gifted ? ' is-gifted' : ''}">
+            <img src="${escapeHtml(resolveUrl(child.url))}" alt="${escapeHtml(child.name)}">
+            <div class="card-info">
+                <span class="age">${escapeHtml(ageLabel(child))}</span>
+                <h3>${escapeHtml(child.name)}</h3>
+                <p>“${escapeHtml(child.description)}”</p>
+                ${gifted
+                    ? '<button class="gift" disabled>🌱 Already gifted</button>'
+                    : `<button class="gift" data-id="${escapeHtml(child.id)}">🎁 Gift BloomPod</button>`}
+            </div>
+        </article>`;
+    }).join('');
+}
+
+// ==============================================
+// POPUP TẶNG QUÀ
+// ==============================================
+
+function openGift(child) {
+    if (!child) return;
+
+    modal.innerHTML = `
+        <div class="gift-child">
+            <img src="${escapeHtml(resolveUrl(child.url))}" alt="${escapeHtml(child.name)}">
+            <div class="gift-child-text">
+                <h3>${escapeHtml(child.name)}</h3>
+                <p class="gift-age">${escapeHtml(ageLabel(child))}</p>
+                <div class="gift-sprout">🌱</div>
+                <p class="gift-quote">“${escapeHtml(child.description)}”</p>
+            </div>
+        </div>
+
+        <div class="gift-product">
+            <h4>The gift</h4>
+            <div class="gift-product-row">
+                <img src="${GIFT.image}" alt="${escapeHtml(GIFT.name)}">
+                <div>
+                    <strong>${escapeHtml(GIFT.name)}</strong>
+                    <p>${escapeHtml(GIFT.forAge)}</p>
+                    <p>${escapeHtml(GIFT.quantity)}</p>
+                    <p class="gift-price">${GIFT.price ? 'Gift price: ' + money(GIFT.price) : ''}</p>
+                </div>
+            </div>
+        </div>
+
+        <button class="primary gift-cta" id="giftNow">Gift this</button>`;
+
+    backdrop.classList.add('open');
+
+    document.querySelector('#giftNow').onclick = () => {
+        // Sang trang đặt hàng ở chế độ tặng quà: không hỏi địa chỉ và tuổi bé
+        const params = new URLSearchParams({ gift: child.id, child: child.name });
+        window.location.href = 'order-en.html?' + params.toString();
+    };
+}
+
+function closeGift() {
+    backdrop.classList.remove('open');
+}
+
+// ==============================================
+// SỰ KIỆN
+// ==============================================
+
+pills.addEventListener('click', event => {
+    const button = event.target.closest('.filter');
+    if (!button) return;
+
+    pills.querySelectorAll('.filter').forEach(x => x.classList.remove('active'));
+    button.classList.add('active');
+    activeCategoryId = button.dataset.categoryId || null;
+    loadChildren();
+});
+
+sortSelect.onchange = render;
+
+grid.onclick = event => {
+    const button = event.target.closest('[data-id]');
+    if (button) openGift(children.find(c => String(c.id) === button.dataset.id));
+};
+
+// "Sponsor a Child" — để BloomPod chọn giúp một bé bất kỳ
+document.querySelector('#choose').onclick = () => {
+    const available = children.filter(c => !isGifted(c));
+    if (!available.length) return;
+    openGift(available[Math.floor(Math.random() * available.length)]);
+};
+
+document.querySelector('#close').onclick = closeGift;
+backdrop.onclick = event => {
+    if (event.target === backdrop) closeGift();
+};
+
+(async function init() {
+    await Promise.all([loadCategories(), loadGiftPrice()]);
+    await loadChildren();
+})();
