@@ -885,7 +885,11 @@
         const giftId = params.get('gift');
         if (giftId) {
             giftMode = { giftId: giftId, childName: (params.get('child') || '').trim() };
+            // Go back return to the Planting a Seed page with the same gift and child parameters
+            document.getElementById('btnBack').href =
+            'order-en.html?' + new URLSearchParams({ gift: giftId, child: giftMode.childName });
         }
+        
         if (!orderCode) {
             showBlockingModal(t('order.notFoundTitle'), t('order.notFoundDesc'), t('order.gotIt'),
                 () => { window.location.href = isEnglish() ? 'order-en.html' : 'order.html'; });
