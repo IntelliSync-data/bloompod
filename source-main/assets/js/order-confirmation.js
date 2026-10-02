@@ -165,7 +165,7 @@
         const orderPage = isEnglish ? 'order-en.html' : 'order.html';
 
         // Chỉ có một bản trang Planting a Seed, không tách VI/EN
-        const seedPage = 'https://website-demo.xn--hthng-171byc.vn/pas_bloom/';
+        const seedPage = 'https://website-demo.xn--hthng-171byc.vn/pas_bloom/#gg-children';
 
         document.querySelectorAll(
             '#confirmationSuccess .btn-primary, #confirmationFailure .btn-secondary'
