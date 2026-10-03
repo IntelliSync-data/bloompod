@@ -431,6 +431,12 @@
         const container = document.getElementById('methodList');
         container.classList.add('is-busy');
 
+        // Cửa sổ phải mở ngay tại đây, khi user gesture còn hiệu lực. Mở sau
+        // await thì trình duyệt coi là popup tự bung và chặn. Chưa có link nên
+        // mở kèm màn chờ, lát có link thì đẩy chính cửa sổ đó sang PayPal.
+        const expectsGateway = !inline && isGatewayMethod(method);
+        if (expectsGateway) openGatewayWindow();
+
         try {
             const result = await createPayment(method.id);
 
@@ -450,6 +456,16 @@
                 orderInfo = info;
                 cacheOrder(info);
                 renderOrderSummary(info);
+
+                // Cửa sổ chờ mở từ cú click giờ mới có đích để đi. Bảng chọn
+                // vẫn hiện bên dưới: khách lỡ tắt cửa sổ thì bấm nút trong đó
+                // là mở lại được.
+                if (expectsGateway && info.transaction.payment_url) {
+                    navigateGatewayWindow(info.transaction.payment_url);
+                } else {
+                    closeGatewayWindow();
+                }
+
                 renderTransaction(info.order, info.transaction, inline);
             } else {
                 closeGatewayWindow();
@@ -469,8 +485,40 @@
     // ==============================================
 
     /**
+     * Phương thức đưa khách sang trang của cổng (PayPal, VNPay). Nhận biết
+     * bằng việc không có kiểu chuyển khoản nào: sepay thì có qr_pay/
+     * bank_transfer, cash thì đã tách riêng.
+     */
+    function isGatewayMethod(method) {
+        if (!method || method.type === 'cash') return false;
+        return !((method.transfer && method.transfer.types) || []).length;
+    }
+
+    /** Màn chờ vẽ vào cửa sổ vừa mở, để khách không nhìn một ô trắng trơn */
+    function paintGatewayLoader(win) {
+        const message = isEnglish() ? 'Opening PayPal…' : 'Đang mở PayPal…';
+        try {
+            win.document.write(
+                '<!doctype html><html><head><meta charset="utf-8"><title>' + message + '</title>' +
+                '<style>html,body{height:100%;margin:0}' +
+                'body{display:flex;align-items:center;justify-content:center;background:#f7f8f4;' +
+                'font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#5d7a4f}' +
+                '.box{text-align:center}' +
+                '.spinner{width:34px;height:34px;margin:0 auto 14px;border:3px solid #dde3d6;' +
+                'border-top-color:#5d7a4f;border-radius:50%;animation:spin .8s linear infinite}' +
+                '@keyframes spin{to{transform:rotate(360deg)}}</style></head>' +
+                '<body><div class="box"><div class="spinner"></div><p>' + message + '</p></div></body></html>'
+            );
+            win.document.close();
+        } catch (error) {
+            console.error('Cannot paint gateway loader:', error);
+        }
+    }
+
+    /**
      * Mở cửa sổ PayPal. Luôn gọi thẳng trong cú click của khách - mở sau await
-     * thì trình duyệt coi là popup tự bung và chặn. Trả null khi bị chặn.
+     * thì trình duyệt coi là popup tự bung và chặn. Gọi không kèm url thì mở
+     * màn chờ, để navigateGatewayWindow() đẩy tiếp. Trả null khi bị chặn.
      */
     function openGatewayWindow(url) {
         const width = 500;
@@ -479,20 +527,31 @@
         const top = window.screenY + Math.max(0, (window.outerHeight - height) / 2);
 
         gatewayWindow = window.open(
-            url,
+            url || '',
             'bloompodPaymentWindow',
             `width=${width},height=${height},left=${Math.round(left)},top=${Math.round(top)},resizable=yes,scrollbars=yes`
         );
         if (!gatewayWindow) return null;
 
+        if (!url) paintGatewayLoader(gatewayWindow);
         gatewayWindow.focus();
         return gatewayWindow;
     }
 
+    /** Đưa cửa sổ đang chờ tới link thật. Khách đóng mất rồi thì mở lại. */
+    function navigateGatewayWindow(url) {
+        if (gatewayWindow && !gatewayWindow.closed) {
+            gatewayWindow.location.href = url;
+            gatewayWindow.focus();
+            return;
+        }
+        payAtGateway(url);
+    }
+
     /**
-     * Bấm nút "Thanh toán qua PayPal": link đã có sẵn trong giao dịch nên mở
-     * thẳng vào PayPal, không qua cửa sổ trống nào. Bị chặn popup thì đi bằng
-     * chính tab hiện tại, đừng để khách kẹt.
+     * Bấm nút "Thanh toán qua PayPal": link đã có sẵn nên mở thẳng vào PayPal,
+     * khỏi màn chờ. Nút này sống suốt phiên để khách lỡ tắt cửa sổ thì bấm lại
+     * được. Bị chặn popup thì đi bằng chính tab hiện tại, đừng để khách kẹt.
      */
     function payAtGateway(url) {
         if (openGatewayWindow(url)) return;
