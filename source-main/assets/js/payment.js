@@ -18,6 +18,7 @@
     const PAYMENT_API_URL = 'https://app.bloompod.vn/api/profile';
     const PRODUCTS_API_URL = 'https://app.bloompod.vn/api/v1/products';
     const SESSION_KEY = 'bloomPaymentOrder';
+    const GIFT_KEY = 'bloomPaymentGift';
 
     // Backend đặt expired_at = create_date + 1 tiếng
     const PAYMENT_WINDOW_SECONDS = 3600;
@@ -42,7 +43,6 @@
     // Đơn đi từ trang Planting a Seed: { giftId, childName } hoặc null
     let giftMode = null;
     let paymentMethods = [];
-    let paymentWindow = null;
     let qrFile = null;
 
     // Chỉ có một phương thức thì hiện thẳng cột phải; nhiều hơn thì mở popup,
@@ -171,6 +171,31 @@
             sessionStorage.setItem(SESSION_KEY, JSON.stringify({ code: orderCode, info: info }));
         } catch (error) {
             console.error('Cannot write session cache:', error);
+        }
+    }
+
+    /**
+     * Cổng thanh toán đưa khách rời trang rồi mới trả về, lúc về URL chỉ còn
+     * ?order= - mất ?gift= là không ẩn được bé đã tặng nữa. Giữ lại theo đúng
+     * mã đơn để quay về vẫn dựng lại được.
+     */
+    function cacheGift() {
+        if (!giftMode) return;
+        try {
+            sessionStorage.setItem(GIFT_KEY, JSON.stringify({ code: orderCode, gift: giftMode }));
+        } catch (error) {
+            console.error('Cannot write gift cache:', error);
+        }
+    }
+
+    function readCachedGift() {
+        try {
+            const raw = sessionStorage.getItem(GIFT_KEY);
+            if (!raw) return null;
+            const saved = JSON.parse(raw);
+            return saved && saved.code === orderCode ? saved.gift : null;
+        } catch (error) {
+            return null;
         }
     }
 
@@ -313,18 +338,14 @@
         setText('paymentSectionTitle', method.name || t('payment.chooseTitle'));
 
         // PayPal và VNPay đưa khách sang trang của họ
-        if (transaction.payment_url) {
+        const gateway = !!transaction.payment_url;
+
+        if (gateway) {
             setText('paymentDescription', t('payment.paypalDesc'));
             show('paymentPaypal', true);
             document.getElementById('paypalPayBtn').onclick = function () {
-                openPaymentWindow(transaction.payment_url);
+                goToGateway(transaction.payment_url);
             };
-
-            // Khách đã bấm chọn phương thức rồi, đừng bắt bấm thêm lần nữa:
-            // cửa sổ trống đã mở sẵn từ cú click đó, giờ chỉ việc đưa nó tới link
-            if (!inline && paymentWindow && !paymentWindow.closed) {
-                navigatePaymentWindow(transaction.payment_url);
-            }
         } else {
             setText('paymentDescription', t('payment.transferDesc'));
 
@@ -343,9 +364,11 @@
 
         show('paymentCountdown', true);
 
-        // Một phương thức thì để luôn trong cột phải, khỏi bắt khách đóng mở
+        // Một phương thức thì để luôn trong cột phải, khỏi bắt khách đóng mở.
+        // Cổng ngoài cũng khỏi popup: khách quay về mà chưa trả thì nút thanh
+        // toán nằm sẵn ở cột phải, bấm là đi tiếp.
         show('methodBack', !inline);
-        if (!inline) openDetailModal();
+        if (!inline && !gateway) openDetailModal();
 
         startPolling(secondsUntil(transaction.expired_at));
     }
@@ -411,16 +434,10 @@
         const container = document.getElementById('methodList');
         container.classList.add('is-busy');
 
-        // Mở ngay tại đây, khi user gesture còn hiệu lực. Mở sau await thì
-        // trình duyệt coi là popup tự bung và chặn.
-        const willRedirect = !inline && isRedirectMethod(method);
-        if (willRedirect) openPaymentWindow('about:blank');
-
         try {
             const result = await createPayment(method.id);
 
             if (!result.success) {
-                closePaymentWindow();
                 if (result.error_code === 'ALREADY_PAID') {
                     goToConfirmation('success');
                     return;
@@ -435,14 +452,22 @@
                 orderInfo = info;
                 cacheOrder(info);
                 renderOrderSummary(info);
+
+                // Khách vừa tự bấm chọn cổng ngoài thì đi thẳng sang trang của
+                // họ luôn, khỏi bắt bấm thêm một nút nữa. forceInline là lúc
+                // trang tự chọn hộ (chỉ có một phương thức) - không tự lôi
+                // khách đi khi họ chưa bấm gì.
+                if (!forceInline && info.transaction.payment_url) {
+                    goToGateway(info.transaction.payment_url);
+                    return;
+                }
+
                 renderTransaction(info.order, info.transaction, inline);
             } else {
-                closePaymentWindow();
                 showToast(t('order.networkError'), 'error');
             }
         } catch (error) {
             console.error('Error choosing payment method:', error);
-            closePaymentWindow();
             showToast(t('order.networkError'), 'error');
         } finally {
             container.classList.remove('is-busy');
@@ -450,46 +475,21 @@
     }
 
     // ==============================================
-    // CỬA SỔ THANH TOÁN (PayPal)
+    // CỔNG THANH TOÁN NGOÀI (PayPal)
     // ==============================================
 
     /**
-     * Phương thức đưa khách sang trang của cổng (PayPal, VNPay).
-     * Nhận biết bằng việc không có kiểu chuyển khoản nào: sepay thì có
-     * qr_pay/bank_transfer, cash thì đã tách riêng.
+     * Chuyển hẳn tab hiện tại sang trang thanh toán của cổng. Không mở popup:
+     * popup trắng chờ link vừa xấu vừa hay bị trình duyệt chặn, mà trên điện
+     * thoại thì gần như không dùng được.
+     *
+     * Trả xong, cổng đưa khách về lại payment.html?order=... theo return_url
+     * backend cấu hình; init() dựng lại trạng thái từ order-info nên không mất
+     * gì, và polling bắt được giao dịch đã confirmed.
      */
-    function isRedirectMethod(method) {
-        if (!method || method.type === 'cash') return false;
-        return !((method.transfer && method.transfer.types) || []).length;
-    }
-
-    /** Đưa cửa sổ đã mở sẵn tới link thanh toán */
-    function navigatePaymentWindow(url) {
-        if (paymentWindow && !paymentWindow.closed) {
-            paymentWindow.location.href = url;
-            paymentWindow.focus();
-        } else {
-            openPaymentWindow(url);
-        }
-    }
-
-    function openPaymentWindow(url) {
-        const width = 500;
-        const height = 720;
-        const left = window.screenX + Math.max(0, (window.outerWidth - width) / 2);
-        const top = window.screenY + Math.max(0, (window.outerHeight - height) / 2);
-
-        paymentWindow = window.open(
-            url,
-            'bloompodPaymentWindow',
-            `width=${width},height=${height},left=${Math.round(left)},top=${Math.round(top)},resizable=yes,scrollbars=yes`
-        );
-        if (paymentWindow) paymentWindow.focus();
-    }
-
-    function closePaymentWindow() {
-        if (paymentWindow && !paymentWindow.closed) paymentWindow.close();
-        paymentWindow = null;
+    function goToGateway(url) {
+        stopPolling();
+        window.location.href = url;
     }
 
     // ==============================================
@@ -592,7 +592,6 @@
     }
 
     function stopPolling() {
-        closePaymentWindow();
         if (pollingTimer) clearTimeout(pollingTimer);
         pollingTimer = null;
         if (pollingTimeoutId) clearTimeout(pollingTimeoutId);
@@ -886,9 +885,15 @@
         if (giftId) {
             giftMode = { giftId: giftId, childName: (params.get('child') || '').trim() };
             // Go back return to the Planting a Seed page with the same gift and child parameters
-            document.getElementById('btnBack').href =
-            'order-en.html?' + new URLSearchParams({ gift: giftId, child: giftMode.childName });
+            const btnBack = document.getElementById('btnBack');
+            if (btnBack) {
+                btnBack.href = 'order-en.html?' +
+                    new URLSearchParams({ gift: giftId, child: giftMode.childName });
+            }
+        } else {
+            giftMode = readCachedGift();
         }
+        cacheGift();
         
         if (!orderCode) {
             showBlockingModal(t('order.notFoundTitle'), t('order.notFoundDesc'), t('order.gotIt'),

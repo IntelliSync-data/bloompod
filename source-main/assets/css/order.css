@@ -423,6 +423,7 @@
 
 .qr-code img {
     display: block;
+    margin: auto;
 }
 
 .payment-guide-link {
