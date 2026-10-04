@@ -20,9 +20,17 @@
     const API_BASE_URL = 'https://provinces.open-api.vn/api/v2';
     const INQUIRY_API_URL = 'https://app.bloompod.vn/api/inquiry';
     const PAYMENT_API_URL = 'https://app.bloompod.vn/api/profile';
-    const PRODUCTS_API_URL = 'https://app.bloompod.vn/api/v1/products';
+    // Chỉ có một bản trang Planting a Seed, không tách VI/EN (giống order-confirmation.js)
+    const SEED_PAGE = 'https://website-demo.xn--hthng-171byc.vn/pas_bloom/#gg-children';
+    // Giữ tạm thông tin khách khi bé bị người khác bảo trợ và phải chọn lại
+    const FORM_DRAFT_KEY = 'bloomOrderDraft';
+
     // Đơn tặng quà từ trang Planting a Seed: { giftId, childName } hoặc null
     let giftMode = null;
+
+    // Email đã gửi inquiry. Giữ kèm trong draft để khi khách phải quay lại chọn
+    // bé khác (trang tải lại) vẫn không gửi thêm một lead trùng cho sale.
+    let sentInquiryEmail = '';
 
     /** Đơn tặng quà dùng gói riêng, giá khác gói bán lẻ */
     function getPackageId() {
@@ -107,6 +115,7 @@
     }
 
     async function submitInquiry(formData) {
+        if (sentInquiryEmail && sentInquiryEmail === formData.email) return null;
         try {
             const fullAddress = buildAddress(formData);
             const parts = buildNoteParts(formData);
@@ -133,6 +142,7 @@
 
             const data = await response.json();
             console.log('Inquiry response:', data);
+            sentInquiryEmail = formData.email;
             return data;
         } catch (error) {
             console.error('Error submitting inquiry:', error);
@@ -150,22 +160,32 @@
             const fullAddress = buildAddress(formData);
             const notes = buildNoteParts(formData).join(', ');
 
+            const params = {
+                package_id: getPackageId(),
+                name: formData.fullName,
+                phone: formData.phone,
+                email: formData.email,
+                address: fullAddress,
+                notes: notes
+            };
+
+            // Đơn tặng quà: BE dựa vào metadata.gift.product_id để giữ chỗ bé ngay
+            // lúc tạo đơn, và trả lại nguyên khối này trong order-info
+            if (giftMode) {
+                params.metadata = {
+                    gift: {
+                        product_id: Number(giftMode.giftId) || giftMode.giftId,
+                        child_name: giftMode.childName
+                    }
+                };
+            }
+
             const response = await fetch(`${PAYMENT_API_URL}/create`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    jsonrpc: "2.0",
-                    params: {
-                        package_id: getPackageId(),
-                        name: formData.fullName,
-                        phone: formData.phone,
-                        email: formData.email,
-                        address: fullAddress,
-                        notes: notes
-                    }
-                })
+                body: JSON.stringify({ jsonrpc: "2.0", params: params })
             });
 
             if (!response.ok) {
@@ -471,6 +491,14 @@
             const response = await createOrder(formData);
 
             if (!response.result || !response.result.success) {
+                // Bé vừa bị người khác bảo trợ: đơn CHƯA được tạo, mời chọn bé khác.
+                // Bắt theo error_code, chuỗi error có thể đổi.
+                if (response.result?.error_code === 'child_unavailable') {
+                    saveFormDraft(formData);
+                    showChildTakenModal();
+                    restoreButton();
+                    return;
+                }
                 showToast(response.result?.error || t('order.createFailed'), 'error');
                 restoreButton();
                 return;
@@ -616,6 +644,89 @@
         // Hàng chứa tỉnh + phường giờ rỗng, giấu luôn cả hàng
         const addressRow = document.querySelector('#province')?.closest('.form-row');
         if (addressRow) addressRow.hidden = true;
+
+        restoreFormDraft();
+    }
+
+    // ==============================================
+    // BÉ ĐÃ CÓ NGƯỜI BẢO TRỢ
+    // ==============================================
+
+    /** Giữ tạm thông tin khách, chọn bé khác xong khỏi gõ lại */
+    function saveFormDraft(formData) {
+        try {
+            sessionStorage.setItem(FORM_DRAFT_KEY, JSON.stringify({
+                fullName: formData.fullName,
+                phone: formData.phone,
+                email: formData.email,
+                sentInquiryEmail: sentInquiryEmail
+            }));
+        } catch (error) {
+            console.error('Cannot save form draft:', error);
+        }
+    }
+
+    function restoreFormDraft() {
+        let draft = null;
+        try {
+            const raw = sessionStorage.getItem(FORM_DRAFT_KEY);
+            if (raw) draft = JSON.parse(raw);
+        } catch (error) {
+            return;
+        }
+        if (!draft) return;
+
+        sentInquiryEmail = draft.sentInquiryEmail || '';
+
+        ['fullName', 'phone', 'email'].forEach(function (id) {
+            const field = document.getElementById(id);
+            if (field && !field.value && draft[id]) field.value = draft[id];
+        });
+    }
+
+    /** Popup báo bé đã có người bảo trợ. Đóng được, để khách còn xem lại form. */
+    function showChildTakenModal() {
+        const t = window.i18n || (k => k);
+
+        const overlay = document.createElement('div');
+        overlay.className = 'pm-overlay';
+
+        const dialog = document.createElement('div');
+        dialog.className = 'pm-dialog';
+        dialog.innerHTML = '<h3 class="pm-title"></h3><p class="pm-desc"></p>';
+        dialog.querySelector('.pm-title').textContent = t('order.childTaken.title');
+        dialog.querySelector('.pm-desc').textContent = t('order.childTaken.desc');
+
+        const actions = document.createElement('div');
+        actions.className = 'pm-actions';
+
+        function close() {
+            overlay.remove();
+            document.body.style.overflow = '';
+        }
+
+        const cancel = document.createElement('button');
+        cancel.type = 'button';
+        cancel.className = 'pm-cancel';
+        cancel.textContent = t('order.childTaken.close');
+        cancel.addEventListener('click', close);
+
+        const ok = document.createElement('button');
+        ok.type = 'button';
+        ok.className = 'pm-ok';
+        ok.textContent = t('order.childTaken.ok');
+        ok.addEventListener('click', function () { window.location.href = SEED_PAGE; });
+
+        actions.appendChild(cancel);
+        actions.appendChild(ok);
+        dialog.appendChild(actions);
+        overlay.appendChild(dialog);
+        overlay.addEventListener('click', function (event) {
+            if (event.target === overlay) close();
+        });
+
+        document.body.appendChild(overlay);
+        document.body.style.overflow = 'hidden';
     }
 
     function init() {

@@ -16,7 +16,6 @@
         window.location.hostname === 'www.bloompod.vn';
 
     const PAYMENT_API_URL = 'https://app.bloompod.vn/api/profile';
-    const PRODUCTS_API_URL = 'https://app.bloompod.vn/api/v1/products';
     const SESSION_KEY = 'bloomPaymentOrder';
     const GIFT_KEY = 'bloomPaymentGift';
 
@@ -215,9 +214,36 @@
     // CỘT TRÁI - THÔNG TIN ĐƠN
     // ==============================================
 
+    /**
+     * Nguồn chuẩn của ngữ cảnh tặng quà là metadata trên đơn (BE trả trong
+     * order-info), nhờ vậy mở link thanh toán trong email ở máy khác vẫn dựng
+     * lại được. Param trên URL và cache phiên chỉ là đường lùi cho đơn cũ tạo
+     * trước khi backend có metadata.
+     */
+    function applyGiftFromMetadata(order) {
+        const gift = (order.metadata || {}).gift;
+        if (!gift || !gift.product_id) return;
+
+        giftMode = {
+            giftId: String(gift.product_id),
+            childName: (gift.child_name || '').trim()
+        };
+        cacheGift();
+
+        const btnBack = document.getElementById('btnBack');
+        if (btnBack) {
+            btnBack.href = 'order-en.html?' + new URLSearchParams({
+                gift: giftMode.giftId,
+                child: giftMode.childName
+            });
+        }
+    }
+
     function renderOrderSummary(info) {
         const order = info.order || {};
         const transaction = info.transaction;
+
+        applyGiftFromMetadata(order);
 
         // order_code để tra đơn; transaction_id là nội dung chuyển khoản.
         // Hai thứ khác nhau, không được hiện lẫn.
@@ -718,33 +744,12 @@
     // ==============================================
 
     /** mode: 'success' cho đã thu tiền, 'cash' cho đơn chờ liên hệ */
-    /**
-     * Ẩn bé đã được tặng khỏi trang Planting a Seed.
-     * Lỗi ở đây không được chặn luồng: khách trả tiền rồi thì vẫn phải sang
-     * được trang xác nhận.
-     */
-    async function hideGiftedChild() {
-        if (!giftMode) return;
-
-        try {
-            const response = await fetch(`${PRODUCTS_API_URL}/${giftMode.giftId}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ is_visible: false })
-            });
-            console.log('Hide gifted child:', response.status);
-        } catch (error) {
-            console.error('Error hiding gifted child:', error);
-        }
-    }
-
     async function goToConfirmation(mode) {
         stopPolling();
         closeGatewayWindow();
 
-        // Chỉ ẩn bé khi đã thật sự thu được tiền. Đơn tiền mặt chưa trả đồng nào
-        // nên vẫn để bé trong danh sách.
-        if (mode === 'success') await hideGiftedChild();
+        // Không còn ẩn bé ở đây: BE ẩn ngay trong lúc tạo đơn (giữ chỗ), nên
+        // đóng tab giữa chừng cũng không làm bé bị tặng trùng.
 
         const page = isEnglish() ? 'order-confirmation-en.html' : 'order-confirmation.html';
         const params = new URLSearchParams({ status: 'success', order: orderCode });

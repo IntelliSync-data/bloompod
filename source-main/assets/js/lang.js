@@ -37,6 +37,10 @@
             'order.notFoundTitle': 'Không tìm thấy đơn hàng',
             'order.notFoundDesc': 'Đơn hàng này không còn tồn tại hoặc đã bị huỷ. Vui lòng tạo đơn hàng mới.',
             'order.gotIt': 'Đã hiểu',
+            'order.childTaken.title': 'Bé này vừa có người bảo trợ',
+            'order.childTaken.desc': 'Rất tiếc, bé vừa được một thành viên khác bảo trợ nên đơn chưa được tạo. Bạn hãy chọn một bé khác nhé, thông tin bạn vừa nhập vẫn được giữ lại.',
+            'order.childTaken.ok': 'Chọn bé khác',
+            'order.childTaken.close': 'Để sau',
 
 
             // Payment methods
@@ -93,6 +97,10 @@
             'order.notFoundTitle': 'Order not found',
             'order.notFoundDesc': 'This order no longer exists or has been cancelled. Please place a new order.',
             'order.gotIt': 'Got it',
+            'order.childTaken.title': 'This child has just been sponsored',
+            'order.childTaken.desc': 'Sorry, another member has just sponsored this child, so your order was not created. Please choose another child — the details you entered will be kept.',
+            'order.childTaken.ok': 'Choose another child',
+            'order.childTaken.close': 'Not now',
 
 
             // Payment methods

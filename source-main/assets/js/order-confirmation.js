@@ -174,12 +174,20 @@
             link.textContent = t('confirm.backToChildren');
         });
 
+        // Thử lại = thanh toán tiếp ĐƠN CŨ. Tạo đơn mới sẽ bị chặn, vì bé đang
+        // bị chính đơn cũ giữ chỗ (backend ẩn bé ngay lúc tạo đơn).
         const retry = document.querySelector('#confirmationFailure .btn-primary');
         if (retry) {
-            const params = new URLSearchParams({ gift: giftId });
-            const childName = getQueryParam('child');
-            if (childName) params.set('child', childName);
-            retry.href = `${orderPage}?${params.toString()}`;
+            const code = getQueryParam('order');
+            if (code) {
+                const paymentPage = isEnglish ? 'payment-en.html' : 'payment.html';
+                retry.href = `${paymentPage}?${new URLSearchParams({ order: code })}`;
+            } else {
+                const params = new URLSearchParams({ gift: giftId });
+                const childName = getQueryParam('child');
+                if (childName) params.set('child', childName);
+                retry.href = `${orderPage}?${params.toString()}`;
+            }
         }
     }
 
