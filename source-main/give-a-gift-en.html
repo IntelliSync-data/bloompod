@@ -195,353 +195,251 @@
   </script>
   <main class="main">
     <section>
-      <header class="menu-bar">
-        <div class="container flex-direction-row justify-content-space-between">
-          <div onclick="window.location.href='index-en.html'" class="logo" role="img" aria-label="Bloompod logo"></div>
-          <nav class="home-wrapper-nav-tertiary desktop-nav" aria-label="Main navigation">
-            <a href="index-en.html#home" class="menu-tab active"><span class="home-text-span-tertiary">Home</span></a>
-            <a href="give-a-gift-en.html" class="menu-tab"><span class="home-text-span-tertiary">Give a Gift</span></a>
-            <a href="index-en.html#book-sharing" class="menu-tab"><span class="home-text-span-tertiary">Download Language
-                Readiness Book</span></a>
-            <a href="support-en.html" class="menu-tab"><span class="home-text-span-tertiary">Support</span></a>
-          </nav>
-          <div class="home-wrapper-div-extra">
-            <button class="purchase-button-button-additional" type="button" aria-label="Order Bloompod"
-              onclick="window.location.href='index-en.html#package'">
-              <span class="purchase-button-span">Order <span>Bloompod</span></span>
-            </button>
-            <div class="language-hero-wrapper-div" role="button" tabindex="0" aria-label="Change language to Vietnamese"
-              onclick="window.location.href='give-a-gift.html'">
-              <div class="layout-section-div"><span class="label-text-span-lang">VN</span></div>
-              <img class="content-image-img" src="./assets/images/united-kingdom.png" alt="Language flag">
-            </div>
-            <button id="hamburger-btn" class="hamburger-menu" aria-label="Open menu">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M3 12H21M3 6H21M3 18H21" stroke="#605e5c" stroke-width="2" stroke-linecap="round"></path>
-              </svg>
-            </button>
-          </div>
+      <!-- Menu dùng chung: sửa ở partials/header-en.html -->
+      <div data-site-header data-active="gift">
+        <noscript>
+          <a href="index-en.html">Home</a>
+          <a href="give-a-gift-en.html">Give a Gift</a>
+          <a href="index-en.html#book-sharing">Download Language Readiness Book</a>
+          <a href="support-en.html">Support</a>
+        </noscript>
+      </div>
+
+      <section class="gag-wrapper-section-banner">
+        <img background class="gag-background" src="./assets/images/Bg_GaG.jpg" alt="Give a Gift Background" />
+        <div class="hero-copy">
+          <p class="eyebrow">A LITTLE GIFT<br>FOR A BRIGHTER TOMORROW</p>
+          <h1>Give<br><span class="heart-anchor">with Love<span class="note-heart-header" aria-hidden="true"><svg
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.75" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <path
+                    d="M12 21 C6 16.5 2 13 2 8.5 C2 5.2 4.6 3 7.2 3 C9.6 3 11.3 5.2 12 10 C12.7 5.2 14.4 3 16.8 3 C19.4 3 22 5.2 22 8.5 C22 13 18 16.5 12 21 Z" />
+                </svg></span></span></h1>
+          <p class="script">Plant the First Seeds</p>
+          <p class="hero-description">
+            A Bloompod gift is more than a listening device.
+            It is a gentle beginning filled with sounds, stories, and love — helping
+            little ones build an early English foundation during their first years
+            of life <strong>(0–3 years)</strong>.
+          </p>
+          <a class="button" href="#gift">Learn More <span>→</span></a>
         </div>
-      </header>
 
-      <!-- Mobile Menu -->
-      <div id="mobile-menu" class="mobile-menu">
-        <div class="mobile-menu-header">
-          <div onclick="window.location.href='index-en.html'" class="logo" role="img" aria-label="Bloompod logo"></div>
-          <div style="display: flex; gap: 8px;">
-            <div class="language-hero-wrapper-div" role="button" tabindex="0" aria-label="Change language to Vietnamese"
-              onclick="window.location.href='give-a-gift.html'">
-              <img class="content-image-img" src="./assets/images/circle---countries-flag.svg" alt="Language flag">
-              <div class="layout-section-div"><span class="label-text-span-lang">VN</span></div>
-            </div>
-            <button id="mobile-menu-close" class="mobile-menu-close" aria-label="Close menu">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M18 6L6 18M6 6L18 18" stroke="#605e5c" stroke-width="2" stroke-linecap="round">
-                </path>
-              </svg>
-            </button>
-          </div>
+        <div class="hero-visual">
+          <div class="leaf-note note-one">Every little one<br>deserves<br>a bright<br>beginning ♡</div>
+
+          <div class="floating-note">Those who love us<br>always help create<br>beautiful beginnings ♡</div>
         </div>
-        <nav class="mobile-nav" aria-label="Mobile navigation">
-          <a href="index-en.html#home" class="mobile-nav-link active"><span>Home</span></a>
-          <a href="give-a-gift-en.html" class="mobile-nav-link"><span>Give a Gift</span></a>
-          <a href="index-en.html#book-sharing" class="mobile-nav-link"><span>Download Language Readiness Book</span></a>
-          <a href="support-en.html" class="mobile-nav-link"><span>Support</span></a>
-        </nav>
-        <div class="mobile-menu-footer">
-          <nav class="language-switcher-wrapper-nav-tertiary" aria-label="Footer navigation">
-            <a href="support-en.html" class="footer-tab">
-              <span class="terms-of-use"><span class="label-text-span-link">Privacy Policy</span></span>
-            </a>
-            <a href="support-en.html" class="footer-tab">
-              <span class="terms-of-use"><span class="label-text-span-link">Terms of Use</span></span>
-            </a>
-            <a href="support-en.html" class="footer-tab">
-              <span class="terms-of-use"><span class="label-text-span-link">Shipping</span></span>
-            </a>
-            <a href="support-en.html" class="footer-tab">
-              <span class="terms-of-use"><span class="label-text-span-link">Returns</span></span>
-            </a>
-            <a href="support-en.html" class="footer-tab">
-              <span class="terms-of-use"><span class="label-text-span-link"> Contact</span></span>
-            </a>
-          </nav>
+      </section>
+
+      <section id="gift" class="gift-section">
+        <div class="section-heading">
+          <h2>For the Little Ones You Love</h2>
+          <p>Bloompod is a meaningful gift for the little ones in your life.</p>
         </div>
-      </div>
 
-    <section class="gag-wrapper-section-banner">
-      <img background class="gag-background" src="./assets/images/Bg_GaG.jpg" alt="Give a Gift Background" />
-      <div class="hero-copy">
-        <p class="eyebrow">A LITTLE GIFT<br>FOR A BRIGHTER TOMORROW</p>
-        <h1>Give<br><span class="heart-anchor">with Love<span class="note-heart-header" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21 C6 16.5 2 13 2 8.5 C2 5.2 4.6 3 7.2 3 C9.6 3 11.3 5.2 12 10 C12.7 5.2 14.4 3 16.8 3 C19.4 3 22 5.2 22 8.5 C22 13 18 16.5 12 21 Z"/></svg></span></span></h1>
-        <p class="script">Plant the First Seeds</p>
-        <p class="hero-description">
-          A Bloompod gift is more than a listening device.
-          It is a gentle beginning filled with sounds, stories, and love — helping
-          little ones build an early English foundation during their first years
-          of life <strong>(0–3 years)</strong>.
-        </p>
-        <a class="button" href="#gift">Learn More <span>→</span></a>
-      </div>
-
-      <div class="hero-visual">
-        <div class="leaf-note note-one">Every little one<br>deserves<br>a bright<br>beginning ♡</div>
-
-        <div class="floating-note">Those who love us<br>always help create<br>beautiful beginnings ♡</div>
-      </div>
-    </section>
-
-    <section id="gift" class="gift-section">
-      <div class="section-heading">
-        <h2>For the Little Ones You Love</h2>
-        <p>Bloompod is a meaningful gift for the little ones in your life.</p>
-      </div>
-
-      <div class="recipient-grid">
-        <article class="recipient-card">
-          <div class="card-img">
-            <img src="./assets/images/Parents_GaG.jpg" alt="Parents gift Bloompod to their child" />
-            <div class="card-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"/>
-              </svg>
-            </div>
-          </div>
-          <div class="card-body">
-            <h3>A loving gift for their little one</h3>
-            <p>A loving beginning for their little one.</p>
-          </div>
-        </article>
-        <article class="recipient-card">
-          <div class="card-img">
-            <img src="./assets/images/GParents_GaG.jpg" alt="Grandparents gift Bloompod to their grandchild" />
-            <div class="card-icon green">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M14 9.536V7a4 4 0 0 1 4-4h1.5a.5.5 0 0 1 .5.5V5a4 4 0 0 1-4 4 4 4 0 0 0-4 4c0 2 1 3 1 5a5 5 0 0 1-1 3"/>
-                <path d="M4 9a5 5 0 0 1 8 4 5 5 0 0 1-8-4"/>
-                <path d="M5 21h14"/>
-              </svg>
-            </div>
-          </div>
-          <div class="card-body">
-            <h3>Grandparents Gift Bloompod to Their Grandchild</h3>
-            <p>Sending love through every little story.</p>
-          </div>
-        </article>
-        <article class="recipient-card">
-          <div class="card-img">
-            <img src="./assets/images/Aunt_GaG.jpg" alt="Aunts gift Bloompod to their niece or nephew" />
-            <div class="card-icon gold">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M12 7v14"/>
-                <path d="M20 11v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8"/>
-                <path d="M7.5 7a1 1 0 0 1 0-5A4.8 8 0 0 1 12 7a4.8 8 0 0 1 4.5-5 1 1 0 0 1 0 5"/>
-                <rect x="3" y="7" width="18" height="4" rx="1"/>
-              </svg>
-            </div>
-          </div>
-          <div class="card-body">
-            <h3>Aunts Gift Bloompod to Their Niece or Nephew</h3>
-            <p>A little gift, filled with love.</p>
-          </div>
-        </article>
-        <article class="recipient-card">
-          <div class="card-img">
-            <img src="./assets/images/Uncle_GaG.jpg" alt="Uncles gift Bloompod to their niece or nephew" />
-            <div class="card-icon blue">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/>
-              </svg>
-            </div>
-          </div>
-          <div class="card-body">
-            <h3>Uncles Gift Bloompod to Their Niece or Nephew</h3>
-            <p>A meaningful gift for a little one.</p>
-          </div>
-        </article>
-        <article class="recipient-card">
-          <div class="card-img">
-            <img src="./assets/images/Shipment_GaG.jpg" alt="Send a gift to a little one far away" />
-            <div class="card-icon purple">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/>
-                <path d="m21.854 2.147-10.94 10.939"/>
-              </svg>
-            </div>
-          </div>
-          <div class="card-body">
-            <h3>Send a Gift to a Little One Far Away</h3>
-            <p>Even from afar, love can always find its way.</p>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <section id="product" class="foundation section-shell">
-      <svg class="clip-defs" width="0" height="0" aria-hidden="true" focusable="false">
-        <clipPath id="wave-clip" clipPathUnits="objectBoundingBox">
-          <path d="M0,0.3 C0,0.1 0.12,0.02 0.3,0.04 C0.48,0.06 0.6,0.06 0.7,0.1 C0.8,0.14 0.84,0.26 1,0.34 L1,1 L0,1 Z" />
-        </clipPath>
-      </svg>
-
-      <div class="product-photo">
-        <img src="./assets/images/Product_GaG.jpg" alt="Green Bloompod listening device" />
-        <span class="photo-note">Little sounds<br>can open up<br>a big world ♡</span>
-      </div>
-
-      <div class="foundation-head">
-        <h2>A Little Gift. <br>A Strong English Foundation.</h2>
-        <p>
-          Designed especially for children aged 0–3, Bloompod helps little ones
-          become familiar with English naturally through sounds, vocabulary,
-          everyday expressions, and stories.
-        </p>
-      </div>
-
-      <div class="benefit-grid">
-        <div class="benefit">
-          <div class="benefit-icon">
-            <svg viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M6 8.5a6.5 6.5 0 1 1 13 0c0 5-3.5 7.5-3.5 10a2.5 2.5 0 0 1-5 0c0-1.5 1-2.5 2.5-2.5"/>
-              <path d="M10 9a2.5 2.5 0 0 1 5 0c0 2-1.5 3-2 4"/>
-            </svg>
-          </div>
-          <h3>Familiarize</h3>
-          <p>Become familiar with English sounds and rhythm from an early age.</p>
-        </div>
-        <div class="benefit">
-          <div class="benefit-icon">
-            <svg viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M2.5 12c2.5-3 5.5-4 7.5-2.5 1 .75 3 .75 4 0 2-1.5 5-0.5 7.5 2.5-2.5 4.5-6 6.5-9.5 6.5S5 16.5 2.5 12z"/>
-              <path d="M2.5 12c4 1 7.5 1.5 9.5 0.5 2 1 5.5 0.5 9.5-0.5"/>
-            </svg>
-          </div>
-          <h3>Listen &amp; Feel</h3>
-          <p>Experience natural pronunciation and intonation.</p>
-        </div>
-        <div class="benefit">
-          <div class="benefit-icon">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-              <text x="12" y="17" text-anchor="middle" font-size="14" font-weight="600" stroke="none" fill="currentColor" font-family="sans-serif">Aa</text>
-            </svg>
-          </div>
-          <h3>Recognize</h3>
-          <p>Gradually recognize familiar words and everyday expressions through repeated listening.</p>
-        </div>
-        <div class="benefit">
-          <div class="benefit-icon">
-            <svg viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 4.5A4 4 0 0 0 7 5a4 4 0 0 0-2.5 4.5A3.5 3.5 0 0 0 5 15a4 4 0 0 0 4.5 4.5 4 4 0 0 0 2.5-1"/>
-              <path d="M12 4.5A4 4 0 0 1 17 5a4 4 0 0 1 2.5 4.5A3.5 3.5 0 0 1 19 15a4 4 0 0 1-4.5 4.5 4 4 0 0 1-2.5-1"/>
-              <path d="M12 4.5v14"/>
-              <path d="M5.5 12.5a3.5 3.5 0 0 0 3-1.5"/>
-              <path d="M18.5 12.5a3.5 3.5 0 0 1-3-1.5"/>
-            </svg>
-          </div>
-          <h3>Absorb</h3>
-          <p>Build an early English listening foundation through everyday listening.</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="about" class="organization section-shell">
-      <div class="seed-visual">
-        <img class="seed-photo" src="./assets/images/Seed_GaG.jpg" alt="A little one holding a sprouting seed" />
-        <div class="leaf-note note-one">Together,<br>we can give love
-          <br>and plant the first seeds<br>
-          <span class="note-heart">♡</span>
-        </div>
-      </div>
-      <div class="organization-copy">
-        <p class="eyebrow">FOR COMPANIES, ORGANIZATIONS &amp; COMMUNITIES</p>
-        <h2>Together, Let’s Give a Better Beginning.</h2>
-        <p>
-          If your company, organization, or community group would like to purchase
-          Bloompod gifts for children who need additional support, special gifting
-          rates are available for bulk orders.
-        </p>
-        <ul class="check-list">
-          <li>Special pricing for bulk gifting orders</li>
-          <li>Gifting program consultation and support</li>
-          <li>Suitable for community and giving initiatives</li>
-          <li>Help bring early English exposure to more little ones</li>
-        </ul>
-        <button type="button" id="contactOpenBtn" class="button contact-open" aria-haspopup="dialog"> <span>✉︎</span>Contact Us <span>❯</span></button>
-      </div>
-    </section>
-
-    <section id="stories" class="closing section-shell">
-      <img src="assets/images/bloompod_logo_transparent.png" alt="Bloompod" />
-      <p>“Every little one can shine<br>in their own way.” ♡</p>
-      <span>Building an early English foundation for children aged 0–3.</span>
-    </section>
-
-      <footer class="footer">
-        <div class="container flex-direction-column footer-container">
-          <div class="footer-top-row">
-            <div class="logo-2" role="img" aria-label="Bloompod logo"></div>
-            <nav class="language-switcher-wrapper-nav-tertiary" aria-label="Footer navigation">
-              <a href="support-en.html" class="footer-tab">
-                <span class="terms-of-use"><span class="label-text-span-link">Payment Policy</span></span>
-              </a>
-              <a href="support-en.html" class="footer-tab">
-                <span class="terms-of-use"><span class="label-text-span-link">Privacy Policy</span></span>
-              </a>
-              <a href="support-en.html" class="footer-tab">
-                <span class="terms-of-use"><span class="label-text-span-link">Terms of Use</span></span>
-              </a>
-              <a href="support-en.html" class="footer-tab">
-                <span class="terms-of-use"><span class="label-text-span-link">Shipping</span></span>
-              </a>
-              <a href="support-en.html" class="footer-tab">
-                <span class="terms-of-use"><span class="label-text-span-link">Returns</span></span>
-              </a>
-              <a href="support-en.html" class="footer-tab">
-                <span class="terms-of-use"><span class="label-text-span-link"> Contact</span></span>
-              </a>
-            </nav>
-          </div>
-          <div class="footer-bottom-row">
-            <div class="footer-bottom-left">
-              <p class="language-switcher-text-p">
-                Global Education Amplify Co., Ltd.<br>
-                Tax ID: 0318833596<br>
-                Address: B2.7.04, Lavida Plus Apartment Building,
-                part of the Riverside Residential Area Project – Functional Area No. 4,
-                South Saigon New Urban Area, Tan Phong Ward, District 7, Ho Chi Minh City, Vietnam.<br>
-                Email: <a href="mailto:info@bloompod.vn">info@bloompod.vn</a><br>
-                Hotline: <a href="tel:+84814433355">+84 814 433 355</a>
-              </p>
-            </div>
-            <div class="footer-bottom-right">
-              <div class="social-media-wrapper">
-                <a href="https://www.facebook.com/share/1Fmuhq8vPh/?mibextid=wwXIfr"
-                  target="_blank" class="social-icon" aria-label="Facebook">
-                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" />
-                  </svg>
-                </a>
-
-                <a href="#" target="_blank" class="social-icon" aria-label="TikTok">
-                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="transform: scale(0.85);">
-                    <path
-                      d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z" />
-                  </svg>
-                </a>
-
-                <a href="https://www.youtube.com/@BloomPod" target="_blank" class="social-icon" aria-label="YouTube">
-                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M21.582 6.186c-.23-.86-.908-1.538-1.768-1.768C18.254 4 12 4 12 4s-6.254 0-7.814.418c-.86.23-1.538.908-1.768 1.768C2 7.746 2 12 2 12s0 4.254.418 5.814c.23.86.908 1.538 1.768 1.768C7.746 20 12 20 12 20s6.254 0 7.814-.418c.86-.23 1.538-.908 1.768-1.768C22 16.254 22 12 22 12s0-4.254-.418-5.814zM9.999 15.594v-7.188l6.328 3.594-6.328 3.594z" />
-                  </svg>
-                </a>
+        <div class="recipient-grid">
+          <article class="recipient-card">
+            <div class="card-img">
+              <img src="./assets/images/Parents_GaG.jpg" alt="Parents gift Bloompod to their child" />
+              <div class="card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" aria-hidden="true">
+                  <path
+                    d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" />
+                </svg>
               </div>
-              <p class="footer-copyright-text">© 2026 Bloompod™ Developed by Amplify Global Education</p>
             </div>
+            <div class="card-body">
+              <h3>A loving gift for their little one</h3>
+              <p>A loving beginning for their little one.</p>
+            </div>
+          </article>
+          <article class="recipient-card">
+            <div class="card-img">
+              <img src="./assets/images/GParents_GaG.jpg" alt="Grandparents gift Bloompod to their grandchild" />
+              <div class="card-icon green">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" aria-hidden="true">
+                  <path
+                    d="M14 9.536V7a4 4 0 0 1 4-4h1.5a.5.5 0 0 1 .5.5V5a4 4 0 0 1-4 4 4 4 0 0 0-4 4c0 2 1 3 1 5a5 5 0 0 1-1 3" />
+                  <path d="M4 9a5 5 0 0 1 8 4 5 5 0 0 1-8-4" />
+                  <path d="M5 21h14" />
+                </svg>
+              </div>
+            </div>
+            <div class="card-body">
+              <h3>Grandparents Gift Bloompod to Their Grandchild</h3>
+              <p>Sending love through every little story.</p>
+            </div>
+          </article>
+          <article class="recipient-card">
+            <div class="card-img">
+              <img src="./assets/images/Aunt_GaG.jpg" alt="Aunts gift Bloompod to their niece or nephew" />
+              <div class="card-icon gold">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12 7v14" />
+                  <path d="M20 11v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8" />
+                  <path d="M7.5 7a1 1 0 0 1 0-5A4.8 8 0 0 1 12 7a4.8 8 0 0 1 4.5-5 1 1 0 0 1 0 5" />
+                  <rect x="3" y="7" width="18" height="4" rx="1" />
+                </svg>
+              </div>
+            </div>
+            <div class="card-body">
+              <h3>Aunts Gift Bloompod to Their Niece or Nephew</h3>
+              <p>A little gift, filled with love.</p>
+            </div>
+          </article>
+          <article class="recipient-card">
+            <div class="card-img">
+              <img src="./assets/images/Uncle_GaG.jpg" alt="Uncles gift Bloompod to their niece or nephew" />
+              <div class="card-icon blue">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" aria-hidden="true">
+                  <path
+                    d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" />
+                </svg>
+              </div>
+            </div>
+            <div class="card-body">
+              <h3>Uncles Gift Bloompod to Their Niece or Nephew</h3>
+              <p>A meaningful gift for a little one.</p>
+            </div>
+          </article>
+          <article class="recipient-card">
+            <div class="card-img">
+              <img src="./assets/images/Shipment_GaG.jpg" alt="Send a gift to a little one far away" />
+              <div class="card-icon purple">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" aria-hidden="true">
+                  <path
+                    d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z" />
+                  <path d="m21.854 2.147-10.94 10.939" />
+                </svg>
+              </div>
+            </div>
+            <div class="card-body">
+              <h3>Send a Gift to a Little One Far Away</h3>
+              <p>Even from afar, love can always find its way.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="product" class="foundation section-shell">
+        <svg class="clip-defs" width="0" height="0" aria-hidden="true" focusable="false">
+          <clipPath id="wave-clip" clipPathUnits="objectBoundingBox">
+            <path
+              d="M0,0.3 C0,0.1 0.12,0.02 0.3,0.04 C0.48,0.06 0.6,0.06 0.7,0.1 C0.8,0.14 0.84,0.26 1,0.34 L1,1 L0,1 Z" />
+          </clipPath>
+        </svg>
+
+        <div class="product-photo">
+          <img src="./assets/images/Product_GaG.jpg" alt="Green Bloompod listening device" />
+          <span class="photo-note">Little sounds<br>can open up<br>a big world ♡</span>
+        </div>
+
+        <div class="foundation-head">
+          <h2>A Little Gift. <br>A Strong English Foundation.</h2>
+          <p>
+            Designed especially for children aged 0–3, Bloompod helps little ones
+            become familiar with English naturally through sounds, vocabulary,
+            everyday expressions, and stories.
+          </p>
+        </div>
+
+        <div class="benefit-grid">
+          <div class="benefit">
+            <div class="benefit-icon">
+              <svg viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill="none"
+                stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 8.5a6.5 6.5 0 1 1 13 0c0 5-3.5 7.5-3.5 10a2.5 2.5 0 0 1-5 0c0-1.5 1-2.5 2.5-2.5" />
+                <path d="M10 9a2.5 2.5 0 0 1 5 0c0 2-1.5 3-2 4" />
+              </svg>
+            </div>
+            <h3>Familiarize</h3>
+            <p>Become familiar with English sounds and rhythm from an early age.</p>
+          </div>
+          <div class="benefit">
+            <div class="benefit-icon">
+              <svg viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill="none"
+                stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M2.5 12c2.5-3 5.5-4 7.5-2.5 1 .75 3 .75 4 0 2-1.5 5-0.5 7.5 2.5-2.5 4.5-6 6.5-9.5 6.5S5 16.5 2.5 12z" />
+                <path d="M2.5 12c4 1 7.5 1.5 9.5 0.5 2 1 5.5 0.5 9.5-0.5" />
+              </svg>
+            </div>
+            <h3>Listen &amp; Feel</h3>
+            <p>Experience natural pronunciation and intonation.</p>
+          </div>
+          <div class="benefit">
+            <div class="benefit-icon">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor"
+                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <text x="12" y="17" text-anchor="middle" font-size="14" font-weight="600" stroke="none"
+                  fill="currentColor" font-family="sans-serif">Aa</text>
+              </svg>
+            </div>
+            <h3>Recognize</h3>
+            <p>Gradually recognize familiar words and everyday expressions through repeated listening.</p>
+          </div>
+          <div class="benefit">
+            <div class="benefit-icon">
+              <svg viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill="none"
+                stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M12 4.5A4 4 0 0 0 7 5a4 4 0 0 0-2.5 4.5A3.5 3.5 0 0 0 5 15a4 4 0 0 0 4.5 4.5 4 4 0 0 0 2.5-1" />
+                <path
+                  d="M12 4.5A4 4 0 0 1 17 5a4 4 0 0 1 2.5 4.5A3.5 3.5 0 0 1 19 15a4 4 0 0 1-4.5 4.5 4 4 0 0 1-2.5-1" />
+                <path d="M12 4.5v14" />
+                <path d="M5.5 12.5a3.5 3.5 0 0 0 3-1.5" />
+                <path d="M18.5 12.5a3.5 3.5 0 0 1-3-1.5" />
+              </svg>
+            </div>
+            <h3>Absorb</h3>
+            <p>Build an early English listening foundation through everyday listening.</p>
           </div>
         </div>
-      </footer>
+      </section>
+
+      <section id="about" class="organization section-shell">
+        <div class="seed-visual">
+          <img class="seed-photo" src="./assets/images/Seed_GaG.jpg" alt="A little one holding a sprouting seed" />
+          <div class="leaf-note note-one">Together,<br>we can give love
+            <br>and plant the first seeds<br>
+            <span class="note-heart">♡</span>
+          </div>
+        </div>
+        <div class="organization-copy">
+          <p class="eyebrow">FOR COMPANIES, ORGANIZATIONS &amp; COMMUNITIES</p>
+          <h2>Together, Let’s Give a Better Beginning.</h2>
+          <p>
+            If your company, organization, or community group would like to purchase
+            Bloompod gifts for children who need additional support, special gifting
+            rates are available for bulk orders.
+          </p>
+          <ul class="check-list">
+            <li>Special pricing for bulk gifting orders</li>
+            <li>Gifting program consultation and support</li>
+            <li>Suitable for community and giving initiatives</li>
+            <li>Help bring early English exposure to more little ones</li>
+          </ul>
+          <button type="button" id="contactOpenBtn" class="button contact-open" aria-haspopup="dialog">
+            <span>✉︎</span>Contact Us <span>❯</span></button>
+        </div>
+      </section>
+
+      <section id="stories" class="closing section-shell">
+        <img src="assets/images/bloompod_logo_transparent.png" alt="Bloompod" />
+        <p>“Every little one can shine<br>in their own way.” ♡</p>
+        <span>Building an early English foundation for children aged 0–3.</span>
+      </section>
+
+      <!-- Footer dùng chung: sửa ở partials/footer-en.html -->
+      <div data-site-footer>
+        <noscript><a href="support-en.html">Support</a></noscript>
+      </div>
     </section>
   </main>
 
@@ -551,23 +449,28 @@
     <div class="email-modal" role="dialog" aria-modal="true" aria-labelledby="contactModalTitle">
       <button id="contactModalClose" class="email-modal-close" type="button" aria-label="Close">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M18 6L6 18M6 6L18 18" stroke="#605e5c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M18 6L6 18M6 6L18 18" stroke="#605e5c" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" />
         </svg>
       </button>
 
       <div class="email-modal-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M3 11h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-5Zm0 0a9 9 0 1 1 18 0m0 0v5a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3Z" />
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round" aria-hidden="true">
+          <path
+            d="M3 11h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-5Zm0 0a9 9 0 1 1 18 0m0 0v5a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3Z" />
           <path d="M21 16v2a4 4 0 0 1-4 4h-5" />
         </svg>
       </div>
       <h2 id="contactModalTitle" class="email-modal-title">Contact Us</h2>
-      <p class="email-modal-description">Bloompod is always happy to help plan a gifting program for your company, organization, or community.</p>
+      <p class="email-modal-description">Bloompod is always happy to help plan a gifting program for your company,
+        organization, or community.</p>
 
       <div class="contact-modal-list">
         <a class="contact-modal-item" href="mailto:wyonaphung@bloompod.vn">
           <span class="contact-modal-item-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" aria-hidden="true">
               <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7" />
               <rect x="2" y="4" width="20" height="16" rx="2" />
             </svg>
@@ -579,8 +482,10 @@
         </a>
         <a class="contact-modal-item" href="tel:+84814433355">
           <span class="contact-modal-item-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384" />
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" aria-hidden="true">
+              <path
+                d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384" />
             </svg>
           </span>
           <span class="contact-modal-item-text">
@@ -593,6 +498,7 @@
   </div>
 
   <script src="assets/js/give-a-gift.js?v=2"></script>
+  <script src="./assets/js/site-chrome.js?v=1"></script>
 </body>
 
 </html>

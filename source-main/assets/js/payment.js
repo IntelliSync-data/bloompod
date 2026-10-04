@@ -230,13 +230,7 @@
         };
         cacheGift();
 
-        const btnBack = document.getElementById('btnBack');
-        if (btnBack) {
-            btnBack.href = 'order-en.html?' + new URLSearchParams({
-                gift: giftMode.giftId,
-                child: giftMode.childName
-            });
-        }
+        updateBackLink();
     }
 
     function renderOrderSummary(info) {
@@ -740,6 +734,81 @@
     }
 
     // ==============================================
+    // QUAY LẠI Ở ĐƠN TẶNG QUÀ
+    // ==============================================
+
+    /** Nút "Quay lại" trỏ về form kèm đúng bé, theo ngôn ngữ đang xem */
+    function updateBackLink() {
+        const btnBack = document.getElementById('btnBack');
+        if (!btnBack || !giftMode) return;
+
+        const page = isEnglish() ? 'order-en.html' : 'order.html';
+        btnBack.href = page + '?' + new URLSearchParams({
+            gift: giftMode.giftId,
+            child: giftMode.childName
+        });
+    }
+
+    /** Giữ lại thông tin khách để quay về form khỏi gõ lại. Khoá dùng chung với order.js */
+    function saveCustomerDraft() {
+        const customer = (orderInfo && orderInfo.order && orderInfo.order.customer) || {};
+        try {
+            sessionStorage.setItem('bloomOrderDraft', JSON.stringify({
+                fullName: customer.name || '',
+                phone: customer.phone || '',
+                email: customer.email || '',
+                // Inquiry đã gửi lúc đặt đơn này rồi, đừng để sale nhận thêm lead trùng
+                sentInquiryEmail: customer.email || ''
+            }));
+        } catch (error) {
+            console.error('Cannot save form draft:', error);
+        }
+    }
+
+    /**
+     * Đơn tặng quà bấm "Quay lại" thì phải HUỶ ĐƠN rồi mới mở lại bé.
+     *
+     * Chỉ mở lại bé mà để đơn sống là hỏng: người khác nhận bé đó và trả tiền,
+     * trong khi khách cũ vẫn còn link thanh toán trong email -> hai người cùng
+     * trả cho một bé. Huỷ hỏng thì ở lại trang, không được để đơn và bé lệch nhau.
+     */
+    function wireGiftBack() {
+        const btnBack = document.getElementById('btnBack');
+        if (!btnBack) return;
+
+        btnBack.addEventListener('click', async function (event) {
+            if (!giftMode) return;   // đơn thường: cứ để link chạy như cũ
+            event.preventDefault();
+
+            const child = (giftMode.childName || '').trim();
+            const agreed = await showConfirmModal(
+                t('payment.cancelBack.title'),
+                child
+                    ? t('payment.cancelBack.desc', { code: orderCode, child: child })
+                    : t('payment.cancelBack.descNoName', { code: orderCode }),
+                t('payment.cancelBack.ok'),
+                t('payment.cancelBack.cancel'));
+            if (!agreed) return;
+
+            let result = null;
+            try {
+                result = await callApi('cancel-order', { order_code: orderCode });
+            } catch (error) {
+                console.error('Cancel order failed:', error);
+            }
+
+            if (!result || !result.success) {
+                showToast((result && result.error) || t('payment.cancelFailed'), 'error');
+                return;
+            }
+
+            stopPolling();
+            saveCustomerDraft();
+            window.location.href = btnBack.href;
+        });
+    }
+
+    // ==============================================
     // ĐIỀU HƯỚNG
     // ==============================================
 
@@ -909,15 +978,11 @@
      */
     function keepOrderOnLanguageSwitch() {
         const target = isEnglish() ? './payment.html' : './payment-en.html';
-        const url = `${target}${window.location.search}`;
 
-        document.querySelectorAll('[onclick*="payment-en.html"], [onclick*="payment.html"]')
-            .forEach(function (el) {
-                el.removeAttribute('onclick');
-                el.addEventListener('click', function () {
-                    window.location.href = url;
-                });
-            });
+        // Menu do site-chrome.js nạp sau, nhưng nó đọc lại giá trị này đúng lúc
+        // bấm nên gán sớm ở đây vẫn ăn, không cần chờ nạp xong.
+        window.siteChrome = window.siteChrome || {};
+        window.siteChrome.langSwitch = target + window.location.search;
     }
 
     async function ensureMethods() {
@@ -965,11 +1030,7 @@
         if (giftId) {
             giftMode = { giftId: giftId, childName: (params.get('child') || '').trim() };
             // Go back return to the Planting a Seed page with the same gift and child parameters
-            const btnBack = document.getElementById('btnBack');
-            if (btnBack) {
-                btnBack.href = 'order-en.html?' +
-                    new URLSearchParams({ gift: giftId, child: giftMode.childName });
-            }
+            updateBackLink();
         } else {
             giftMode = readCachedGift();
         }
@@ -987,6 +1048,7 @@
             .addEventListener('click', downloadQrCode);
         document.getElementById('methodBack')
             .addEventListener('click', closeDetail);
+        wireGiftBack();
         document.querySelectorAll('.transfer-copy').forEach(function (button) {
             button.addEventListener('click', function () { copyValue(button); });
         });

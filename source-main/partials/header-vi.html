@@ -1,0 +1,96 @@
+<!--
+  MENU DÙNG CHUNG - BẢN TIẾNG VIỆT
+  Sửa menu thì sửa ở đây, đừng sửa trong từng file .html nữa.
+
+  Phần riêng của mỗi trang do assets/js/site-chrome.js gắn vào lúc chạy, lấy từ
+  các thuộc tính data-* đặt trên thẻ <div data-site-header> của trang đó:
+    data-active      tab đang đứng: home | gift | book | support (bỏ trống = không tô)
+    data-lang-switch link sang bản tiếng Anh ("none" = giấu nút đổi ngôn ngữ)
+    data-cta         đích nút "Đặt mua Bloompod"
+    data-home        đích khi bấm logo
+    data-hide-nav    danh sách mục cần ẩn, ngăn bằng dấu phẩy (vd "gift")
+-->
+<header class="menu-bar">
+  <div class="container flex-direction-row justify-content-space-between">
+    <div data-site-home class="logo" role="img" aria-label="Bloompod logo"></div>
+
+    <nav class="home-wrapper-nav-tertiary desktop-nav" aria-label="Main navigation">
+      <a data-nav="home" href="index.html#home" class="menu-tab"><span class="home-text-span-tertiary">Trang
+          Chủ</span></a>
+      <a data-nav="gift" href="give-a-gift.html" class="menu-tab"><span class="home-text-span-tertiary">Tặng
+          Quà</span></a>
+      <a data-nav="book" href="index.html#book-sharing" class="menu-tab"><span class="home-text-span-tertiary">Tải Sách
+          Language Readiness</span></a>
+      <a data-nav="support" href="support.html" class="menu-tab"><span class="home-text-span-tertiary">Hỗ Trợ</span></a>
+    </nav>
+
+    <div class="home-wrapper-div-extra">
+      <button data-site-cta class="purchase-button-button-additional" type="button" aria-label="Đặt mua Bloompod">
+        <span class="purchase-button-span">Đặt mua <span>Bloompod</span></span>
+      </button>
+
+      <!-- Cờ = ngôn ngữ đang xem, chữ = ngôn ngữ sẽ chuyển sang -->
+      <div data-site-lang-switch class="language-hero-wrapper-div" role="button" tabindex="0"
+        aria-label="Change language to English">
+        <img class="content-image-img" src="./assets/images/circle---countries-flag.svg" alt="Language flag">
+        <div class="layout-section-div"><span class="label-text-span-lang">EN</span></div>
+      </div>
+
+      <button id="hamburger-btn" class="hamburger-menu" aria-label="Open menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 12H21M3 6H21M3 18H21" stroke="#605e5c" stroke-width="2" stroke-linecap="round"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div id="mobile-menu" class="mobile-menu">
+  <div class="mobile-menu-header">
+    <div data-site-home class="logo" role="img" aria-label="Bloompod logo"></div>
+    <div style="display: flex; gap: 8px;">
+      <div data-site-lang-switch class="language-hero-wrapper-div" role="button" tabindex="0"
+        aria-label="Change language to English">
+        <img class="content-image-img" src="./assets/images/circle---countries-flag.svg" alt="Language flag">
+        <div class="layout-section-div"><span class="label-text-span-lang">EN</span></div>
+      </div>
+      <button id="mobile-menu-close" class="mobile-menu-close" aria-label="Close menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18 6L6 18M6 6L18 18" stroke="#605e5c" stroke-width="2" stroke-linecap="round"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <nav class="mobile-nav" aria-label="Mobile navigation">
+    <a data-nav="home" href="index.html#home" class="mobile-nav-link"><span>Trang Chủ</span></a>
+    <a data-nav="gift" href="give-a-gift.html" class="mobile-nav-link"><span>Tặng Quà</span></a>
+    <a data-nav="book" href="index.html#book-sharing" class="mobile-nav-link"><span>Tải Sách Language
+        Readiness</span></a>
+    <a data-nav="support" href="support.html" class="mobile-nav-link"><span>Hỗ Trợ</span></a>
+  </nav>
+
+  <div class="mobile-menu-footer">
+    <!-- Các trang chính sách nằm chung trong support.html, giống hệt footer -->
+    <nav class="language-switcher-wrapper-nav-tertiary" aria-label="Footer navigation">
+      <a href="support.html" class="footer-tab">
+        <span class="terms-of-use"><span class="label-text-span-link">Chính sách thanh toán</span></span>
+      </a>
+      <a href="support.html" class="footer-tab">
+        <span class="terms-of-use"><span class="label-text-span-link">Chính sách bảo mật</span></span>
+      </a>
+      <a href="support.html" class="footer-tab">
+        <span class="terms-of-use"><span class="label-text-span-link">Điều khoản sử dụng</span></span>
+      </a>
+      <a href="support.html" class="footer-tab">
+        <span class="terms-of-use"><span class="label-text-span-link">Giao hàng</span></span>
+      </a>
+      <a href="support.html" class="footer-tab">
+        <span class="terms-of-use"><span class="label-text-span-link">Đổi trả</span></span>
+      </a>
+      <a href="support.html" class="footer-tab">
+        <span class="terms-of-use"><span class="label-text-span-link">Liên hệ</span></span>
+      </a>
+    </nav>
+  </div>
+</div>

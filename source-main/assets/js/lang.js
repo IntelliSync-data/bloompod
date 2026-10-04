@@ -41,6 +41,12 @@
             'order.childTaken.desc': 'Rất tiếc, bé vừa được một thành viên khác bảo trợ nên đơn chưa được tạo. Bạn hãy chọn một bé khác nhé, thông tin bạn vừa nhập vẫn được giữ lại.',
             'order.childTaken.ok': 'Chọn bé khác',
             'order.childTaken.close': 'Để sau',
+            'payment.cancelBack.title': 'Quay lại và huỷ đơn này?',
+            'payment.cancelBack.desc': 'Đơn {code} sẽ bị huỷ và bé {child} được mở lại cho người khác bảo trợ. Thông tin bạn đã nhập vẫn được giữ lại.',
+            'payment.cancelBack.descNoName': 'Đơn {code} sẽ bị huỷ và bé bạn đã chọn được mở lại cho người khác bảo trợ. Thông tin bạn đã nhập vẫn được giữ lại.',
+            'payment.cancelBack.ok': 'Huỷ đơn và quay lại',
+            'payment.cancelBack.cancel': 'Ở lại trang này',
+            'payment.cancelFailed': 'Không huỷ được đơn. Vui lòng thử lại.',
 
 
             // Payment methods
@@ -101,6 +107,12 @@
             'order.childTaken.desc': 'Sorry, another member has just sponsored this child, so your order was not created. Please choose another child — the details you entered will be kept.',
             'order.childTaken.ok': 'Choose another child',
             'order.childTaken.close': 'Not now',
+            'payment.cancelBack.title': 'Go back and cancel this order?',
+            'payment.cancelBack.desc': 'Order {code} will be cancelled and {child} will be released for someone else to sponsor. The details you entered will be kept.',
+            'payment.cancelBack.descNoName': 'Order {code} will be cancelled and the child you picked will be released for someone else to sponsor. The details you entered will be kept.',
+            'payment.cancelBack.ok': 'Cancel order and go back',
+            'payment.cancelBack.cancel': 'Stay here',
+            'payment.cancelFailed': 'Could not cancel this order. Please try again.',
 
 
             // Payment methods

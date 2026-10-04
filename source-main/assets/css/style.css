@@ -3788,3 +3788,21 @@ details:focus-visible {
         display: none;
     }
 }
+
+/* ==============================================
+   CHỖ TRỐNG CHO MENU/FOOTER DÙNG CHUNG
+   site-chrome.js thay hai thẻ này bằng partials/header-*.html và footer-*.html.
+   Thẻ đánh dấu biến mất sau khi nạp, nên quy tắc dưới chỉ có tác dụng trong lúc
+   chờ: giữ sẵn chiều cao menu (78px) cho trang khỏi giật.
+   ============================================== */
+[data-site-header] {
+    display: block;
+    min-height: 78px;
+}
+
+/* Link chính sách trong menu mobile xài chung class với footer (footer nền tối
+   nên chữ trắng), mà nền menu mobile lại trắng -> chữ trắng trên nền trắng,
+   không ai đọc được. Trả lại màu chữ cho riêng chỗ này. */
+.mobile-menu-footer .label-text-span-link {
+    color: var(--text);
+}

@@ -1,0 +1,97 @@
+<!--
+  SHARED MENU - ENGLISH
+  Edit the menu here, not inside each .html page.
+
+  Per-page bits are applied at runtime by assets/js/site-chrome.js, read from the
+  data-* attributes on that page's <div data-site-header>:
+    data-active      current tab: home | gift | book | support (empty = none)
+    data-lang-switch link to the Vietnamese page ("none" hides the switcher)
+    data-cta         target of the "Order Bloompod" button
+    data-home        target when clicking the logo
+    data-hide-nav    comma separated items to hide (eg "gift")
+-->
+<header class="menu-bar">
+  <div class="container flex-direction-row justify-content-space-between">
+    <div data-site-home class="logo" role="img" aria-label="Bloompod logo"></div>
+
+    <nav class="home-wrapper-nav-tertiary desktop-nav" aria-label="Main navigation">
+      <a data-nav="home" href="index-en.html#home" class="menu-tab"><span
+          class="home-text-span-tertiary">Home</span></a>
+      <a data-nav="gift" href="give-a-gift-en.html" class="menu-tab"><span class="home-text-span-tertiary">Give a
+          Gift</span></a>
+      <a data-nav="book" href="index-en.html#book-sharing" class="menu-tab"><span
+          class="home-text-span-tertiary">Download Language Readiness Book</span></a>
+      <a data-nav="support" href="support-en.html" class="menu-tab"><span
+          class="home-text-span-tertiary">Support</span></a>
+    </nav>
+
+    <div class="home-wrapper-div-extra">
+      <button data-site-cta class="purchase-button-button-additional" type="button" aria-label="Order Bloompod">
+        <span class="purchase-button-span">Order <span>Bloompod</span></span>
+      </button>
+
+      <!-- Flag = language you are reading, label = language you switch to -->
+      <div data-site-lang-switch class="language-hero-wrapper-div" role="button" tabindex="0"
+        aria-label="Change language to Vietnamese">
+        <div class="layout-section-div"><span class="label-text-span-lang">VN</span></div>
+        <img class="content-image-img" src="./assets/images/united-kingdom.png" alt="Language flag">
+      </div>
+
+      <button id="hamburger-btn" class="hamburger-menu" aria-label="Open menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 12H21M3 6H21M3 18H21" stroke="#605e5c" stroke-width="2" stroke-linecap="round"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div id="mobile-menu" class="mobile-menu">
+  <div class="mobile-menu-header">
+    <div data-site-home class="logo" role="img" aria-label="Bloompod logo"></div>
+    <div style="display: flex; gap: 8px;">
+      <div data-site-lang-switch class="language-hero-wrapper-div" role="button" tabindex="0"
+        aria-label="Change language to Vietnamese">
+        <div class="layout-section-div"><span class="label-text-span-lang">VN</span></div>
+        <img class="content-image-img" src="./assets/images/united-kingdom.png" alt="Language flag">
+      </div>
+      <button id="mobile-menu-close" class="mobile-menu-close" aria-label="Close menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18 6L6 18M6 6L18 18" stroke="#605e5c" stroke-width="2" stroke-linecap="round"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <nav class="mobile-nav" aria-label="Mobile navigation">
+    <a data-nav="home" href="index-en.html#home" class="mobile-nav-link"><span>Home</span></a>
+    <a data-nav="gift" href="give-a-gift-en.html" class="mobile-nav-link"><span>Give a Gift</span></a>
+    <a data-nav="book" href="index-en.html#book-sharing" class="mobile-nav-link"><span>Download Language Readiness
+        Book</span></a>
+    <a data-nav="support" href="support-en.html" class="mobile-nav-link"><span>Support</span></a>
+  </nav>
+
+  <div class="mobile-menu-footer">
+    <!-- Every policy page lives inside support-en.html, same as the footer -->
+    <nav class="language-switcher-wrapper-nav-tertiary" aria-label="Footer navigation">
+      <a href="support-en.html" class="footer-tab">
+        <span class="terms-of-use"><span class="label-text-span-link">Payment Policy</span></span>
+      </a>
+      <a href="support-en.html" class="footer-tab">
+        <span class="terms-of-use"><span class="label-text-span-link">Privacy Policy</span></span>
+      </a>
+      <a href="support-en.html" class="footer-tab">
+        <span class="terms-of-use"><span class="label-text-span-link">Terms of Use</span></span>
+      </a>
+      <a href="support-en.html" class="footer-tab">
+        <span class="terms-of-use"><span class="label-text-span-link">Shipping</span></span>
+      </a>
+      <a href="support-en.html" class="footer-tab">
+        <span class="terms-of-use"><span class="label-text-span-link">Returns</span></span>
+      </a>
+      <a href="support-en.html" class="footer-tab">
+        <span class="terms-of-use"><span class="label-text-span-link">Contact</span></span>
+      </a>
+    </nav>
+  </div>
+</div>
