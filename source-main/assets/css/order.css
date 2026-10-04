@@ -88,6 +88,14 @@
     color: var(--red);
 }
 
+/* Nhãn "(không bắt buộc)" thay cho dấu * ở ô không bắt buộc.
+   order.html không nạp file nào định nghĩa --muted nên phải có màu dự phòng. */
+.optional {
+    color: var(--muted, #605e5c);
+    font-weight: 400;
+    font-size: 13px;
+}
+
 .form-group input,
 .form-group select {
     font-family: var(--body-2-font-family);

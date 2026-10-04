@@ -162,6 +162,11 @@
 
             const params = {
                 package_id: getPackageId(),
+                // Đặt ở trang tiếng Anh thì mọi thứ phía backend cũng phải theo
+                // tiếng Anh: nhãn trả về, ngôn ngữ của liên hệ vừa tạo, và email
+                // gửi cho khách. payment.js gửi lang ở mọi lời gọi, chỗ này trước
+                // giờ bỏ sót nên đơn tiếng Anh vẫn bị coi là tiếng Việt.
+                lang: window.i18nLang === 'en' ? 'en_US' : 'vi_VN',
                 name: formData.fullName,
                 phone: formData.phone,
                 email: formData.email,
@@ -450,6 +455,14 @@
             }
         });
 
+        // Ô không bắt buộc mà khách có nhập thì vẫn phải đúng định dạng - bỏ
+        // required của số điện thoại ở đơn tặng quà không có nghĩa là nhập bừa.
+        // Chỉ xét ô đang có dữ liệu, để ô rỗng đang ẩn không bị bắt lỗi oan.
+        form.querySelectorAll('input:not([required])').forEach(input => {
+            if (input.type === 'hidden' || !input.value.trim()) return;
+            if (!validateField(input)) isValid = false;
+        });
+
         return isValid;
     }
 
@@ -645,7 +658,26 @@
         const addressRow = document.querySelector('#province')?.closest('.form-row');
         if (addressRow) addressRow.hidden = true;
 
+        // Tặng quà thì nhiều người không muốn để lại số điện thoại; có email là
+        // đủ để nhận thông báo đơn hàng. Cả hai API đều nhận phone rỗng.
+        makePhoneOptional();
+
         restoreFormDraft();
+    }
+
+    /** Bỏ bắt buộc cho ô số điện thoại và đổi dấu * thành "(không bắt buộc)" */
+    function makePhoneOptional() {
+        const phone = document.getElementById('phone');
+        if (!phone) return;
+
+        phone.removeAttribute('required');
+
+        const marker = phone.closest('.form-group')?.querySelector('.required');
+        if (marker) {
+            const t = window.i18n || (k => k);
+            marker.className = 'optional';
+            marker.textContent = t('order.optional');
+        }
     }
 
     // ==============================================

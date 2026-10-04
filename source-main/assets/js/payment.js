@@ -256,11 +256,13 @@
         setText('payEmail', customer.email || '-');
         setText('payAddress', order.address || '-');
 
-        // Ghi chú gồm địa chỉ cũ và số tháng tuổi của bé. order-info chưa trả
-        // trường này nên hàng tự ẩn cho tới khi backend thêm vào.
+        // Ghi chú gồm địa chỉ cũ và số tháng tuổi của bé.
+        // Đơn tặng quà thì note là chỗ dành cho staff (kèm ghi chú nội bộ của bé
+        // do backend ghép vào), khách không cần đọc -> giấu hẳn hàng này.
+        // Đơn thường vẫn hiện bình thường.
         const notes = (order.notes || '').trim();
         setText('payNotes', notes || '-');
-        show('payNotesRow', !!notes);
+        show('payNotesRow', !!notes && !giftMode);
     }
 
     // ==============================================
