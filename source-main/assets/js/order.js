@@ -20,8 +20,11 @@
     const API_BASE_URL = 'https://provinces.open-api.vn/api/v2';
     const INQUIRY_API_URL = 'https://app.bloompod.vn/api/inquiry';
     const PAYMENT_API_URL = 'https://app.bloompod.vn/api/profile';
-    // Chỉ có một bản trang Planting a Seed, không tách VI/EN (giống order-confirmation.js)
-    const SEED_PAGE = 'https://website-demo.xn--hthng-171byc.vn/pas_bloom/#gg-children';
+    // Chỉ có một bản trang Planting a Seed, không tách VI/EN (giống order-confirmation.js).
+    // Production chạy ở tên miền riêng plantaseed.bloompod.vn.
+    const SEED_PAGE = isProduction
+        ? 'https://plantaseed.bloompod.vn/#gg-children'
+        : 'https://website-demo.xn--hthng-171byc.vn/pas_bloom/#gg-children';
     // Giữ tạm thông tin khách khi bé bị người khác bảo trợ và phải chọn lại
     const FORM_DRAFT_KEY = 'bloomOrderDraft';
 
