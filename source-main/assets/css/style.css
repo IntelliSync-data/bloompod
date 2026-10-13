@@ -2251,9 +2251,24 @@ details[open] .landing-hero-wrapper-summary {
 }
 
 .footer-bottom-left {
+    position: relative;
     width: 60%;
     max-width: 60%;
     box-sizing: border-box;
+    padding-right: 120px;
+}
+
+.footer-notice-badge {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 100px;
+}
+
+.footer-notice-badge img {
+    display: block;
+    width: 100%;
+    height: auto;
 }
 
 .footer-bottom-right {
