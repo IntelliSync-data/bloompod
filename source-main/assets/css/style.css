@@ -2255,14 +2255,14 @@ details[open] .landing-hero-wrapper-summary {
     width: 60%;
     max-width: 60%;
     box-sizing: border-box;
-    padding-right: 120px;
+    padding-right: 160px;
 }
 
 .footer-notice-badge {
     position: absolute;
-    right: 0;
+    left: 200px;
     bottom: 0;
-    width: 100px;
+    width: 140px;
 }
 
 .footer-notice-badge img {
