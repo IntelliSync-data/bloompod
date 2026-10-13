@@ -853,6 +853,14 @@
         max-width: 100%;
     }
 
+    .footer-bottom-left {
+        padding-right: 90px;
+    }
+
+    .footer-notice-badge {
+        width: 80px;
+    }
+
     .footer-bottom-right {
         align-items: flex-start;
     }
