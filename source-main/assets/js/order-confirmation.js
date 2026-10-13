@@ -3,7 +3,7 @@
  * Display order confirmation based on status and order data from LocalStorage
  */
 
-(function() {
+(function () {
     'use strict';
 
     // ==============================================
@@ -164,8 +164,13 @@
         const isEnglish = window.location.pathname.includes('-en.html');
         const orderPage = isEnglish ? 'order-en.html' : 'order.html';
 
-        // Chỉ có một bản trang Planting a Seed, không tách VI/EN
-        const seedPage = 'https://website-demo.xn--hthng-171byc.vn/pas_bloom/#gg-children';
+        // Chỉ có một bản trang Planting a Seed, không tách VI/EN.
+        // Production chạy ở tên miền riêng plantaseed.bloompod.vn.
+        const isProduction = window.location.hostname === 'bloompod.vn' ||
+            window.location.hostname === 'www.bloompod.vn';
+        const seedPage = isProduction
+            ? 'https://plantaseed.bloompod.vn/#gg-children'
+            : 'https://website-demo.xn--hthng-171byc.vn/pas_bloom/#gg-children';
 
         document.querySelectorAll(
             '#confirmationSuccess .btn-primary, #confirmationFailure .btn-secondary'
