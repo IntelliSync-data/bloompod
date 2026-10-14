@@ -545,6 +545,7 @@
 
     .home-wrapper-section-body-extra {
         flex-direction: column;
+        align-items: center;
         gap: 16px;
     }
 
