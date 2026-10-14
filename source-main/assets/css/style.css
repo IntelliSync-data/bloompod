@@ -2282,6 +2282,8 @@ details[open] .landing-hero-wrapper-summary {
 }
 
 .footer-copyright-text {
+    position: absolute;
+    bottom: -16px;
     margin: 0 !important;
     color: var(--white);
     font-size: 14px;
