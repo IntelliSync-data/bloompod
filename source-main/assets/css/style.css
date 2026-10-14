@@ -2333,6 +2333,7 @@ details[open] .landing-hero-wrapper-summary {
 }
 
 .language-switcher-wrapper-nav-tertiary {
+    margin-left: -8px;
     display: inline-flex;
     gap: 24px;
 }
