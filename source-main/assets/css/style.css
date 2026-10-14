@@ -1369,6 +1369,7 @@ details[open] .content-image-img {
     line-height: var(--h4-line-height);
     white-space: nowrap;
     font-style: var(--h4-font-style);
+    white-space: break-spaces;
 }
 
 .rhythm-feature-image-img {
