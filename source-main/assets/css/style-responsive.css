@@ -213,6 +213,7 @@
     }
 
     .grg-mb {
+        width: 100%;
         display: block;
     }
 
@@ -870,6 +871,7 @@
     }
 
     .footer-copyright-text {
+        position: static;
         text-align: left;
         white-space: normal;
     }
