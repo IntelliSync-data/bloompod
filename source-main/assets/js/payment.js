@@ -485,9 +485,12 @@
         const notice = methodNotice(method);
         if (notice.description) setText('cashNote', notice.description);
 
-        // Câu mặc định nói chuyện thu tiền mặt trong 24h, không đúng với
-        // chuyển khoản ngân hàng - không có mô tả riêng thì giấu luôn
-        show('cashNote', !isInfoTransfer || !!notice.description);
+        // Chuyển khoản ngân hàng thì giấu hẳn khối này: cả câu mặc định lẫn
+        // notice.description của backend đều đang là chữ viết cho COD ("sẽ liên
+        // hệ trong 24h để thu tiền"), đọc vào là sai hướng dẫn. Câu riêng cho
+        // từng phương thức chuyển khoản nằm ở transfer.note, đã hiện trong
+        // khung vàng ngay trên nút xác nhận.
+        show('cashNote', !isInfoTransfer);
 
         document.getElementById('cashConfirmBtn').onclick = function () {
             confirmCash(method);
