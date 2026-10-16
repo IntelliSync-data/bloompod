@@ -922,7 +922,7 @@
 /* ===== Chuyển khoản tay ===== */
 .transfer-box {
     width: 100%;
-    max-width: 360px;
+    max-width: 500px;
     margin: 0 auto;
 }
 
@@ -938,7 +938,6 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 10px 12px;
     margin-bottom: 8px;
     background: var(--second-bg);
     border-radius: 8px;
@@ -955,11 +954,12 @@
 .transfer-val {
     flex: 1;
     min-width: 0;
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-family: var(--body-2-font-family);
     font-size: 14px;
     font-weight: 600;
     color: var(--black);
-    word-break: break-all;
+    word-break: break-word;
+    text-align: right;
 }
 
 .transfer-copy {
