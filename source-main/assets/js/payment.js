@@ -467,11 +467,12 @@
     }
 
     /** Khối tiền mặt ở cột phải: hiện rõ phương thức rồi mới cho bấm xác nhận */
-    function showCashPanel(method) {
+    function showCashPanel(method, inline) {
         resetDetail();
-        show('methodList', false);
+        // Vào bằng popup thì giữ danh sách phía sau, đóng popup là thấy lại
+        show('methodList', !inline);
         show('methodDetail', true);
-        show('methodBack', false);
+        show('methodBack', !inline);
         show('paymentCash', true);
         setText('paymentSectionTitle', method.name || t('payment.cashTitle'));
         setText('paymentDescription', t('payment.cashPanelDesc'));
@@ -495,6 +496,10 @@
         document.getElementById('cashConfirmBtn').onclick = function () {
             confirmCash(method);
         };
+
+        // Nhiều phương thức thì đưa nguyên khối này vào popup, nội dung y hệt
+        // lúc nằm ở cột phải vì dùng chung đúng một DOM
+        if (!inline) openDetailModal();
     }
 
     /** Chốt đơn tiền mặt: ghi nhận rồi sang trang xác nhận */
@@ -517,10 +522,15 @@
         const inline = forceInline || isSingleMethod();
 
         if (method.type === 'cash') {
-            if (inline) {
-                showCashPanel(method);
+            // Chuyển khoản thủ công: mở popup hiện luôn số tài khoản, khách đọc
+            // xong mới bấm xác nhận. Không hỏi lại kiểu COD, vì popup hỏi lại
+            // sinh ra để chống bấm nhầm, mà ở đây đã có sẵn một bước bấm nút.
+            const isInfoTransfer = (method.transfer || {}).type === 'info_transfer';
+            if (inline || isInfoTransfer) {
+                showCashPanel(method, inline);
                 return;
             }
+
             // Hỏi lại vì tiền mặt không có bước thanh toán nào để khách sửa sai
             // Backend cấu hình được lời nhắc riêng cho tiền mặt; chưa có thì
             // dùng chuỗi mặc định của trang
