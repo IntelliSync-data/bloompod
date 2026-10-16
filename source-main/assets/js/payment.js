@@ -333,7 +333,10 @@
 
     /** Ẩn hết các khối chi tiết trước khi bật đúng khối cần */
     function resetDetail() {
-        ['paymentQr', 'paymentTransfer', 'paymentPaypal', 'paymentCountdown']
+        // paymentCash trước giờ bị bỏ sót: chọn tiền mặt rồi quay lại chọn
+        // phương thức khác thì nút "Xác nhận đơn" của tiền mặt vẫn còn nằm đó
+        ['paymentQr', 'paymentTransfer', 'paymentInfoTransfer', 'paymentCash',
+            'paymentPaypal', 'paymentCountdown']
             .forEach(id => show(id, false));
     }
 
@@ -343,6 +346,72 @@
         setText('trAmount', String(Math.round(Number(amount) || 0)));
         setText('trMemo', memo || '-');
         show('paymentTransfer', true);
+    }
+
+    // Nút copy dựng bằng JS, dùng đúng icon như các nút có sẵn trong markup
+    const COPY_ICON =
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" ' +
+        'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+        '<rect x="9" y="9" width="12" height="12" rx="2" />' +
+        '<path d="M6 15H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1" /></svg>';
+
+    /** Backend có thể để {order_code} trong value, thay bằng mã đơn thật */
+    const fillPlaceholders = value => value.replace(/\{order_code\}/g, orderCode || '');
+
+    /**
+     * Chuyển khoản thủ công (transfer.type === 'info_transfer').
+     *
+     * Backend quyết định có bao nhiêu dòng và tên dòng là gì, FE chỉ đổ ra theo
+     * đúng thứ tự nhận được. Không được tra theo label: label là chữ tự do, đổi
+     * theo ngôn ngữ, và mỗi ngân hàng hỏi một kiểu khác nhau. Thêm dòng mới ở
+     * backend là hiện được ngay, không phải sửa chỗ này.
+     */
+    function renderInfoTransfer(transfer) {
+        const lines = document.getElementById('infoTransferLines');
+        if (!lines) return;
+
+        lines.innerHTML = '';
+
+        (transfer.fields || []).forEach(function (field, index) {
+            const label = String((field && field.label) || '').trim();
+            const value = fillPlaceholders(String((field && field.value) || '').trim());
+            if (!label && !value) return;
+
+            const valueId = 'infoTr' + index;
+
+            const row = document.createElement('div');
+            row.className = 'transfer-line';
+
+            const key = document.createElement('span');
+            key.className = 'transfer-key';
+            key.textContent = label;
+
+            const val = document.createElement('span');
+            val.className = 'transfer-val';
+            val.id = valueId;
+            val.textContent = value || '-';
+
+            // Nội dung chuyển khoản mà khách gõ tay là sai, sai thì không đối
+            // soát được đơn - nên dòng nào cũng có nút copy
+            const copy = document.createElement('button');
+            copy.type = 'button';
+            copy.className = 'transfer-copy';
+            copy.dataset.copy = valueId;
+            copy.setAttribute('aria-label', t('payment.copy'));
+            copy.innerHTML = COPY_ICON;
+            copy.addEventListener('click', function () { copyValue(copy); });
+
+            row.appendChild(key);
+            row.appendChild(val);
+            row.appendChild(copy);
+            lines.appendChild(row);
+        });
+
+        const note = String(transfer.note || '').trim();
+        setText('infoTransferNote', note);
+        show('infoTransferNote', !!note);
+
+        show('paymentInfoTransfer', lines.children.length > 0);
     }
 
     /**
@@ -378,7 +447,12 @@
                 show('paymentQr', true);
             }
 
-            if (types.indexOf('bank_transfer') !== -1) {
+            // Rẽ theo transfer.type, không đoán theo việc có khoá nào.
+            // Đơn mở lại từ link trong email cũng phải thấy lại thông tin
+            // chuyển khoản - chuyển khoản quốc tế mất 2-3 ngày làm việc.
+            if (transfer.type === 'info_transfer') {
+                renderInfoTransfer(transfer);
+            } else if (types.indexOf('bank_transfer') !== -1) {
                 renderTransfer(transfer, transaction.amount, transaction.transaction_id);
             }
         }
@@ -402,9 +476,18 @@
         setText('paymentSectionTitle', method.name || t('payment.cashTitle'));
         setText('paymentDescription', t('payment.cashPanelDesc'));
 
+        // Chuyển khoản thủ công: hiện các dòng ngân hàng ngay trên nút xác nhận
+        const transfer = method.transfer || {};
+        const isInfoTransfer = transfer.type === 'info_transfer';
+        if (isInfoTransfer) renderInfoTransfer(transfer);
+
         // Một phương thức thì không có popup, chỉ lấy phần mô tả của notice
         const notice = methodNotice(method);
         if (notice.description) setText('cashNote', notice.description);
+
+        // Câu mặc định nói chuyện thu tiền mặt trong 24h, không đúng với
+        // chuyển khoản ngân hàng - không có mô tả riêng thì giấu luôn
+        show('cashNote', !isInfoTransfer || !!notice.description);
 
         document.getElementById('cashConfirmBtn').onclick = function () {
             confirmCash(method);
@@ -513,7 +596,13 @@
      */
     function isGatewayMethod(method) {
         if (!method || method.type === 'cash') return false;
-        return !((method.transfer && method.transfer.types) || []).length;
+
+        const transfer = method.transfer || {};
+        // Backend mới gắn `type` cho mọi khối transfer: có type nghĩa là có thứ
+        // để hiện tại chỗ (sepay, info_transfer), không phải đưa khách đi đâu.
+        // Còn `types` là đường lùi cho response cũ chưa có `type`.
+        if (transfer.type) return false;
+        return !(transfer.types || []).length;
     }
 
     /** Màn chờ vẽ vào cửa sổ vừa mở, để khách không nhìn một ô trắng trơn */
