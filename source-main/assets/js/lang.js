@@ -47,6 +47,7 @@
             'payment.cancelBack.ok': 'Huỷ đơn và quay lại',
             'payment.cancelBack.cancel': 'Ở lại trang này',
             'payment.cancelFailed': 'Không huỷ được đơn. Vui lòng thử lại.',
+            'payment.copy': 'Sao chép',
             'order.optional': '(không bắt buộc)',
 
 
@@ -114,6 +115,7 @@
             'payment.cancelBack.ok': 'Cancel order and go back',
             'payment.cancelBack.cancel': 'Stay here',
             'payment.cancelFailed': 'Could not cancel this order. Please try again.',
+            'payment.copy': 'Copy',
             'order.optional': '(optional)',
 
 
