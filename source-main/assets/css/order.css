@@ -788,6 +788,9 @@
 #paymentQr[hidden],
 #paymentPaypal[hidden],
 #paymentCash[hidden],
+#cashNote[hidden],
+#paymentInfoTransfer[hidden],
+#infoTransferNote[hidden],
 #paymentCountdown[hidden] {
     display: none !important;
 }
@@ -919,7 +922,7 @@
 /* ===== Chuyển khoản tay ===== */
 .transfer-box {
     width: 100%;
-    max-width: 360px;
+    max-width: 500px;
     margin: 0 auto;
 }
 
@@ -935,7 +938,6 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 10px 12px;
     margin-bottom: 8px;
     background: var(--second-bg);
     border-radius: 8px;
@@ -952,11 +954,12 @@
 .transfer-val {
     flex: 1;
     min-width: 0;
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-family: var(--body-2-font-family);
     font-size: 14px;
     font-weight: 600;
     color: var(--black);
-    word-break: break-all;
+    word-break: break-word;
+    text-align: right;
 }
 
 .transfer-copy {
@@ -985,13 +988,35 @@
     border-color: var(--secondary-dark);
 }
 
+/* Chuyển khoản thủ công: nhãn do backend đặt, dài ngắn tuỳ ngân hàng và tuỳ
+   ngôn ngữ, nên cột nhãn co theo nội dung thay vì chốt cứng 96px như khối
+   chuyển khoản của sepay (nhãn cố định, luôn ngắn). */
+#infoTransferLines .transfer-key {
+    width: auto;
+    min-width: 92px;
+    max-width: 44%;
+}
+
+/* Màn hẹp thì xuống dòng: nhãn một hàng, giá trị và nút copy hàng dưới */
+@media (max-width: 480px) {
+    #infoTransferLines .transfer-line {
+        flex-wrap: wrap;
+        row-gap: 4px;
+    }
+
+    #infoTransferLines .transfer-key {
+        width: 100%;
+        max-width: none;
+    }
+}
+
 .transfer-warning {
     margin: 12px 0 0;
     padding: 10px 12px;
     font-family: var(--body-2-font-family);
     font-size: 13px;
     line-height: 1.6;
-    color: var(--black);
+    color: var(--red);
     background: #FFF6E5;
     border-radius: 8px;
 }
