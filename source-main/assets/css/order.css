@@ -1016,7 +1016,7 @@
     font-family: var(--body-2-font-family);
     font-size: 13px;
     line-height: 1.6;
-    color: var(--black);
+    color: var(--red);
     background: #FFF6E5;
     border-radius: 8px;
 }
