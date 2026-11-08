@@ -608,6 +608,7 @@ details[open] .content-image-img {
 
 .z.mb {
     display: none;
+    object-position: center bottom;
 }
 
 .z-2 {

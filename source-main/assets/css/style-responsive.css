@@ -73,7 +73,9 @@
     }
 
     .home-wrapper-section-banner {
-        height: calc(100vh - 56px);
+    height: auto;
+    min-height: calc(100vh - 56px);
+    padding-bottom: 56vw;
     }
 
     .grg {
@@ -422,6 +424,14 @@
 
     .z {
         display: none;
+    }
+
+    /* Banner cao theo nội dung (không cố định 100vh) để màn hình thấp như
+       iPhone SE chữ không đè lên mặt bé; chừa đáy cho phần mẹ & bé. */
+    .home-wrapper-section-banner {
+        height: auto;
+        min-height: calc(100vh - 56px);
+        padding-bottom: 56vw;
     }
 
     .home-wrapper-section-primary {
@@ -884,5 +894,17 @@
 @media screen and (max-width: 440px) {
     .language-switcher-text-span-secondary {
         font-size: 12px;
+    }
+}
+
+/* iPad dọc (769–1024px): dùng ảnh banner dọc giống mobile.
+   iPad ngang vẫn giữ ảnh ngang của desktop. */
+@media screen and (min-width: 769px) and (max-width: 1024px) and (orientation: portrait) {
+    .z.mb {
+        display: block;
+    }
+
+    .z {
+        display: none;
     }
 }
