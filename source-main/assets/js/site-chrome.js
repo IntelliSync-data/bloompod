@@ -35,6 +35,44 @@
 
     const query = new URLSearchParams(window.location.search);
 
+    window.siteChrome = window.siteChrome || {};
+
+    // ==============================================
+    // AFFILIATE REF/SSM — lưu khi khách vào site qua link giới thiệu
+    // (?ref=<mã thành viên>&ssm=<key nguồn>), để order.js gửi kèm lúc tạo đơn.
+    // Dùng sessionStorage: còn giữ khi khách chuyển trang trong cùng một lượt
+    // ghé site, nhưng tắt hẳn trình duyệt (đóng mọi tab) là mất, không cần tính
+    // hạn riêng. Chạy không điều kiện, không phụ thuộc menu/footer có bị ẩn hay không.
+    // Xem thêm: isd_affiliate README, mục "API cho frontend".
+    // ==============================================
+    const AFFILIATE_STORAGE_KEY = 'bloomAffiliateRef';
+
+    function saveAffiliateRef() {
+        const ref = (query.get('ref') || '').trim();
+        if (!ref) return;
+        const ssm = (query.get('ssm') || '').trim();
+        try {
+            sessionStorage.setItem(AFFILIATE_STORAGE_KEY, JSON.stringify({ ref: ref, ssm: ssm }));
+        } catch (error) {
+            console.error('Không lưu được affiliate ref:', error);
+        }
+    }
+
+    function getAffiliateRef() {
+        try {
+            const raw = sessionStorage.getItem(AFFILIATE_STORAGE_KEY);
+            if (!raw) return null;
+            const data = JSON.parse(raw);
+            if (!data || !data.ref) return null;
+            return { ref: data.ref, ssm: data.ssm || '' };
+        } catch (error) {
+            return null;
+        }
+    }
+
+    saveAffiliateRef();
+    window.siteChrome.getAffiliateRef = getAffiliateRef;
+
     /** Bỏ hẳn menu/footer khi URL mang param được khai báo ở data-hide-if-param */
     function dropIfHidden(slot) {
         if (!slot) return null;
@@ -55,8 +93,6 @@
 
     // Thẻ đánh dấu sẽ bị thay mất, nên giữ lại cấu hình trước
     const config = Object.assign({}, headerSlot ? headerSlot.dataset : {});
-
-    window.siteChrome = window.siteChrome || {};
 
     const file = window.location.pathname.split('/').pop() || 'index.html';
     const lang = config.lang ||
