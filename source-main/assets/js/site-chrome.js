@@ -35,6 +35,50 @@
 
     const query = new URLSearchParams(window.location.search);
 
+    window.siteChrome = window.siteChrome || {};
+
+    // ==============================================
+    // AFFILIATE REF/SSM — lưu khi khách vào site qua link giới thiệu
+    // (?ref=<mã thành viên>&ssm=<key nguồn>), để order.js gửi kèm lúc tạo đơn.
+    // Chạy không điều kiện, không phụ thuộc menu/footer có bị ẩn hay không.
+    // Xem thêm: isd_affiliate README, mục "API cho frontend".
+    // ==============================================
+    const AFFILIATE_STORAGE_KEY = 'bloomAffiliateRef';
+    const AFFILIATE_TTL_DAYS = 30;
+
+    function saveAffiliateRef() {
+        const ref = (query.get('ref') || '').trim();
+        if (!ref) return;
+        const ssm = (query.get('ssm') || '').trim();
+        try {
+            localStorage.setItem(AFFILIATE_STORAGE_KEY, JSON.stringify({
+                ref: ref,
+                ssm: ssm,
+                expires: Date.now() + AFFILIATE_TTL_DAYS * 24 * 60 * 60 * 1000
+            }));
+        } catch (error) {
+            console.error('Không lưu được affiliate ref:', error);
+        }
+    }
+
+    function getAffiliateRef() {
+        try {
+            const raw = localStorage.getItem(AFFILIATE_STORAGE_KEY);
+            if (!raw) return null;
+            const data = JSON.parse(raw);
+            if (!data || !data.ref || !data.expires || data.expires < Date.now()) {
+                localStorage.removeItem(AFFILIATE_STORAGE_KEY);
+                return null;
+            }
+            return { ref: data.ref, ssm: data.ssm || '' };
+        } catch (error) {
+            return null;
+        }
+    }
+
+    saveAffiliateRef();
+    window.siteChrome.getAffiliateRef = getAffiliateRef;
+
     /** Bỏ hẳn menu/footer khi URL mang param được khai báo ở data-hide-if-param */
     function dropIfHidden(slot) {
         if (!slot) return null;
@@ -55,8 +99,6 @@
 
     // Thẻ đánh dấu sẽ bị thay mất, nên giữ lại cấu hình trước
     const config = Object.assign({}, headerSlot ? headerSlot.dataset : {});
-
-    window.siteChrome = window.siteChrome || {};
 
     const file = window.location.pathname.split('/').pop() || 'index.html';
     const lang = config.lang ||

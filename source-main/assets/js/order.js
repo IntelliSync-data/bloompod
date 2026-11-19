@@ -188,6 +188,17 @@
                 };
             }
 
+            // Khách vào site qua link giới thiệu (?ref=...&ssm=...) thì site-chrome.js
+            // đã lưu lại từ lúc đó; gửi kèm đây để backend ghi nhận người tiếp thị.
+            // Cả hai đều không bắt buộc, sai/thiếu cũng không ảnh hưởng tạo đơn.
+            const affiliate = window.siteChrome && window.siteChrome.getAffiliateRef
+                ? window.siteChrome.getAffiliateRef()
+                : null;
+            if (affiliate) {
+                params.affiliate_ref = affiliate.ref;
+                if (affiliate.ssm) params.affiliate_source = affiliate.ssm;
+            }
+
             const response = await fetch(`${PAYMENT_API_URL}/create`, {
                 method: 'POST',
                 headers: {
